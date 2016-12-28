@@ -24,6 +24,7 @@ public final class TestContext {
     public static WebDriverWait getWebDriverWait() {
         return Browser.getWebDriverWait();
     }
-    // Add Reports
+
+	// Add Reports
     // Keeping everything for the basepage in one class
 }

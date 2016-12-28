@@ -11,17 +11,6 @@ import uk.gov.ons.dd.frontend.pages.BasePage;
 public class UITests extends BasePage{
 	ArmedForces armedForces = new ArmedForces();
 
-//	String[] residenceFilters = {   ArmedForces.Residence_Type.DO000161.toString(),
-//			ArmedForces.Residence_Type.DO000162.toString(), ArmedForces.Residence_Type.DO000163.toString()};
-//	String[] sexFilters = { ArmedForces.Sex.DO000153.toString(), ArmedForces.Sex.DO000154.toString()};
-
-
-
-
-
-
-
-
 	@BeforeTest
 	public void openPage(){
 		armedForces.navigateToUrl(getConfig().getBaseURL());

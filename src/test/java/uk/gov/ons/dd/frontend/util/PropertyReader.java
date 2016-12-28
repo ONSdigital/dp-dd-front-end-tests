@@ -12,12 +12,18 @@ public class PropertyReader {
 	public static HashMap <String, String> elementMap = new HashMap <String, String>();
 	Properties props = new Properties();
 
-	public PropertyReader() {
-		loadLocators();
+	public PropertyReader(Configuration configuration) {
+		loadLocators(configuration.getBackend().equals("stub"));
 	}
 
-	public void loadLocators() {
-		InputStream input = Configuration.class.getResourceAsStream("/files/locators.properties");
+	public void loadLocators(boolean stub) {
+		String propertyFile = null;
+		if (stub) {
+			propertyFile = "stub_locators.properties";
+		} else {
+			propertyFile = "backend_locators.properties";
+		}
+		InputStream input = Configuration.class.getResourceAsStream("/files/" + propertyFile);
 		try {
 			props.load(input);
 			Set <Object> keys = props.keySet();
@@ -31,9 +37,6 @@ public class PropertyReader {
 	}
 
 	public HashMap <String, String> getElementMap() {
-		if (!(elementMap.size() > 0)) {
-			loadLocators();
-		}
 		return elementMap;
 
 	}

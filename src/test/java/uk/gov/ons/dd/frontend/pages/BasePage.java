@@ -19,9 +19,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class BasePage {
 
-    public String buttonElement = "//button[text()[contains(.,'replace')]]";
-    public By linkText = By.linkText("text_to_replace");
-	public PropertyReader propertyReader = new PropertyReader();
+
+    public PropertyReader propertyReader = new PropertyReader(getConfig());
 
     public WebDriver getDriver() {
         return TestContext.getDriver();
@@ -30,7 +29,6 @@ public class BasePage {
     public Configuration getConfig() {
         return TestContext.getConfiguration();
     }
-
 
     public WebDriverWait getWebDriverWait() {
         return TestContext.getWebDriverWait();
@@ -51,10 +49,6 @@ public class BasePage {
 
     public WebElement getElement(final By by, long timeout) {
         return Do.until(getDriver(), ExpectedConditions.presenceOfElementLocated(by), timeout);
-    }
-
-    public By getButton(String idToGenerate, String textValue) {
-        return By.xpath(idToGenerate.replace("replace", textValue));
     }
 
 

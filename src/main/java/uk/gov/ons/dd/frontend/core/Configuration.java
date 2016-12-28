@@ -2,6 +2,7 @@ package uk.gov.ons.dd.frontend.core;
 
 
 import uk.gov.ons.dd.frontend.util.Helper;
+
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -12,6 +13,7 @@ public class Configuration {
     private Logger log = Logger.getLogger(Configuration.class.getCanonicalName());
     private String baseURL;
     private String browser;
+	private String backend;
 
 
     public Configuration() {
@@ -29,6 +31,9 @@ public class Configuration {
         return browser;
     }
 
+	public String getBackend() {
+		return backend;
+	}
 
     @SuppressWarnings("rawtypes")
     private void loadConfig(String filePath) {
@@ -48,6 +53,9 @@ public class Configuration {
         if (config.getProperty("browser")!=null) {
             browser = (String) config.get("browser");
         }
+	    if (config.getProperty("backend") != null) {
+		    backend = (String) config.get("backend");
+	    }
 
     }
 
@@ -61,6 +69,10 @@ public class Configuration {
         if (browser_value != null) {
             browser = browser_value;
         }
+	    String backend_value = Helper.getSetting("backend");
+	    if (backend_value != null) {
+		    backend = browser_value;
+	    }
 
 
 
@@ -71,7 +83,8 @@ public class Configuration {
         return "Configuration{" +
                 "baseURL=" + baseURL +
                 ", browser=" + browser +
-                '}';
+		        ", backend=" + backend +
+		        '}';
     }
 
 }
