@@ -1,4 +1,4 @@
-package uk.gov.ons.dd.frontend;
+package uk.gov.ons.dd.frontend.pages;
 
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +10,7 @@ import uk.gov.ons.dd.frontend.core.Configuration;
 import uk.gov.ons.dd.frontend.core.TestContext;
 import uk.gov.ons.dd.frontend.util.Do;
 import uk.gov.ons.dd.frontend.util.Helper;
+import uk.gov.ons.dd.frontend.util.PropertyReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class BasePage {
 
     public String buttonElement = "//button[text()[contains(.,'replace')]]";
     public By linkText = By.linkText("text_to_replace");
+	public PropertyReader propertyReader = new PropertyReader();
 
     public WebDriver getDriver() {
         return TestContext.getDriver();
@@ -277,6 +279,26 @@ public class BasePage {
 
     }
 
+	public By getElementLocator(String locator) {
+		By elementToReturn = null;
+		String propValue = propertyReader.getValue(locator);
+		if (locator.contains("_xpath")) {
+			elementToReturn = By.xpath(propValue);
+		} else if (locator.contains("_id")) {
+			elementToReturn = By.id(propValue);
+		} else if (locator.contains("_linkText")) {
+			elementToReturn = By.linkText(propValue);
+		} else if (locator.contains("_css")) {
+			elementToReturn = By.cssSelector(propValue);
+		} else if (locator.contains("_className")) {
+			elementToReturn = By.className(propValue);
+		}
+		return elementToReturn;
+	}
+
+	public String getTextFromProperty(String locator) {
+		return propertyReader.getValue(locator);
+	}
 
 }
 
