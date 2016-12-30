@@ -71,7 +71,7 @@ public class Configuration {
         }
 	    String backend_value = Helper.getSetting("backend");
 	    if (backend_value != null) {
-		    backend = browser_value;
+		    backend = backend;
 	    }
 
 

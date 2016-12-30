@@ -20,10 +20,11 @@ Get the front end test project
 git clone https://github.com/ONSdigital/dp-dd-front-end-tests
 ````
 
-Run the test
+Run the test passing all the parameters. If any -Dproperty is not specified; default specified in the local_config.properties will be used.
 
 ````
-mvn clean test -Dtest=**/UITests.java
+mvn clean test -Dbrowser=chrome -Dbase_url=http://localhost:20040 -Dbackend=stub -Dtest=**/UITests.*
+
 ````
 
 ### Contributing
