@@ -1,5 +1,7 @@
 package uk.gov.ons.dd.frontend.tests;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
@@ -8,15 +10,26 @@ import uk.gov.ons.dd.frontend.core.TestContext;
 import uk.gov.ons.dd.frontend.pages.ArmedForces;
 import uk.gov.ons.dd.frontend.pages.BasePage;
 
+import java.util.ArrayList;
+
 public class UITests extends BasePage{
 	ArmedForces armedForces = new ArmedForces();
 
 	@BeforeTest
 	public void openPage(){
 		armedForces.navigateToUrl(getConfig().getBaseURL());
+		printall();
 		click(armedForces.armedForces_link);
+		printall();
 		click(armedForces.customise_data_set);
 
+	}
+
+	public void printall() {
+		ArrayList <WebElement> bb = (ArrayList <WebElement>) findElementsBy(By.cssSelector("a"));
+		for (WebElement ww : bb) {
+			System.out.println(ww.getText());
+		}
 	}
 
 	@Test(groups = "sex")

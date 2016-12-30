@@ -7,6 +7,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.gov.ons.dd.frontend.core.Configuration;
@@ -50,6 +52,21 @@ public class Browser {
                 webDriver = new FirefoxDriver(desiredCapabilities);
 
 
+	            break;
+	        case "HTMLUNITDRIVER":
+		        DesiredCapabilities caps = new DesiredCapabilities();
+		        caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, "/usr/local/Cellar/phantomjs/2.1.1/bin/phantomjs");
+		        caps.setCapability("phantomjs.page.settings.userAgent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
+		        caps.setJavascriptEnabled(true);
+		        webDriver = new PhantomJSDriver(caps);
+		        Dimension dim = new Dimension(1280, 1024);
+		        webDriver.manage().window().setSize(dim);
+
+//                HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.CHROME);
+//                driver.setJavascriptEnabled(true);
+//                webDriver = driver;
+
+
                 break;
             case "CHROME":
                 URL resource = Browser.class.getResource(Helper.getChromeDriverFileLocation());
@@ -65,6 +82,9 @@ public class Browser {
                 options.addArguments("--start-maximized");
                 desiredCapabilitiesChrome.setCapability(ChromeOptions.CAPABILITY, options);
                 webDriver = new ChromeDriver();
+	            if (webDriver instanceof JavascriptExecutor) {
+		            ((JavascriptExecutor) webDriver).executeScript("window.resizeTo(1024, 768);");
+	            }
                 webDriver.manage().window().maximize();
                 break;
             case "BROWSERSTACK":
@@ -74,13 +94,14 @@ public class Browser {
             default:
                 System.setProperty("webdriver.gecko.driver", "/home/giri/Downloads/firefox/browser/firefox");
                 webDriver = new FirefoxDriver();
+	            if (webDriver instanceof JavascriptExecutor) {
+		            ((JavascriptExecutor) webDriver).executeScript("window.resizeTo(1024, 768);");
+	            }
         }
-        if (webDriver instanceof JavascriptExecutor) {
-            ((JavascriptExecutor) webDriver).executeScript("window.resizeTo(1024, 768);");
-        }
+
         webDriver.manage().window().maximize();
-        Dimension dim = new Dimension(1920, 1080);
-        webDriver.manage().window().setSize(dim);
+	    Dimension dim = new Dimension(1280, 1024);
+	    webDriver.manage().window().setSize(dim);
     }
 
     public static void closeBrowser() {
