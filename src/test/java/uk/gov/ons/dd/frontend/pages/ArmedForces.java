@@ -39,10 +39,6 @@ public class ArmedForces extends BasePage{
 	private ArrayList<WebElement> selectedOptions = new ArrayList <WebElement>();
 	private ArrayList<WebElement> customiseLinks = new ArrayList <WebElement>();
 
-	public By getId(String id) {
-		return By.id(id);
-	}
-
 	public int getFilterNameIndex(String filterString){
 		int indexToReturn = 0;
 		filterNames = (ArrayList<WebElement>) findElementsBy(filter_name_css);
@@ -74,15 +70,4 @@ public class ArmedForces extends BasePage{
 		getAllCheckBoxes().get(num).click();
 	}
 
-	public enum Sex {
-		DO000153, DO000154
-	}
-
-	public enum Residence_Type {
-		DO000161, DO000162, DO000163
-	}
-
-	public enum Age {
-		DO000265, DO000266, DO000267, DO000268, DO000269
-	}
 }
