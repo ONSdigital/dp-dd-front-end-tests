@@ -1,7 +1,5 @@
 package uk.gov.ons.dd.frontend.tests;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
@@ -10,7 +8,6 @@ import uk.gov.ons.dd.frontend.core.TestContext;
 import uk.gov.ons.dd.frontend.pages.ArmedForces;
 import uk.gov.ons.dd.frontend.pages.BasePage;
 
-import java.util.ArrayList;
 
 public class UITests extends BasePage{
 	ArmedForces armedForces = new ArmedForces();
@@ -18,18 +15,9 @@ public class UITests extends BasePage{
 	@BeforeTest
 	public void openPage(){
 		armedForces.navigateToUrl(getConfig().getBaseURL());
-		printall();
 		click(armedForces.armedForces_link);
-		printall();
 		click(armedForces.customise_data_set);
 
-	}
-
-	public void printall() {
-		ArrayList <WebElement> bb = (ArrayList <WebElement>) findElementsBy(By.cssSelector("a"));
-		for (WebElement ww : bb) {
-			System.out.println(ww.getText());
-		}
 	}
 
 	@Test(groups = "sex")
@@ -71,17 +59,14 @@ public class UITests extends BasePage{
 		armedForces.getCustomiseLink(armedForces.residence_filter).click();
 		click(armedForces.disable_all);
 		armedForces.selectCheckBox(0);
-		//	click(armedForces.getId(ArmedForces.Residence_Type.DO000161.toString()));
 		click(armedForces.save_selection);
 		Assert.assertEquals(armedForces.getoptionsText(armedForces.residence_filter), armedForces.selectedOptions1_text);
 		armedForces.getCustomiseLink(armedForces.residence_filter).click();
 		armedForces.selectCheckBox(1);
-//		click(armedForces.getId(ArmedForces.Residence_Type.DO000162.toString()));
 		click(armedForces.save_selection);
 		Assert.assertEquals(armedForces.getoptionsText(armedForces.residence_filter), armedForces.selectedOptions2_text);
 		armedForces.getCustomiseLink(armedForces.residence_filter).click();
 		armedForces.selectCheckBox(2);
-//		click(armedForces.getId(ArmedForces.Residence_Type.DO000163.toString()));
 		click(armedForces.save_selection);
 		Assert.assertEquals(armedForces.getoptionsText(armedForces.residence_filter), defaultSelection);
 		armedForces.getCustomiseLink(armedForces.residence_filter).click();
@@ -94,14 +79,11 @@ public class UITests extends BasePage{
 		armedForces.getCustomiseLink(armedForces.residence_filter).click();
 		click(armedForces.disable_all);
 		armedForces.selectCheckBox(2);
-//		click(armedForces.getId(ArmedForces.Residence_Type.DO000163.toString()));
 		click(armedForces.cancel_button);
 		Assert.assertEquals(armedForces.getoptionsText(armedForces.residence_filter), defaultSelection);
 	}
 
 
-	//	String[] ageFilters = {ArmedForces.Age.DO000265.toString(), ArmedForces.Age.DO000266.toString(),
-//			ArmedForces.Age.DO000267.toString(), ArmedForces.Age.DO000268.toString(), ArmedForces.Age.DO000269.toString() };
 	@Test(groups = "age", dependsOnGroups = {"residence"})
 	public void customiseAge(){
 		String defaultSelection = armedForces.getoptionsText(armedForces.age_filter);
