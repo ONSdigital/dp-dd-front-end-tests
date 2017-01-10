@@ -107,9 +107,7 @@ public class BasePage {
         try {
             final WebElement element = getElement(by);
             return element != null && element.isDisplayed();
-        } catch (NoSuchElementException exception) {
-            return false;
-        } catch (TimeoutException e) {
+        } catch (Exception exception) {
             return false;
         }
     }
@@ -161,20 +159,16 @@ public class BasePage {
     }
 
     public void clear(By by) {
-        Helper.pause(200);
         Do.until(getDriver(), presenceOfElementLocated(by));
         getElement(by).clear();
     }
 
     public void click(By by) {
-    //    Helper.pause(200);
         Do.until(getDriver(), presenceOfElementLocated(by));
-//        Do.until(getDriver(), elementToBeClickable(by));
         getElement(by).click();
     }
 
     public void sendKeys(By by, String text) {
-        Helper.pause(200);
         Do.until(getDriver(), presenceOfElementLocated(by));
         getElement(by).sendKeys(text);
     }
@@ -204,6 +198,10 @@ public class BasePage {
             return false;
         }
     }
+
+	public void deleteCookies() {
+		getDriver().manage().deleteAllCookies();
+	}
 
     public void fillWithValue(By by, String value) {
         try {
@@ -268,8 +266,8 @@ public class BasePage {
     }
 
     public void switchToNewTab() {
-        ArrayList<String> tabs = new ArrayList<String>(getDriver().getWindowHandles());
-        getDriver().switchTo().window(tabs.get(1));
+	    ArrayList <String> tabs = new ArrayList <>(getDriver().getWindowHandles());
+	    getDriver().switchTo().window(tabs.get(1));
 
     }
 

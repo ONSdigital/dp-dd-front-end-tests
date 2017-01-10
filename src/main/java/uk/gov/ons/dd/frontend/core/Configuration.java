@@ -8,10 +8,10 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 public class Configuration {
-    public static final int DEFAULT_TIMEOUT_VALUE = 25;
-    public static int DEFAULT_TIME_OUT = 2000;
-    private Logger log = Logger.getLogger(Configuration.class.getCanonicalName());
-    private String baseURL;
+	public static final int DEFAULT_TIMEOUT_VALUE = 5;
+	public static int DEFAULT_TIME_OUT = 100;
+	private Logger log = Logger.getLogger(Configuration.class.getCanonicalName());
+	private String baseURL;
     private String browser;
 	private String backend;
 
@@ -71,7 +71,7 @@ public class Configuration {
         }
 	    String backend_value = Helper.getSetting("backend");
 	    if (backend_value != null) {
-		    backend = backend;
+		    backend = backend_value;
 	    }
 
 

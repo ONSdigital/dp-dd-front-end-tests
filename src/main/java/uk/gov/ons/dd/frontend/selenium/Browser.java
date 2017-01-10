@@ -79,8 +79,8 @@ public class Browser {
                 System.setProperty("webdriver.chrome.driver", resource.getPath());
                 DesiredCapabilities desiredCapabilitiesChrome = DesiredCapabilities.chrome();
                 ChromeOptions options = new ChromeOptions();
-                options.addArguments("--start-maximized");
-                desiredCapabilitiesChrome.setCapability(ChromeOptions.CAPABILITY, options);
+	            options.addArguments("--start-maximized", "--silent");
+	            desiredCapabilitiesChrome.setCapability(ChromeOptions.CAPABILITY, options);
                 webDriver = new ChromeDriver();
 	            if (webDriver instanceof JavascriptExecutor) {
 		            ((JavascriptExecutor) webDriver).executeScript("window.resizeTo(1024, 768);");
