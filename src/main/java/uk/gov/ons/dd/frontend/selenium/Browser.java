@@ -25,7 +25,6 @@ public class Browser {
     private static WebDriverWait webDriverWait;
 
     public static WebDriver initDriver(Configuration configuration) {
-        log.info("Initialising browser " + configuration.getBrowser().toString());
         if (webDriver == null) {
             setDriver(configuration.getBrowser().toUpperCase());
             setWebDriverWait(webDriver);
