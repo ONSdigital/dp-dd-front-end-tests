@@ -240,7 +240,7 @@ public class UITests extends BasePage {
 		assertLastPage(selectedChkBox);
 	}
 
-	//	@Test(groups = {"alloptions"}, dependsOnGroups = {"option1"})
+	@Test(groups = {"alloptions"}, dependsOnGroups = {"option1"})
 	public void downloadCompleteDS_all_options() {
 		downloadOption(true);
 		ArrayList <String> selectedCheckBoxes = selectChkBox(0, 1, 2);
