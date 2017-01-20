@@ -164,7 +164,6 @@ public class BasePage {
 	}
 
 	public void click(By by) {
-		Helper.pause(500);
 		Do.until(getDriver(), presenceOfElementLocated(by));
 		getElement(by).click();
 	}

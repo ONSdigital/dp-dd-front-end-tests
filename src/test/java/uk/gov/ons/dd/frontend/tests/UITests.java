@@ -1,6 +1,5 @@
 package uk.gov.ons.dd.frontend.tests;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
@@ -18,10 +17,6 @@ import java.util.Set;
 public class UITests extends BasePage {
 	ArmedForces armedForces = new ArmedForces();
 	String selectedOption = null;
-
-	public static void main(String[] args) {
-		new UITests().downloadCompleteDS_WithXLS();
-	}
 
 	@BeforeTest
 	public void openPage() {
@@ -233,22 +228,55 @@ public class UITests extends BasePage {
 
 	}
 
-	@Test(groups = {"option1"}, dependsOnGroups = {"back"})
-	public void downloadCompleteDS_WithXLS() {
+	@Test(groups = {"canceldownload"}, dependsOnGroups = {"back"})
+	public void customiseSelections() {
+		armedForces.getCustomiseLink(armedForces.age_filter).click();
+		click(armedForces.disable_all);
+		armedForces.selectCheckBox(0);
+		armedForces.selectCheckBox(1);
+		String ageSelection = returnSelectedOptionText();
+		click(armedForces.save_selection);
+		armedForces.getCustomiseLink(armedForces.residence_filter).click();
+		click(armedForces.disable_all);
+		armedForces.selectCheckBox(0);
+		String residenceSelection = returnSelectedOptionText();
+		click(armedForces.save_selection);
+		armedForces.getCustomiseLink(armedForces.sex_filter).click();
+		click(armedForces.disable_all);
+		armedForces.selectCheckBox(0);
+		String sexSelection = returnSelectedOptionText();
+		click(armedForces.save_selection);
+		click(armedForces.choose_download_format);
+		click(armedForces.cancel_button);
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), ageSelection);
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.residence_filter), residenceSelection);
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.sex_filter), sexSelection);
+
+	}
+
+	//
+//	@Test(groups = {"downloadXLS"}, dependsOnGroups = {"back"})
+//	public void downloadCompleteDS_WithXLS() {
+//		downloadOption(true);
+//		ArrayList <String> selectedChkBox = selectChkBox(0);
+//		assertLastPage(selectedChkBox);
+//	}
+	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"canceldownload"})
+	public void downloadCompleteDS_WithCSV() {
 		downloadOption(true);
-		ArrayList <String> selectedChkBox = selectChkBox(0);
+		ArrayList <String> selectedChkBox = selectChkBox(1);
 		assertLastPage(selectedChkBox);
 	}
 
-	@Test(groups = {"alloptions"}, dependsOnGroups = {"option1"})
-	public void downloadCompleteDS_all_options() {
-		downloadOption(true);
-		ArrayList <String> selectedCheckBoxes = selectChkBox(0, 1, 2);
-		assertLastPage(selectedCheckBoxes);
 
-	}
+//	@Test(groups = {"alloptions"}, dependsOnGroups = {"option1"})
+//	public void downloadCompleteDS_all_options() {
+//		downloadOption(true);
+//		ArrayList <String> selectedCheckBoxes = selectChkBox(0, 1, 2);
+//		assertLastPage(selectedCheckBoxes);
+//	}
 
-	@Test(groups = {"cancelDownload"}, dependsOnGroups = {"alloptions"})
+	@Test(groups = {"cancelDownload"}, dependsOnGroups = {"downloadCSV"})
 	public void cancelCompleteDownload() {
 		downloadOption(true);
 		selectChkBox(2);
@@ -311,14 +339,12 @@ public class UITests extends BasePage {
 
 	public void assertLastPage(ArrayList <String> selectedCheckBoxes) {
 		click(armedForces.generate_file);
-		getWebDriverWait().until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("p.margin-top--0"),
-				armedForces.files_available_for_download));
-		Assert.assertTrue(armedForces.getPageSource().contains(armedForces.files_available_for_download),
-				armedForces.files_available_for_download + " is not displayed on the page.");
+		getWebDriverWait().until(ExpectedConditions.presenceOfElementLocated(armedForces.file_download_button_options));
 		ArrayList <String> actualButtonsForDownload = new ArrayList <>();
 		for (WebElement webElement : findElementsBy(armedForces.file_download_button_options)) {
 			actualButtonsForDownload.add(webElement.getText().toUpperCase());
 		}
+
 		Assert.assertEquals(actualButtonsForDownload, selectedCheckBoxes,
 				"Mismatch between the file formats selected to the file formats available for download");
 
