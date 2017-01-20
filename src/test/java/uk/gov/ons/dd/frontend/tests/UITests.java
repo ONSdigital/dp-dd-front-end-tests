@@ -254,13 +254,15 @@ public class UITests extends BasePage {
 
 	}
 
-	//
-//	@Test(groups = {"downloadXLS"}, dependsOnGroups = {"back"})
-//	public void downloadCompleteDS_WithXLS() {
-//		downloadOption(true);
-//		ArrayList <String> selectedChkBox = selectChkBox(0);
-//		assertLastPage(selectedChkBox);
-//	}
+	/*
+
+		@Test(groups = {"downloadXLS"}, dependsOnGroups = {"back"})
+		public void downloadCompleteDS_WithXLS() {
+			downloadOption(true);
+			ArrayList <String> selectedChkBox = selectChkBox(0);
+			assertLastPage(selectedChkBox);
+		}
+	*/
 	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"canceldownload"})
 	public void downloadCompleteDS_WithCSV() {
 		downloadOption(true);
@@ -268,13 +270,15 @@ public class UITests extends BasePage {
 		assertLastPage(selectedChkBox);
 	}
 
+/*
+	@Test(groups = {"alloptions"}, dependsOnGroups = {"option1"})
+	public void downloadCompleteDS_all_options() {
+		downloadOption(true);
+		ArrayList <String> selectedCheckBoxes = selectChkBox(0, 1, 2);
+		assertLastPage(selectedCheckBoxes);
+	}
 
-//	@Test(groups = {"alloptions"}, dependsOnGroups = {"option1"})
-//	public void downloadCompleteDS_all_options() {
-//		downloadOption(true);
-//		ArrayList <String> selectedCheckBoxes = selectChkBox(0, 1, 2);
-//		assertLastPage(selectedCheckBoxes);
-//	}
+*/
 
 	@Test(groups = {"cancelDownload"}, dependsOnGroups = {"downloadCSV"})
 	public void cancelCompleteDownload() {
