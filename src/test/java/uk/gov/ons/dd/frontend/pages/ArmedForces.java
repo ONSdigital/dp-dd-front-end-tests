@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 
-public class ArmedForces extends BasePage{
+public class ArmedForces extends BasePage {
 
 	// ***** Armed Forces dataset
 	public By armedForces_link = getElementLocator("armed_forces_linkText");
@@ -36,13 +36,13 @@ public class ArmedForces extends BasePage{
 
 
 	// ****** Selected Text Options
-	public String selectedOptions1_text = getTextFromProperty("selected_options_1_text");
-	public String selectedOptions2_text = getTextFromProperty("selected_options_2_text");
-	public String selectedOptions3_text = getTextFromProperty("selected_options_3_text");
-	public String selectedOptions4_text = getTextFromProperty("selected_options_4_text");
-	public String everything_selected2_text = getTextFromProperty("everything_selected_2_text");
-	public String everything_selected3_text = getTextFromProperty("everything_selected_3_text");
-	public String everything_selected5_text = getTextFromProperty("everything_selected_5_text");
+//	public String selectedOptions1_text = getTextFromProperty("selected_options_1_text");
+//	public String selectedOptions2_text = getTextFromProperty("selected_options_2_text");
+//	public String selectedOptions3_text = getTextFromProperty("selected_options_3_text");
+//	public String selectedOptions4_text = getTextFromProperty("selected_options_4_text");
+//	public String everything_selected2_text = getTextFromProperty("everything_selected_2_text");
+//	public String everything_selected3_text = getTextFromProperty("everything_selected_3_text");
+//	public String everything_selected5_text = getTextFromProperty("everything_selected_5_text");
 	public String files_available_for_download = getTextFromProperty("file_available_for_download_text");
 
 	// ********** Filter options
@@ -59,9 +59,9 @@ public class ArmedForces extends BasePage{
 
 	private int getFilterNameIndex(String filterString) {
 		int indexToReturn = 0;
-		filterNames = (ArrayList<WebElement>) findElementsBy(filter_name_css);
-		for(int index = 0; index<filterNames.size(); index++){
-			if(filterNames.get(index).getText().equalsIgnoreCase(filterString)){
+		filterNames = (ArrayList <WebElement>) findElementsBy(filter_name_css);
+		for (int index = 0; index < filterNames.size(); index++) {
+			if (filterNames.get(index).getText().equalsIgnoreCase(filterString)) {
 				indexToReturn = index;
 				break;
 			}
@@ -69,14 +69,14 @@ public class ArmedForces extends BasePage{
 		return indexToReturn;
 	}
 
-	public String getoptionsText(String filter){
+	public String getoptionsText(String filter) {
 
-		selectedOptions = (ArrayList<WebElement>) findElementsBy(selected_options_css);
+		selectedOptions = (ArrayList <WebElement>) findElementsBy(selected_options_css);
 		return selectedOptions.get(getFilterNameIndex(filter)).getText();
 	}
 
-	public WebElement getCustomiseLink(String filter){
-		customiseLinks = (ArrayList<WebElement>) findElementsBy(customise_links);
+	public WebElement getCustomiseLink(String filter) {
+		customiseLinks = (ArrayList <WebElement>) findElementsBy(customise_links);
 		return customiseLinks.get(getFilterNameIndex(filter));
 	}
 

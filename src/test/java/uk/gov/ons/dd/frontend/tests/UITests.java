@@ -12,21 +12,38 @@ import uk.gov.ons.dd.frontend.pages.ArmedForces;
 import uk.gov.ons.dd.frontend.pages.BasePage;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 
-public class UITests extends BasePage{
+public class UITests extends BasePage {
 	ArmedForces armedForces = new ArmedForces();
+	String selectedOption = null;
+
+	public static void main(String[] args) {
+		new UITests().downloadCompleteDS_WithXLS();
+	}
 
 	@BeforeTest
-	public void openPage(){
+	public void openPage() {
 		armedForces.navigateToUrl(getConfig().getBaseURL());
 		click(armedForces.armedForces_link);
+		switchToLatestWindow();
 		click(armedForces.customise_data_set);
 
 	}
 
+	public void switchToLatestWindow() {
+		Set <String> windowHandles = getDriver().getWindowHandles();
+		if (windowHandles.size() > 1) {
+			for (String wh : windowHandles) {
+				String windowHandle = wh.toString();
+				getDriver().switchTo().window(windowHandle);
+			}
+		}
+	}
+
 	@Test(groups = "sex")
-	public void customiseSexFilter(){
+	public void customiseSexFilter() {
 		String defaultSelection = armedForces.getoptionsText(armedForces.sex_filter);
 		armedForces.getCustomiseLink(armedForces.sex_filter).click();
 		click(armedForces.disable_all);
@@ -39,20 +56,22 @@ public class UITests extends BasePage{
 		armedForces.getCustomiseLink(armedForces.sex_filter).click();
 		// ids need to be removed
 		armedForces.selectCheckBox(0);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.sex_filter), armedForces.selectedOptions1_text,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.sex_filter), selectedOption,
 				"Actual sex filters : "
 						+ armedForces.getoptionsText(armedForces.sex_filter) + "\n" +
-						"Expected sex filters : " + armedForces.selectedOptions1_text);
+						"Expected sex filters : " + selectedOption);
 		armedForces.getCustomiseLink(armedForces.sex_filter).click();
 		click(armedForces.enable_all);
 		click(armedForces.cancel_button);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.sex_filter), armedForces.selectedOptions1_text,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.sex_filter), selectedOption,
 				"Actual sex filters : "
 						+ armedForces.getoptionsText(armedForces.sex_filter) + "\n" +
-						"Expected sex filters : " + armedForces.selectedOptions1_text);
+						"Expected sex filters : " + selectedOption);
 		armedForces.getCustomiseLink(armedForces.sex_filter).click();
 		click(armedForces.enable_all);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
 		Assert.assertEquals(armedForces.getoptionsText(armedForces.sex_filter), defaultSelection,
 				"Actual sex filters : "
@@ -61,40 +80,43 @@ public class UITests extends BasePage{
 		armedForces.getCustomiseLink(armedForces.sex_filter).click();
 		click(armedForces.disable_all);
 		armedForces.selectCheckBox(1);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.sex_filter), armedForces.selectedOptions1_text,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.sex_filter), selectedOption,
 				"Actual sex filters : "
 						+ armedForces.getoptionsText(armedForces.sex_filter) + "\n" +
-						"Expected sex filters : " + armedForces.selectedOptions1_text);
+						"Expected sex filters : " + selectedOption);
 
 	}
 
-
 	@Test(groups = "residence", dependsOnGroups = {"sex"})
-	public void customiseResidenceType(){
+	public void customiseResidenceType() {
 		String defaultSelection = armedForces.getoptionsText(armedForces.residence_filter);
 		armedForces.getCustomiseLink(armedForces.residence_filter).click();
 		click(armedForces.disable_all);
 		armedForces.selectCheckBox(0);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.residence_filter), armedForces.selectedOptions1_text,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.residence_filter), selectedOption,
 				"Actual residence filters : "
 						+ armedForces.getoptionsText(armedForces.residence_filter) + "\n" +
-						"Expected residence filters : " + armedForces.selectedOptions1_text);
+						"Expected residence filters : " + selectedOption);
 		armedForces.getCustomiseLink(armedForces.residence_filter).click();
 		armedForces.selectCheckBox(1);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.residence_filter), armedForces.selectedOptions2_text,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.residence_filter), selectedOption,
 				"Actual residence filters : "
 						+ armedForces.getoptionsText(armedForces.residence_filter) + "\n" +
-						"Expected residence filters : " + armedForces.selectedOptions2_text);
+						"Expected residence filters : " + selectedOption);
 		armedForces.getCustomiseLink(armedForces.residence_filter).click();
 		armedForces.selectCheckBox(2);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.residence_filter), defaultSelection,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.residence_filter), selectedOption,
 				"Actual residence filters : "
 						+ armedForces.getoptionsText(armedForces.residence_filter) + "\n" +
-						"Expected residence filters : " + defaultSelection);
+						"Expected residence filters : " + selectedOption);
 		armedForces.getCustomiseLink(armedForces.residence_filter).click();
 		click(armedForces.disable_all);
 		click(armedForces.save_selection);
@@ -117,46 +139,50 @@ public class UITests extends BasePage{
 						"Expected residence filters : " + defaultSelection);
 	}
 
-
 	@Test(groups = "age", dependsOnGroups = {"residence"})
-	public void customiseAge(){
+	public void customiseAge() {
 		String defaultSelection = armedForces.getoptionsText(armedForces.age_filter);
 		armedForces.getCustomiseLink(armedForces.age_filter).click();
 		click(armedForces.disable_all);
 		armedForces.selectCheckBox(0);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), armedForces.selectedOptions1_text,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
 						+ armedForces.getoptionsText(armedForces.age_filter) + "\n" +
-						"Expected age filters : " + armedForces.selectedOptions1_text);
+						"Expected age filters : " + selectedOption);
 		armedForces.getCustomiseLink(armedForces.age_filter).click();
 		armedForces.selectCheckBox(1);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), armedForces.selectedOptions2_text,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
 						+ armedForces.getoptionsText(armedForces.age_filter) + "\n" +
-						"Expected age filters : " + armedForces.selectedOptions2_text);
+						"Expected age filters : " + selectedOption);
 		armedForces.getCustomiseLink(armedForces.age_filter).click();
 		armedForces.selectCheckBox(2);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), armedForces.selectedOptions3_text,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
 						+ armedForces.getoptionsText(armedForces.age_filter) + "\n" +
-						"Expected age filters : " + armedForces.selectedOptions3_text);
+						"Expected age filters : " + selectedOption);
 		armedForces.getCustomiseLink(armedForces.age_filter).click();
 		armedForces.selectCheckBox(3);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), armedForces.selectedOptions4_text,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
 						+ armedForces.getoptionsText(armedForces.age_filter) + "\n" +
-						"Expected age filters : " + armedForces.selectedOptions4_text);
+						"Expected age filters : " + selectedOption);
 		armedForces.getCustomiseLink(armedForces.age_filter).click();
 		armedForces.selectCheckBox(4);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), defaultSelection,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
 						+ armedForces.getoptionsText(armedForces.age_filter) + "\n" +
-						"Expected age filters : " + defaultSelection);
+						"Expected age filters : " + selectedOption);
 		armedForces.getCustomiseLink(armedForces.age_filter).click();
 
 		click(armedForces.disable_all);
@@ -170,27 +196,29 @@ public class UITests extends BasePage{
 		armedForces.getCustomiseLink(armedForces.age_filter).click();
 		click(armedForces.disable_all);
 		armedForces.selectCheckBox(3);
-
 		click(armedForces.cancel_button);
 		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), defaultSelection);
 		armedForces.getCustomiseLink(armedForces.age_filter).click();
 		click(armedForces.disable_all);
 		armedForces.selectCheckBox(4);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), armedForces.selectedOptions1_text);
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), selectedOption);
 		armedForces.getCustomiseLink(armedForces.age_filter).click();
 		armedForces.selectCheckBox(0);
 		armedForces.selectCheckBox(1);
 		armedForces.selectCheckBox(2);
 		armedForces.selectCheckBox(3);
+		selectedOption = returnSelectedOptionText();
 		click(armedForces.save_selection);
-		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), defaultSelection,
+		Assert.assertEquals(armedForces.getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
 						+ armedForces.getoptionsText(armedForces.age_filter) + "\n" +
-						"Expected age filters : " + defaultSelection);
+						"Expected age filters : " + selectedOption);
 		downloadOption(false);
 
 	}
+
 	@Test(groups = {"back"}, dependsOnGroups = {"age"})
 	public void cancelCustomiseDownload() {
 		openPage();
@@ -205,7 +233,6 @@ public class UITests extends BasePage{
 
 	}
 
-
 	@Test(groups = {"option1"}, dependsOnGroups = {"back"})
 	public void downloadCompleteDS_WithXLS() {
 		downloadOption(true);
@@ -213,8 +240,7 @@ public class UITests extends BasePage{
 		assertLastPage(selectedChkBox);
 	}
 
-
-	@Test(groups = {"alloptions"}, dependsOnGroups = {"option1"})
+	//	@Test(groups = {"alloptions"}, dependsOnGroups = {"option1"})
 	public void downloadCompleteDS_all_options() {
 		downloadOption(true);
 		ArrayList <String> selectedCheckBoxes = selectChkBox(0, 1, 2);
@@ -237,6 +263,7 @@ public class UITests extends BasePage{
 			armedForces.deleteCookies();
 			armedForces.navigateToUrl(getConfig().getBaseURL());
 			click(armedForces.armedForces_link);
+			switchToLatestWindow();
 			click(armedForces.download_complete_dataset);
 		} else {
 			click(armedForces.choose_download_format);
@@ -254,6 +281,22 @@ public class UITests extends BasePage{
 
 	}
 
+	public String returnSelectedOptionText() {
+		String valuetoReturn = null;
+		int totalNumChkBox = armedForces.getAllCheckBoxes().size();
+		int selectedChkBox = findElementsBy(armedForces.selected_checkboxes_css).size();
+		int diff = totalNumChkBox - selectedChkBox;
+		switch (diff) {
+			case 0:
+				valuetoReturn = "Everything selected (" + totalNumChkBox + ")";
+				break;
+			default:
+				valuetoReturn = "Selected options (" + selectedChkBox + ")";
+				break;
+		}
+		return valuetoReturn;
+
+	}
 
 	public ArrayList <String> selectChkBox(int... checkBox) {
 		ArrayList <String> checkBoxesSelected = new ArrayList <>();
@@ -282,7 +325,7 @@ public class UITests extends BasePage{
 	}
 
 	@AfterClass
-	public void closeTest(){
+	public void closeTest() {
 		TestContext.getDriver().close();
 	}
 }

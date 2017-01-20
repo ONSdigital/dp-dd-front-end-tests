@@ -7,24 +7,24 @@ import uk.gov.ons.dd.frontend.selenium.Browser;
 import uk.gov.ons.dd.frontend.util.CacheService;
 
 public final class TestContext {
-    public static Configuration configuration = new Configuration();
+	public static Configuration configuration = new Configuration();
 
-    public static WebDriver getDriver() {
-        return Browser.initDriver(configuration);
-    }
+	public static WebDriver getDriver() {
+		return Browser.initDriver(configuration);
+	}
 
-    public static Configuration getConfiguration() {
-        return configuration;
-    }
+	public static Configuration getConfiguration() {
+		return configuration;
+	}
 
-    public static CacheService getCacheService() {
-        return CacheService.getInstance();
-    }
+	public static CacheService getCacheService() {
+		return CacheService.getInstance();
+	}
 
-    public static WebDriverWait getWebDriverWait() {
-        return Browser.getWebDriverWait();
-    }
+	public static WebDriverWait getWebDriverWait() {
+		return Browser.getWebDriverWait();
+	}
 
 	// Add Reports
-    // Keeping everything for the basepage in one class
+	// Keeping everything for the basepage in one class
 }
