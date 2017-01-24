@@ -17,6 +17,16 @@ import java.util.Set;
 public class UITests extends BasePage {
 	ArmedForces armedForces = new ArmedForces();
 	String selectedOption = null;
+	/*
+
+		@Test(groups = {"downloadXLS"}, dependsOnGroups = {"back"})
+		public void downloadCompleteDS_WithXLS() {
+			downloadOption(true);
+			ArrayList <String> selectedChkBox = selectChkBox(0);
+			assertLastPage(selectedChkBox);
+		}
+	*/
+	ArrayList <String> selectedChkBox = new ArrayList <>();
 
 	@BeforeTest
 	public void openPage() {
@@ -254,19 +264,10 @@ public class UITests extends BasePage {
 
 	}
 
-	/*
-
-		@Test(groups = {"downloadXLS"}, dependsOnGroups = {"back"})
-		public void downloadCompleteDS_WithXLS() {
-			downloadOption(true);
-			ArrayList <String> selectedChkBox = selectChkBox(0);
-			assertLastPage(selectedChkBox);
-		}
-	*/
 	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"canceldownload"})
 	public void downloadCompleteDS_WithCSV() {
 		downloadOption(true);
-		ArrayList <String> selectedChkBox = selectChkBox(1);
+		selectedChkBox = selectChkBox(1);
 		assertLastPage(selectedChkBox);
 	}
 
@@ -309,9 +310,8 @@ public class UITests extends BasePage {
 		Assert.assertEquals(getElementText(armedForces.error_message), armedForces.error_message_text,
 				"Actual error message : " + getElementText(armedForces.error_message)
 						+ "\n Expected error message : " + armedForces.error_message_text);
-
-
 	}
+
 
 	public String returnSelectedOptionText() {
 		String valuetoReturn = null;
@@ -342,8 +342,24 @@ public class UITests extends BasePage {
 	}
 
 	public void assertLastPage(ArrayList <String> selectedCheckBoxes) {
+
 		click(armedForces.generate_file);
-		getWebDriverWait().until(ExpectedConditions.presenceOfElementLocated(armedForces.file_download_button_options));
+		int counter = 30;
+		try {
+			getWebDriverWait().until(ExpectedConditions.presenceOfElementLocated(armedForces.file_download_button_options));
+		} catch (Exception ee) {
+			try {
+				while (counter < 1) {
+					Thread.sleep(2000);
+					assertLastPage(selectedCheckBoxes);
+					counter--;
+				}
+
+			} catch (InterruptedException ee1) {
+			}
+
+		}
+
 		ArrayList <String> actualButtonsForDownload = new ArrayList <>();
 		for (WebElement webElement : findElementsBy(armedForces.file_download_button_options)) {
 			actualButtonsForDownload.add(webElement.getText().toUpperCase());
