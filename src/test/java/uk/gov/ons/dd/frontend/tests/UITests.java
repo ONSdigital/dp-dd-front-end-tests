@@ -228,7 +228,7 @@ public class UITests extends BasePage {
 	public void cancelCustomiseDownload() {
 		openPage();
 		click(armedForces.back_link);
-		Assert.assertTrue(armedForces.getPageSource().contains(getTextFromProperty("armed_forces_linkText")),
+		Assert.assertTrue(armedForces.getPageSource().contains(getTextFromProperty("customise_dataset_linkText")),
 				"Back button did not take it to the dataset details page");
 		click(armedForces.customise_data_set);
 		click(armedForces.choose_download_format);
