@@ -15,4 +15,8 @@ public class RandomStringGen {
 		return stringBuilder.toString();
 	}
 
+	public static int getRandomInt(int lengthToBuild) {
+		return random.nextInt(lengthToBuild);
+	}
+
 }
