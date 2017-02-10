@@ -19,8 +19,9 @@ import java.util.ArrayList;
 public class CPITests extends BasePage {
 	CPI cpi = new CPI();
 	String selectedOption = null;
-	String selected_year, selected_month;
+	String selected_year = null, selected_month = null;
 	int selectsize = 0;
+	String toRet = null;
 
 	@BeforeTest
 	public void openPage() {
@@ -28,65 +29,164 @@ public class CPITests extends BasePage {
 		click(cpi.cpi_link);
 		switchToLatestWindow();
 		click(customise_data_set);
+	}
+
+	public void setSelections() {
+		selected_month = null;
+		selected_year = null;
+	}
+
+	@Test(groups = "cancelSelection")
+	public void cancelSelection() {
+		setSelections();
+		String defaultSelection = getoptionsText(cpi.time_filter);
+		getCustomiseLink(cpi.time_filter).click();
+		singleOrRange(cpi.single_month);
+		selected_year = selectYearMonth(cpi.select_year);
+		Assert.assertTrue(!selected_year.equals(""));
+		selected_month = selectYearMonth(cpi.select_month);
+		Assert.assertTrue(!selected_month.equals(""));
+		click(cancel_button);
+		//		Assert.assertEquals(getoptionsText(cpi.time_filter), defaultSelection,
+//				"Actual Time filters : "
+//						+ getoptionsText(cpi.time_filter) + "\n" +
+//						"Expected Time filters : " + defaultSelection);
 
 	}
 
-	@Test(groups = "singleMonth")
-	public void customiseSingleMonth() {
-		String defaultSelection = getoptionsText(cpi.time_filter);
+	@Test(groups = {"singleMonth"}, dependsOnGroups = {"cancelSelection"})
+	public void saveSelection() {
 		getCustomiseLink(cpi.time_filter).click();
-		selectSingleMonth(cpi.single_month);
-		click(cancel_button);
-		Assert.assertEquals(getoptionsText(cpi.time_filter), defaultSelection,
-				"Actual Time filters : "
-						+ getoptionsText(cpi.time_filter) + "\n" +
-						"Expected Time filters : " + defaultSelection);
-		getCustomiseLink(cpi.time_filter).click();
-		selectSingleMonth(cpi.single_month);
+		singleOrRange(cpi.single_month);
+		setSelections();
+		selected_year = selectYearMonth(cpi.select_year);
+		Assert.assertTrue(!selected_year.equals(""));
+		selected_month = selectYearMonth(cpi.select_month);
+		Assert.assertTrue(!selected_month.equals(""));
 		click(cpi.add_selection);
 		String selectedOptions = returnSelectedOptionText();
-		Assert.assertTrue(getAllRangeHeaders().contains(selected_year),
-				"Selected year:  " + selected_year + " is not showing in the selection summary ");
-		Assert.assertTrue(getAllRangeOptions().contains(selected_month),
-				"Selected month:  " + selected_month + " is not showing in the selection summary ");
+		assertSelection(selected_year, getAllRangeHeaders());
+		assertSelection(selected_month, getAllRangeOptions());
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
 				"Actual Time filters : "
 						+ getoptionsText(cpi.time_filter) + "\n" +
 						"Expected Time filters : " + selectedOptions);
 		getCustomiseLink(cpi.time_filter).click();
-		selectSingleMonth(cpi.single_month);
+		selectedOptions = returnSelectedOptionText();
+		click(save_selection);
+		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
+				"Actual Time filters : "
+						+ getoptionsText(cpi.time_filter) + "\n" +
+						"Expected Time filters : " + selectedOptions);
+
+	}
+
+	@Test(groups = {"removeSelection"}, dependsOnGroups = {"singleMonth"})
+	public void removeSelections() {
+		getCustomiseLink(cpi.time_filter).click();
+		removeAllSelection();
+		singleOrRange(cpi.single_month);
+		setSelections();
+		selected_year = selectYearMonth(cpi.select_year);
+		Assert.assertTrue(!selected_year.equals(""));
+		selected_month = selectYearMonth(cpi.select_month);
+		Assert.assertTrue(!selected_month.equals(""));
 		click(cpi.add_selection);
 		removeAllSelection();
-
-
+		String selectedOptions = returnSelectedOptionText();
 		click(save_selection);
+		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
+				"Actual Time filters : "
+						+ getoptionsText(cpi.time_filter) + "\n" +
+						"Expected Time filters : " + selectedOptions);
 
+	}
 
-		selectSingleMonth(cpi.range);
-		//		click(cpi.add_selection);
-		// validate selection
-//		getCustomiseLink(cpi.time_filter).click();
-		selectAValue(cpi.single_month);
-		click(cancel_button);
+	@Test(groups = {"rangeSelection"}, dependsOnGroups = {"removeSelection"})
+	public void selectARange() {
 		getCustomiseLink(cpi.time_filter).click();
-		//validate cancel
-		selectAValue(cpi.range);
-		click(cancel_button);
-		// validate cancel
+		singleOrRange(cpi.range);
+		selectFromDropDown(cpi.select_year);
+		selectFromDropDown(cpi.select_month);
+		click(cpi.add_selection);
+		String selectedOptions = returnSelectedOptionText();
+		click(save_selection);
+//		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
+//				"Actual Time filters : "
+//						+ getoptionsText(cpi.time_filter) + "\n" +
+//						"Expected Time filters : " + selectedOptions);
+	}
 
+	@Test(groups = {"removerange"}, dependsOnGroups = {"rangeSelection"})
+	public void removeSomeRange() {
+		getCustomiseLink(cpi.time_filter).click();
+		click(addMore);
+		singleOrRange(cpi.range);
+		selectFromDropDown(cpi.select_year);
+		selectFromDropDown(cpi.select_month);
+		click(cpi.add_selection);
+		String selectedOptions = returnSelectedOptionText();
+		click(save_selection);
+		System.out.println(selectedOptions);
+		System.out.println(getoptionsText(cpi.time_filter));
+//		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
+//				"Actual Time filters : "
+//						+ getoptionsText(cpi.time_filter) + "\n" +
+//						"Expected Time filters : " + selectedOptions);
+		getCustomiseLink(cpi.time_filter).click();
+		int removeLinks = getRemoveAll_Lists().size();
+		getRemoveAll_Lists().get(RandomStringGen.getRandomInt(removeLinks - 1)).click();
+		selectedOptions = returnSelectedOptionText();
+		click(save_selection);
+		//		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
+//				"Actual Time filters : "
+//						+ getoptionsText(cpi.time_filter) + "\n" +
+//						"Expected Time filters : " + selectedOptions);
+		System.out.println(selectedOptions);
+		System.out.println(getoptionsText(cpi.time_filter));
+
+	}
+
+	@Test(groups = {"removeAll"}, dependsOnGroups = {"removerange"})
+	public void removeAllRange() {
+		getCustomiseLink(cpi.time_filter).click();
+		removeAllSelection();
+		String selectedOptions = returnSelectedOptionText();
+		click(save_selection);
+//		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
+//				"Actual Time filters : "
+//						+ getoptionsText(cpi.time_filter) + "\n" +
+//						"Expected Time filters : " + selectedOptions);
+
+	}
+
+	public void assertSelection(String selected, ArrayList <WebElement> elementArrayList) {
+		int numberOfItems = 0;
+		for (WebElement tempElement : elementArrayList) {
+			if (tempElement.getText().contains(selected)) {
+				numberOfItems++;
+			}
+		}
+		Assert.assertTrue(numberOfItems > 0,
+				"Selected year/month :  " + selected + " is not displayed in the selection summary ");
 
 	}
 
 	public void removeAllSelection() {
-		for (WebElement remove : getRemoveAll_Lists()) {
+		ArrayList <WebElement> removeAllList = getRemoveAll_Lists();
+		for (WebElement remove : removeAllList) {
 			remove.click();
 		}
 	}
 
 	public String returnSelectedOptionText() {
 		String valuetoReturn = null;
-		int totalMonths = getRemoveLinks().size();
+		int totalMonths = 0;
+		try {
+			totalMonths = getRemoveLinks().size();
+		} catch (Exception ee) {
+		}
 		switch (totalMonths) {
 			case 0:
 				valuetoReturn = "Nothing selected";
@@ -100,35 +200,39 @@ public class CPITests extends BasePage {
 
 	}
 
-	public String selectAValue(By cpiElement) {
-		Select dropdownSelect = new Select(getElement(cpiElement));
-		ArrayList <WebElement> dropDownOption = (ArrayList <WebElement>) dropdownSelect.getOptions();
-		int index = RandomStringGen.getRandomInt(dropDownOption.size());
-		dropdownSelect.selectByIndex(index);
-		return dropdownSelect.getFirstSelectedOption().getText();
-	}
+	public String selectYearMonth(By cpiElement) {
+		Select dropdownSelect = null;
+		int index = 0;
+		try {
+			dropdownSelect = new Select(getElement(cpiElement));
+			ArrayList <WebElement> dropDownOption = (ArrayList <WebElement>) dropdownSelect.getOptions();
+			index = RandomStringGen.getRandomInt(dropDownOption.size() - 1) + 1;
+			dropdownSelect.selectByIndex(index);
+			toRet = dropdownSelect.getOptions().get(index).getAttribute("label");
 
-	public void selectSingleMonth(By selection) {
-		if (!getElement(cpi.single_month).isSelected()) {
-			click(cpi.single_month);
+		} catch (Exception ee) {
+			ee.printStackTrace();
 		}
-		selected_year = selectAValue(cpi.select_year);
-		selected_month = selectAValue(cpi.select_month);
+
+		return toRet;
 	}
 
-	public void selectsAndDropDowns() {
-		ArrayList <WebElement> selects = (ArrayList <WebElement>) findElementsBy(By.cssSelector("select"));
-		if (selectsize < selects.size()) {
+	public void singleOrRange(By selectType) {
+		if (!getElement(selectType).isSelected()) {
+			click(selectType);
+		}
+	}
+
+
+	public void selectFromDropDown(By cpiElement) {
+		String valueSelected = null;
+		ArrayList <WebElement> selects = (ArrayList <WebElement>) findElementsBy(cpiElement);
 			for (WebElement select : selects) {
 				Select dropdownSelect = new Select(select);
-				//		System.out.println("Before Selection : "+dropdownSelect.getFirstSelectedOption().getText());
 				ArrayList <WebElement> dropDownMonths = (ArrayList <WebElement>) dropdownSelect.getOptions();
-				int index = RandomStringGen.getRandomInt(dropDownMonths.size());
+				int index = RandomStringGen.getRandomInt(dropDownMonths.size() - 1) + 1;
 				dropdownSelect.selectByIndex(index);
-				//		System.out.println("After Selection : "+dropdownSelect.getFirstSelectedOption().getText());
-
 			}
-		}
 	}
 
 	@AfterClass

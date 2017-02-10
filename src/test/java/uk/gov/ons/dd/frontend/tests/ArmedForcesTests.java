@@ -38,7 +38,7 @@ public class ArmedForcesTests extends BasePage {
 
 
 	@Test(groups = "sex")
-	public void customiseSexFilter() {
+	public void customiseSexFilter() throws Exception {
 		String defaultSelection = getoptionsText(armedForces.sex_filter);
 		getCustomiseLink(armedForces.sex_filter).click();
 		click(disable_all);
@@ -85,7 +85,7 @@ public class ArmedForcesTests extends BasePage {
 	}
 
 	@Test(groups = "residence", dependsOnGroups = {"sex"})
-	public void customiseResidenceType() {
+	public void customiseResidenceType() throws Exception {
 		String defaultSelection = getoptionsText(armedForces.residence_filter);
 		getCustomiseLink(armedForces.residence_filter).click();
 		click(disable_all);
@@ -135,7 +135,7 @@ public class ArmedForcesTests extends BasePage {
 	}
 
 	@Test(groups = "age", dependsOnGroups = {"residence"})
-	public void customiseAge() {
+	public void customiseAge() throws Exception {
 		String defaultSelection = getoptionsText(armedForces.age_filter);
 		getCustomiseLink(armedForces.age_filter).click();
 		click(disable_all);
@@ -229,7 +229,7 @@ public class ArmedForcesTests extends BasePage {
 	}
 
 	@Test(groups = {"canceldownload"}, dependsOnGroups = {"back"})
-	public void customiseSelections() {
+	public void customiseSelections() throws Exception {
 		getCustomiseLink(armedForces.age_filter).click();
 		click(disable_all);
 		selectCheckBox(0);
@@ -255,7 +255,7 @@ public class ArmedForcesTests extends BasePage {
 	}
 
 	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"canceldownload"})
-	public void downloadCompleteDS_WithCSV() {
+	public void downloadCompleteDS_WithCSV() throws Exception {
 		downloadOption(true);
 		selectedChkBox = selectChkBox(1);
 		assertLastPage(selectedChkBox);
@@ -272,7 +272,7 @@ public class ArmedForcesTests extends BasePage {
 */
 
 	@Test(groups = {"cancelDownload"}, dependsOnGroups = {"downloadCSV"})
-	public void cancelCompleteDownload() {
+	public void cancelCompleteDownload() throws Exception {
 		downloadOption(true);
 		selectChkBox(2);
 		click(cancel_button);
@@ -303,7 +303,7 @@ public class ArmedForcesTests extends BasePage {
 	}
 
 
-	public String returnSelectedOptionText() {
+	public String returnSelectedOptionText() throws Exception {
 		String valuetoReturn = null;
 		int totalNumChkBox = getAllCheckBoxes().size();
 		int selectedChkBox = findElementsBy(selected_checkboxes_css).size();
@@ -320,7 +320,7 @@ public class ArmedForcesTests extends BasePage {
 
 	}
 
-	public ArrayList <String> selectChkBox(int... checkBox) {
+	public ArrayList <String> selectChkBox(int... checkBox) throws Exception {
 		ArrayList <String> checkBoxesSelected = new ArrayList <>();
 		for (int checkOption : checkBox) {
 			selectCheckBox(checkOption);
@@ -331,7 +331,7 @@ public class ArmedForcesTests extends BasePage {
 		return checkBoxesSelected;
 	}
 
-	public void assertLastPage(ArrayList <String> selectedCheckBoxes) {
+	public void assertLastPage(ArrayList <String> selectedCheckBoxes) throws Exception {
 
 		click(generate_file);
 		int counter = 30;

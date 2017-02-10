@@ -13,6 +13,7 @@ import uk.gov.ons.dd.frontend.util.Helper;
 import uk.gov.ons.dd.frontend.util.PropertyReader;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public class BasePage {
 	public By removeButton = getElementLocator("remove_css");
 	public By selectionHeader = getElementLocator("year_summary_css");
 	public By selectionOptions = getElementLocator("month_summary_css");
-	public By addMoreLocations = getElementLocator("add_more_locations_linkText");
+	public By addMore = getElementLocator("add_more_linkText");
 	// ***********  Download Options  ******************
 	public By download_complete_dataset = getElementLocator("download_dataset_linkText");
 	public By choose_download_format = getElementLocator("choose_download_format_linkText");
@@ -326,12 +327,15 @@ public class BasePage {
 
 	private int getFilterNameIndex(String filterString) {
 		int indexToReturn = 0;
-		filterNames = (ArrayList <WebElement>) findElementsBy(filter_name_css);
-		for (int index = 0; index < filterNames.size(); index++) {
-			if (filterNames.get(index).getText().equalsIgnoreCase(filterString)) {
-				indexToReturn = index;
-				break;
+		try {
+			filterNames = (ArrayList <WebElement>) findElementsBy(filter_name_css);
+			for (int index = 0; index < filterNames.size(); index++) {
+				if (filterNames.get(index).getText().equalsIgnoreCase(filterString)) {
+					indexToReturn = index;
+					break;
+				}
 			}
+		} catch (Exception ee) {
 		}
 		return indexToReturn;
 	}
@@ -347,34 +351,37 @@ public class BasePage {
 		return customiseLinks.get(getFilterNameIndex(filter));
 	}
 
-	public ArrayList <WebElement> getAllCheckBoxes() {
+	public ArrayList <WebElement> getAllCheckBoxes() throws Exception {
 		return (ArrayList <WebElement>) findElementsBy(checkboxes);
 	}
 
-	public void selectCheckBox(int num) {
+	public void selectCheckBox(int num) throws Exception {
 		getAllCheckBoxes().get(num).click();
 	}
 
-	public ArrayList <WebElement> getRemoveLinks() {
+	public ArrayList <WebElement> getRemoveLinks() throws Exception {
 		ArrayList <WebElement> removeButtons = (ArrayList <WebElement>) findElementsBy(removeButton);
-		for (WebElement webElement : removeButtons) {
-			if (webElement.getText().contains("Remove all")) {
-				removeButtons.remove(webElement);
-			}
+		Iterator <WebElement> iter = removeButtons.iterator();
+		while (iter.hasNext()) {
+			WebElement webTemp = iter.next();
+
+			if (webTemp.getText().contains("Remove all"))
+				iter.remove();
 		}
 		return removeButtons;
 	}
 
 	public ArrayList <WebElement> getRemoveAll_Lists() {
-		ArrayList <WebElement> removeLinks = getRemoveLinks();
+		ArrayList <WebElement> removeButtons = (ArrayList <WebElement>) findElementsBy(removeButton);
 		ArrayList <WebElement> removeAllLinks = new ArrayList <>();
-		for (WebElement removeTemp : removeLinks) {
-			if (removeTemp.getText().contains("Remove all")) {
-				removeAllLinks.add(removeTemp);
+		for (WebElement webTemp : removeButtons) {
+			if (webTemp.getText().contains("Remove all")) {
+				removeAllLinks.add(webTemp);
 			}
 		}
 		return removeAllLinks;
 	}
+
 
 	public ArrayList <WebElement> getAllRangeHeaders() {
 
