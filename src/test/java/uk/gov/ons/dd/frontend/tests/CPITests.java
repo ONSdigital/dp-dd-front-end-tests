@@ -112,10 +112,10 @@ public class CPITests extends BasePage {
 		click(cpi.add_selection);
 		String selectedOptions = returnSelectedOptionText();
 		click(save_selection);
-//		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
-//				"Actual Time filters : "
-//						+ getoptionsText(cpi.time_filter) + "\n" +
-//						"Expected Time filters : " + selectedOptions);
+		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
+				"Actual Time filters : "
+						+ getoptionsText(cpi.time_filter) + "\n" +
+						"Expected Time filters : " + selectedOptions);
 	}
 
 	@Test(groups = {"removerange"}, dependsOnGroups = {"rangeSelection"})
@@ -130,19 +130,22 @@ public class CPITests extends BasePage {
 		click(save_selection);
 		System.out.println(selectedOptions);
 		System.out.println(getoptionsText(cpi.time_filter));
-//		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
-//				"Actual Time filters : "
-//						+ getoptionsText(cpi.time_filter) + "\n" +
-//						"Expected Time filters : " + selectedOptions);
+		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
+				"Actual Time filters : "
+						+ getoptionsText(cpi.time_filter) + "\n" +
+						"Expected Time filters : " + selectedOptions);
 		getCustomiseLink(cpi.time_filter).click();
 		int removeLinks = getRemoveAll_Lists().size();
-		getRemoveAll_Lists().get(RandomStringGen.getRandomInt(removeLinks - 1)).click();
+		if (removeLinks > 1) {
+			removeLinks = removeLinks - 1;
+		}
+		getRemoveAll_Lists().get(RandomStringGen.getRandomInt(removeLinks)).click();
 		selectedOptions = returnSelectedOptionText();
 		click(save_selection);
-		//		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
-//				"Actual Time filters : "
-//						+ getoptionsText(cpi.time_filter) + "\n" +
-//						"Expected Time filters : " + selectedOptions);
+		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
+				"Actual Time filters : "
+						+ getoptionsText(cpi.time_filter) + "\n" +
+						"Expected Time filters : " + selectedOptions);
 		System.out.println(selectedOptions);
 		System.out.println(getoptionsText(cpi.time_filter));
 
@@ -153,11 +156,11 @@ public class CPITests extends BasePage {
 		getCustomiseLink(cpi.time_filter).click();
 		removeAllSelection();
 		String selectedOptions = returnSelectedOptionText();
-		click(save_selection);
-//		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
-//				"Actual Time filters : "
-//						+ getoptionsText(cpi.time_filter) + "\n" +
-//						"Expected Time filters : " + selectedOptions);
+		click(cancel_button);
+		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
+				"Actual Time filters : "
+						+ getoptionsText(cpi.time_filter) + "\n" +
+						"Expected Time filters : " + selectedOptions);
 
 	}
 
