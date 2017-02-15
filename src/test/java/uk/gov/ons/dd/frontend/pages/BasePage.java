@@ -42,8 +42,8 @@ public class BasePage {
 	public By checkboxes = getElementLocator("checkboxes_css");
 	// ************ Save Selection -- Selection Summary
 	public By removeButton = getElementLocator("remove_css");
-	public By selectionHeader = getElementLocator("year_summary_css");
-	public By selectionOptions = getElementLocator("month_summary_css");
+	public By selectionHeader = getElementLocator("header_summary_css");
+	public By selectionOptions = getElementLocator("selected_summary_css");
 	public By addMore = getElementLocator("add_more_linkText");
 	// ***********  Download Options  ******************
 	public By download_complete_dataset = getElementLocator("download_dataset_linkText");
@@ -405,8 +405,22 @@ public class BasePage {
 
 	public void navigateToUrl(String url) {
 		getDriver().get(url);
+		Cookie splashCookie = new Cookie("splash", "y");
+		getDriver().manage().addCookie(splashCookie);
+		refresh();
 	}
 
+
+	public ArrayList <WebElement> selectChkBox(int... checkBox) throws Exception {
+		ArrayList <WebElement> checkBoxesSelected = new ArrayList <>();
+		for (int checkOption : checkBox) {
+			selectCheckBox(checkOption);
+		}
+		for (WebElement webElement : findElementsBy(selected_checkboxes_css)) {
+			checkBoxesSelected.add(webElement);
+		}
+		return checkBoxesSelected;
+	}
 
 }
 

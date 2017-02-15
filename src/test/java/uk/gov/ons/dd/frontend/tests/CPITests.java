@@ -54,7 +54,7 @@ public class CPITests extends BasePage {
 
 	}
 
-	@Test(groups = {"singleMonth"}, dependsOnGroups = {"cancelSelection"})
+	@Test(groups = {"singleMonth"})//, dependsOnGroups = {"cancelSelection"})
 	public void saveSelection() {
 		getCustomiseLink(cpi.time_filter).click();
 		singleOrRange(cpi.single_month);
@@ -164,6 +164,43 @@ public class CPITests extends BasePage {
 
 	}
 
+
+	@Test//(groups = {"customiseAggregates"}, dependsOnGroups = {"removeAll"})
+	public void searchAggregates() throws Exception {
+		String defaultSelection = getoptionsText(cpi.spl_aggregate_filter);
+		getCustomiseLink(cpi.spl_aggregate_filter).click();
+		click(cpi.search_aggregates);
+		sendKeys(cpi.search_textBox, cpi.searchKeys1);
+		click(cpi.search_button);
+		ArrayList <WebElement> checkBoxes = getAllCheckBoxes();
+		ArrayList <WebElement> selectedChkBoxes = selectChkBox(RandomStringGen.getRandomInt(checkBoxes.size() - 1));
+		click(save_selection);
+		click(addMore);
+		click(cpi.search_aggregates);
+		sendKeys(cpi.search_textBox, cpi.searchKeys2);
+		click(cpi.search_button);
+		checkBoxes = getAllCheckBoxes();
+		selectedChkBoxes = selectChkBox(RandomStringGen.getRandomInt(checkBoxes.size() - 1));
+		click(save_selection);
+		String selectedOptions = returnSelectedOptionText();
+		for (WebElement webTemp : getAllRangeOptions()) {
+
+		}
+		click(save_selection);
+		Assert.assertEquals(getoptionsText(cpi.spl_aggregate_filter), selectedOptions,
+				"Actual selected filters : "
+						+ getoptionsText(cpi.spl_aggregate_filter) + "\n" +
+						"Expected selected filters : " + selectedOptions);
+	}
+
+
+
+
+
+
+
+
+
 	public void assertSelection(String selected, ArrayList <WebElement> elementArrayList) {
 		int numberOfItems = 0;
 		for (WebElement tempElement : elementArrayList) {
@@ -228,7 +265,6 @@ public class CPITests extends BasePage {
 
 
 	public void selectFromDropDown(By cpiElement) {
-		String valueSelected = null;
 		ArrayList <WebElement> selects = (ArrayList <WebElement>) findElementsBy(cpiElement);
 			for (WebElement select : selects) {
 				Select dropdownSelect = new Select(select);

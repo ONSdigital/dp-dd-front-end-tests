@@ -16,7 +16,12 @@ public class RandomStringGen {
 	}
 
 	public static int getRandomInt(int lengthToBuild) {
-		return random.nextInt(lengthToBuild);
+		int value = 0;
+		try {
+			value = random.nextInt(lengthToBuild);
+		} catch (Exception ee) {
+		}
+		return value;
 	}
 
 }

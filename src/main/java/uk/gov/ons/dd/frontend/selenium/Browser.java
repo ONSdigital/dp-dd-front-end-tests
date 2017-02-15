@@ -95,6 +95,7 @@ public class Browser {
 		webDriver.manage().window().maximize();
 		Dimension dim = new Dimension(1280, 1024);
 		webDriver.manage().window().setSize(dim);
+
 	}
 
 	public static void closeBrowser() {

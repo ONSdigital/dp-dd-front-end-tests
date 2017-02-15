@@ -25,7 +25,7 @@ public class ArmedForcesTests extends BasePage {
 			assertLastPage(selectedChkBox);
 		}
 	*/
-	ArrayList <String> selectedChkBox = new ArrayList <>();
+	ArrayList <WebElement> selectedChkBox = new ArrayList <>();
 
 	@BeforeTest
 	public void openPage() {
@@ -258,7 +258,7 @@ public class ArmedForcesTests extends BasePage {
 	public void downloadCompleteDS_WithCSV() throws Exception {
 		downloadOption(true);
 		selectedChkBox = selectChkBox(1);
-		assertLastPage(selectedChkBox);
+		assertLastPage(getCheckBoxValues(selectedChkBox));
 	}
 
 /*
@@ -320,16 +320,14 @@ public class ArmedForcesTests extends BasePage {
 
 	}
 
-	public ArrayList <String> selectChkBox(int... checkBox) throws Exception {
-		ArrayList <String> checkBoxesSelected = new ArrayList <>();
-		for (int checkOption : checkBox) {
-			selectCheckBox(checkOption);
+	public ArrayList <String> getCheckBoxValues(ArrayList <WebElement> selectedCheckBoxes) {
+		ArrayList <String> chkBoxValues = new ArrayList <>();
+		for (WebElement webElement : selectedCheckBoxes) {
+			chkBoxValues.add(webElement.getAttribute("value"));
 		}
-		for (WebElement webElement : findElementsBy(selected_checkboxes_css)) {
-			checkBoxesSelected.add(webElement.getAttribute("value").toUpperCase());
-		}
-		return checkBoxesSelected;
+		return chkBoxValues;
 	}
+
 
 	public void assertLastPage(ArrayList <String> selectedCheckBoxes) throws Exception {
 
@@ -354,6 +352,7 @@ public class ArmedForcesTests extends BasePage {
 		for (WebElement webElement : findElementsBy(file_download_button_options)) {
 			actualButtonsForDownload.add(webElement.getText().toUpperCase());
 		}
+
 
 		Assert.assertEquals(actualButtonsForDownload, selectedCheckBoxes,
 				"Mismatch between the file formats selected to the file formats available for download");
