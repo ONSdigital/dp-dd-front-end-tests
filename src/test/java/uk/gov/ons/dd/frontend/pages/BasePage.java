@@ -6,6 +6,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import uk.gov.ons.dd.frontend.core.Configuration;
 import uk.gov.ons.dd.frontend.core.TestContext;
 import uk.gov.ons.dd.frontend.util.Do;
@@ -37,14 +38,14 @@ public class BasePage {
 	public By enable_all_disabled = getElementLocator("enable_all_disb_xpath");
 	public By disable_all_disabled = getElementLocator("disable_all_disb_xpath");
 	public By error_message = getElementLocator("error_msg_css");
-	public By save_selection = getElementLocator("save_selection_linkText");
+	public By save_selection = getElementLocator("save_selection_css");
 	public By cancel_button = getElementLocator("cancel_button_linkText");
 	public By checkboxes = getElementLocator("checkboxes_css");
 	// ************ Save Selection -- Selection Summary
 	public By removeButton = getElementLocator("remove_css");
 	public By selectionHeader = getElementLocator("header_summary_css");
 	public By selectionOptions = getElementLocator("selected_summary_css");
-	public By addMore = getElementLocator("add_more_linkText");
+	//	public By addMore = getElementLocator("add_more_linkText");
 	// ***********  Download Options  ******************
 	public By download_complete_dataset = getElementLocator("download_dataset_linkText");
 	public By choose_download_format = getElementLocator("choose_download_format_linkText");
@@ -52,7 +53,10 @@ public class BasePage {
 	public By generate_file = getElementLocator("generate_files_linkText");
 	public By file_options_help_text = getElementLocator("file_options_help_css");
 	public By selected_checkboxes_css = getElementLocator("checkbox_selected_css");
+	public String selected_chkBox_label = getTextFromProperty("label_selected_chkbox_css");
 	public By file_download_button_options = getElementLocator("file_format_download_css");
+	public By csv_file_download = getElementLocator("csv_file_download_css");
+
 	// ****** Selected Text Options
 	public String files_available_for_download = getTextFromProperty("file_available_for_download_text");
 	// ****** Error Message
@@ -190,6 +194,10 @@ public class BasePage {
 
 	public boolean pageSourceContains(String text) {
 		return getDriver().getPageSource().contains(text);
+	}
+
+	public void browserBack() {
+		getDriver().navigate().back();
 	}
 
 	public void clear(By by) {
@@ -341,7 +349,6 @@ public class BasePage {
 	}
 
 	public String getoptionsText(String filter) {
-
 		selectedOptions = (ArrayList <WebElement>) findElementsBy(selected_options_css);
 		return selectedOptions.get(getFilterNameIndex(filter)).getText();
 	}
@@ -354,6 +361,11 @@ public class BasePage {
 	public ArrayList <WebElement> getAllCheckBoxes() throws Exception {
 		return (ArrayList <WebElement>) findElementsBy(checkboxes);
 	}
+
+	public ArrayList <WebElement> getAllSelectedChkBoxes() {
+		return (ArrayList <WebElement>) findElementsBy(selected_checkboxes_css);
+	}
+
 
 	public void selectCheckBox(int num) throws Exception {
 		getAllCheckBoxes().get(num).click();
@@ -402,6 +414,26 @@ public class BasePage {
 		}
 	}
 
+	public String returnSelectedOptionText() {
+		String valuetoReturn = null;
+		int totalMonths = 0;
+		try {
+			totalMonths = getRemoveLinks().size();
+		} catch (Exception ee) {
+		}
+		switch (totalMonths) {
+			case 0:
+				valuetoReturn = "Nothing selected";
+				break;
+			default:
+				valuetoReturn = "Selected options (" + (totalMonths) + ")";
+				break;
+		}
+
+		return valuetoReturn;
+
+	}
+
 
 	public void navigateToUrl(String url) {
 		getDriver().get(url);
@@ -420,6 +452,45 @@ public class BasePage {
 			checkBoxesSelected.add(webElement);
 		}
 		return checkBoxesSelected;
+	}
+
+	public void assertLastPage(ArrayList <String> selectedCheckBoxes) throws Exception {
+
+		click(generate_file);
+		int counter = 30;
+		try {
+			getWebDriverWait().until(ExpectedConditions.presenceOfElementLocated(file_download_button_options));
+		} catch (Exception ee) {
+			try {
+				while (counter < 1) {
+					Thread.sleep(2000);
+					assertLastPage(selectedCheckBoxes);
+					counter--;
+				}
+
+			} catch (InterruptedException ee1) {
+			}
+
+		}
+
+		ArrayList <String> actualButtonsForDownload = new ArrayList <>();
+		for (WebElement webElement : findElementsBy(file_download_button_options)) {
+			actualButtonsForDownload.add(webElement.getText().toUpperCase());
+		}
+
+
+		Assert.assertEquals(actualButtonsForDownload, selectedCheckBoxes,
+				"Mismatch between the file formats selected to the file formats available for download");
+		click(csv_file_download);
+
+	}
+
+	public ArrayList <String> getCheckBoxValues(ArrayList <WebElement> selectedCheckBoxes) {
+		ArrayList <String> chkBoxValues = new ArrayList <>();
+		for (WebElement webElement : selectedCheckBoxes) {
+			chkBoxValues.add(webElement.getAttribute("value"));
+		}
+		return chkBoxValues;
 	}
 
 }

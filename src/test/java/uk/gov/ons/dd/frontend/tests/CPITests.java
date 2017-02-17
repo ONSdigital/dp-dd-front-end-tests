@@ -9,6 +9,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.core.TestContext;
+import uk.gov.ons.dd.frontend.filters.HierarchySelector;
+import uk.gov.ons.dd.frontend.filters.SummarySelector;
 import uk.gov.ons.dd.frontend.pages.BasePage;
 import uk.gov.ons.dd.frontend.pages.CPI;
 import uk.gov.ons.dd.frontend.util.RandomStringGen;
@@ -17,11 +19,16 @@ import java.util.ArrayList;
 
 
 public class CPITests extends BasePage {
+	public String nace = getTextFromProperty("nace_filter_text");
+	public String searchKey1 = getTextFromProperty("nace_searchkey_text");
 	CPI cpi = new CPI();
 	String selectedOption = null;
 	String selected_year = null, selected_month = null;
-	int selectsize = 0;
+	ArrayList <String> selectedNames = new ArrayList <>();
 	String toRet = null;
+	HierarchySelector hierarchySelector = new HierarchySelector();
+	SummarySelector summarySelector = new SummarySelector();
+	ArrayList <String> nace_options = null;
 
 	@BeforeTest
 	public void openPage() {
@@ -36,7 +43,7 @@ public class CPITests extends BasePage {
 		selected_year = null;
 	}
 
-	@Test(groups = "cancelSelection")
+	//	@Test(groups = "cancelSelection")
 	public void cancelSelection() {
 		setSelections();
 		String defaultSelection = getoptionsText(cpi.time_filter);
@@ -54,7 +61,7 @@ public class CPITests extends BasePage {
 
 	}
 
-	@Test(groups = {"singleMonth"})//, dependsOnGroups = {"cancelSelection"})
+	//	@Test(groups = {"singleMonth"})//, dependsOnGroups = {"cancelSelection"})
 	public void saveSelection() {
 		getCustomiseLink(cpi.time_filter).click();
 		singleOrRange(cpi.single_month);
@@ -82,7 +89,7 @@ public class CPITests extends BasePage {
 
 	}
 
-	@Test(groups = {"removeSelection"}, dependsOnGroups = {"singleMonth"})
+	//	@Test(groups = {"removeSelection"}, dependsOnGroups = {"singleMonth"})
 	public void removeSelections() {
 		getCustomiseLink(cpi.time_filter).click();
 		removeAllSelection();
@@ -103,7 +110,7 @@ public class CPITests extends BasePage {
 
 	}
 
-	@Test(groups = {"rangeSelection"}, dependsOnGroups = {"removeSelection"})
+	//	@Test(groups = {"rangeSelection"}, dependsOnGroups = {"removeSelection"})
 	public void selectARange() {
 		getCustomiseLink(cpi.time_filter).click();
 		singleOrRange(cpi.range);
@@ -118,10 +125,10 @@ public class CPITests extends BasePage {
 						"Expected Time filters : " + selectedOptions);
 	}
 
-	@Test(groups = {"removerange"}, dependsOnGroups = {"rangeSelection"})
+	//	@Test(groups = {"removerange"}, dependsOnGroups = {"rangeSelection"})
 	public void removeSomeRange() {
 		getCustomiseLink(cpi.time_filter).click();
-		click(addMore);
+		click(new SummarySelector().addMore);
 		singleOrRange(cpi.range);
 		selectFromDropDown(cpi.select_year);
 		selectFromDropDown(cpi.select_month);
@@ -151,7 +158,7 @@ public class CPITests extends BasePage {
 
 	}
 
-	@Test(groups = {"removeAll"}, dependsOnGroups = {"removerange"})
+	//	@Test(groups = {"removeAll"}, dependsOnGroups = {"removerange"})
 	public void removeAllRange() {
 		getCustomiseLink(cpi.time_filter).click();
 		removeAllSelection();
@@ -161,55 +168,122 @@ public class CPITests extends BasePage {
 				"Actual Time filters : "
 						+ getoptionsText(cpi.time_filter) + "\n" +
 						"Expected Time filters : " + selectedOptions);
+		click(back_link);
 
 	}
 
-
-	@Test//(groups = {"customiseAggregates"}, dependsOnGroups = {"removeAll"})
-	public void searchAggregates() throws Exception {
-		String defaultSelection = getoptionsText(cpi.spl_aggregate_filter);
-		getCustomiseLink(cpi.spl_aggregate_filter).click();
-		click(cpi.search_aggregates);
-		sendKeys(cpi.search_textBox, cpi.searchKeys1);
-		click(cpi.search_button);
-		ArrayList <WebElement> checkBoxes = getAllCheckBoxes();
-		ArrayList <WebElement> selectedChkBoxes = selectChkBox(RandomStringGen.getRandomInt(checkBoxes.size() - 1));
-		click(save_selection);
-		click(addMore);
-		click(cpi.search_aggregates);
-		sendKeys(cpi.search_textBox, cpi.searchKeys2);
-		click(cpi.search_button);
-		checkBoxes = getAllCheckBoxes();
-		selectedChkBoxes = selectChkBox(RandomStringGen.getRandomInt(checkBoxes.size() - 1));
-		click(save_selection);
-		String selectedOptions = returnSelectedOptionText();
-		for (WebElement webTemp : getAllRangeOptions()) {
-
+	@Test(groups = {"customiseNACE"})
+	public void customiseNACE() {
+		try {
+			hierarchySelector.hierarchyJourney(nace, searchKey1);
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
 		}
-		click(save_selection);
-		Assert.assertEquals(getoptionsText(cpi.spl_aggregate_filter), selectedOptions,
-				"Actual selected filters : "
-						+ getoptionsText(cpi.spl_aggregate_filter) + "\n" +
-						"Expected selected filters : " + selectedOptions);
+	}
+
+	@Test(groups = {"getOptions"}, dependsOnGroups = {"customiseNACE"})
+	public void getSelectedOptions() {
+		nace_options = summarySelector.selectedOptions(nace, true);
+
+	}
+
+	@Test(groups = {"verifyData"}, dependsOnGroups = {"getOptions"})
+	public void downloadAndVerifyData() {
+		click(choose_download_format);
+		try {
+			ArrayList <WebElement> selectedChkBox = selectChkBox(1);
+			assertLastPage(getCheckBoxValues(selectedChkBox));
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail();
+		}
+		FileChecker fileChecker = new FileChecker();
+		String url = getElement(csv_file_download).getAttribute("href");
+		String[] urlSplit = url.split("/");
+		String fileName = urlSplit[urlSplit.length - 1];
+		try {
+			fileChecker.getFile(url, fileName);
+			fileChecker.checkForFilter(nace_options, nace, fileName);
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail();
+		}
+	}
+
+	//	@Test(groups = {"selectOptions"}, dependsOnGroups = {"addAllAggregates"})
+	public void selectAndBack() {
+		refresh();
+		getCustomiseLink(cpi.spl_aggregate_filter).click();
+		click(cpi.add_all_aggregates);
+		click(back_link);
+		click(cpi.search_aggregates);
+		click(back_link);
+		click(cpi.browse_aggregates);
+		click(back_link);
+		click(back_link);
+		Assert.assertTrue(getCustomiseLink(cpi.spl_aggregate_filter).isDisplayed());
+
 	}
 
 
+	public ArrayList <WebElement> hierarchySearch(By hierarchy, String searchString) throws Exception {
+		click(hierarchy);
+		//	click(back_link);
+//		click(hierarchy);
+		sendKeys(cpi.search_textBox, searchString);
+		click(cpi.search_button);
+		return selectBox();
+	}
 
+	public ArrayList <WebElement> hierarchyBrowse() throws Exception {
+		click(cpi.browse_aggregates);
+		int random = RandomStringGen.getRandomInt(browseHierarchies().size() - 1);
+		browseHierarchies().get(random).click();
+		return selectBox();
+	}
 
+	public ArrayList <WebElement> selectBox() throws Exception {
+		ArrayList <WebElement> checkBoxes = getAllCheckBoxes();
+		ArrayList <WebElement> toReturn = selectChkBox(RandomStringGen.getRandomInt(checkBoxes.size() - 1));
+		getNamesOfSelectedChkBox(toReturn);
+		click(save_selection);
+		return toReturn;
+	}
 
+	public ArrayList <WebElement> drillDownHierarchy(ArrayList <WebElement> allHierarchy) throws Exception {
+		try {
+			allHierarchy = browseHierarchies();
+			int random = RandomStringGen.getRandomInt(allHierarchy.size() - 1);
+			allHierarchy.get(random).click();
+			return allHierarchy;
+		} catch (Exception ee) {
 
+		} finally {
+			return selectBox();
+		}
+	}
 
+	public ArrayList <WebElement> browseHierarchies() throws Exception {
+		return (ArrayList <WebElement>) findElementsBy(cpi.customise_hierarchies);
+	}
 
+	public void getNamesOfSelectedChkBox(ArrayList <WebElement> checkBoxes) {
+		for (WebElement webElement : checkBoxes) {
+			String labelElement = selected_chkBox_label.replace("id", webElement.getAttribute("id"));
+			selectedNames.add(getElement(By.cssSelector(labelElement)).getText());
+		}
+	}
 
 	public void assertSelection(String selected, ArrayList <WebElement> elementArrayList) {
 		int numberOfItems = 0;
 		for (WebElement tempElement : elementArrayList) {
-			if (tempElement.getText().contains(selected)) {
+			if (tempElement.getText().toUpperCase().contains(selected.toUpperCase())) {
 				numberOfItems++;
 			}
 		}
 		Assert.assertTrue(numberOfItems > 0,
-				"Selected year/month :  " + selected + " is not displayed in the selection summary ");
+				"Selected Option :  " + selected + " is not displayed in the selection summary ");
 
 	}
 
@@ -220,25 +294,7 @@ public class CPITests extends BasePage {
 		}
 	}
 
-	public String returnSelectedOptionText() {
-		String valuetoReturn = null;
-		int totalMonths = 0;
-		try {
-			totalMonths = getRemoveLinks().size();
-		} catch (Exception ee) {
-		}
-		switch (totalMonths) {
-			case 0:
-				valuetoReturn = "Nothing selected";
-				break;
-			default:
-				valuetoReturn = "Selected options (" + (totalMonths) + ")";
-				break;
-		}
 
-		return valuetoReturn;
-
-	}
 
 	public String selectYearMonth(By cpiElement) {
 		Select dropdownSelect = null;

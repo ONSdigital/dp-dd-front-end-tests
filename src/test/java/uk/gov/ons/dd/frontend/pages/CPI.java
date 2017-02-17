@@ -26,7 +26,7 @@ public class CPI {
 	public By search_textBox = basePage.getElementLocator("search_textbox_css");
 	public By search_button = basePage.getElementLocator("search_button_css");
 	public By add_all_link_button = basePage.getElementLocator("browse_linkText");
-	public By customise_hierarchies = basePage.getElementLocator("customise_hierarchies_linkText");
+	public By customise_hierarchies = basePage.getElementLocator("customise_hierarchies_css");
 
 
 	public String searchKeys1 = basePage.getTextFromProperty("searchKeys1_text");

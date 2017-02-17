@@ -1,12 +1,12 @@
 package uk.gov.ons.dd.frontend.tests;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.core.TestContext;
+import uk.gov.ons.dd.frontend.filters.SummarySelector;
 import uk.gov.ons.dd.frontend.pages.ArmedForces;
 import uk.gov.ons.dd.frontend.pages.BasePage;
 
@@ -26,14 +26,16 @@ public class ArmedForcesTests extends BasePage {
 		}
 	*/
 	ArrayList <WebElement> selectedChkBox = new ArrayList <>();
-
+	ArrayList <String> age = new ArrayList <>();
+	ArrayList <String> residence = new ArrayList <>();
+	ArrayList <String> sex = new ArrayList <>();
+	SummarySelector summarySelector = new SummarySelector();
 	@BeforeTest
 	public void openPage() {
 		navigateToUrl(getConfig().getBaseURL());
 		click(armedForces.armedForces_link);
 		switchToLatestWindow();
 		click(customise_data_set);
-
 	}
 
 
@@ -51,7 +53,7 @@ public class ArmedForcesTests extends BasePage {
 		getCustomiseLink(armedForces.sex_filter).click();
 		// ids need to be removed
 		selectCheckBox(0);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.sex_filter), selectedOption,
 				"Actual sex filters : "
@@ -66,7 +68,7 @@ public class ArmedForcesTests extends BasePage {
 						"Expected sex filters : " + selectedOption);
 		getCustomiseLink(armedForces.sex_filter).click();
 		click(enable_all);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.sex_filter), defaultSelection,
 				"Actual sex filters : "
@@ -75,7 +77,7 @@ public class ArmedForcesTests extends BasePage {
 		getCustomiseLink(armedForces.sex_filter).click();
 		click(disable_all);
 		selectCheckBox(1);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.sex_filter), selectedOption,
 				"Actual sex filters : "
@@ -90,7 +92,7 @@ public class ArmedForcesTests extends BasePage {
 		getCustomiseLink(armedForces.residence_filter).click();
 		click(disable_all);
 		selectCheckBox(0);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.residence_filter), selectedOption,
 				"Actual residence filters : "
@@ -98,7 +100,7 @@ public class ArmedForcesTests extends BasePage {
 						"Expected residence filters : " + selectedOption);
 		getCustomiseLink(armedForces.residence_filter).click();
 		selectCheckBox(1);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.residence_filter), selectedOption,
 				"Actual residence filters : "
@@ -106,7 +108,7 @@ public class ArmedForcesTests extends BasePage {
 						"Expected residence filters : " + selectedOption);
 		getCustomiseLink(armedForces.residence_filter).click();
 		selectCheckBox(2);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.residence_filter), selectedOption,
 				"Actual residence filters : "
@@ -140,7 +142,7 @@ public class ArmedForcesTests extends BasePage {
 		getCustomiseLink(armedForces.age_filter).click();
 		click(disable_all);
 		selectCheckBox(0);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
@@ -148,7 +150,7 @@ public class ArmedForcesTests extends BasePage {
 						"Expected age filters : " + selectedOption);
 		getCustomiseLink(armedForces.age_filter).click();
 		selectCheckBox(1);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
@@ -156,7 +158,7 @@ public class ArmedForcesTests extends BasePage {
 						"Expected age filters : " + selectedOption);
 		getCustomiseLink(armedForces.age_filter).click();
 		selectCheckBox(2);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
@@ -164,7 +166,7 @@ public class ArmedForcesTests extends BasePage {
 						"Expected age filters : " + selectedOption);
 		getCustomiseLink(armedForces.age_filter).click();
 		selectCheckBox(3);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
@@ -172,7 +174,7 @@ public class ArmedForcesTests extends BasePage {
 						"Expected age filters : " + selectedOption);
 		getCustomiseLink(armedForces.age_filter).click();
 		selectCheckBox(4);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
@@ -196,7 +198,7 @@ public class ArmedForcesTests extends BasePage {
 		getCustomiseLink(armedForces.age_filter).click();
 		click(disable_all);
 		selectCheckBox(4);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.age_filter), selectedOption);
 		getCustomiseLink(armedForces.age_filter).click();
@@ -204,7 +206,7 @@ public class ArmedForcesTests extends BasePage {
 		selectCheckBox(1);
 		selectCheckBox(2);
 		selectCheckBox(3);
-		selectedOption = returnSelectedOptionText();
+		selectedOption = returnSelectedChkBox();
 		click(save_selection);
 		Assert.assertEquals(getoptionsText(armedForces.age_filter), selectedOption,
 				"Actual age filters : "
@@ -217,7 +219,7 @@ public class ArmedForcesTests extends BasePage {
 	@Test(groups = {"back"}, dependsOnGroups = {"age"})
 	public void cancelCustomiseDownload() {
 		openPage();
-		click(back_link);
+		browserBack();
 		Assert.assertTrue(getPageSource().contains(getTextFromProperty("customise_dataset_linkText")),
 				"Back button did not take it to the dataset details page");
 		click(customise_data_set);
@@ -234,17 +236,17 @@ public class ArmedForcesTests extends BasePage {
 		click(disable_all);
 		selectCheckBox(0);
 		selectCheckBox(1);
-		String ageSelection = returnSelectedOptionText();
+		String ageSelection = returnSelectedChkBox();
 		click(save_selection);
 		getCustomiseLink(armedForces.residence_filter).click();
 		click(disable_all);
 		selectCheckBox(0);
-		String residenceSelection = returnSelectedOptionText();
+		String residenceSelection = returnSelectedChkBox();
 		click(save_selection);
 		getCustomiseLink(armedForces.sex_filter).click();
 		click(disable_all);
 		selectCheckBox(0);
-		String sexSelection = returnSelectedOptionText();
+		String sexSelection = returnSelectedChkBox();
 		click(save_selection);
 		click(choose_download_format);
 		click(cancel_button);
@@ -254,11 +256,31 @@ public class ArmedForcesTests extends BasePage {
 
 	}
 
-	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"canceldownload"})
+	@Test(groups = {"getOptions"}, dependsOnGroups = {"canceldownload"})
+	public void getSelectedOptions() {
+		age = summarySelector.selectedOptions(armedForces.age_filter, false);
+		residence = summarySelector.selectedOptions(armedForces.residence_filter, false);
+		sex = summarySelector.selectedOptions(armedForces.sex_filter, false);
+	}
+
+	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"getOptions"})
 	public void downloadCompleteDS_WithCSV() throws Exception {
 		downloadOption(true);
 		selectedChkBox = selectChkBox(1);
 		assertLastPage(getCheckBoxValues(selectedChkBox));
+		FileChecker fileChecker = new FileChecker();
+		String url = getElement(csv_file_download).getAttribute("href");
+		String[] urlSplit = url.split("/");
+		String fileName = urlSplit[urlSplit.length - 1];
+		try {
+			fileChecker.getFile(url, fileName);
+			fileChecker.checkForFilter(age, armedForces.age_filter, fileName);
+			fileChecker.checkForFilter(residence, armedForces.residence_filter, fileName);
+			fileChecker.checkForFilter(sex, armedForces.sex_filter, fileName);
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 /*
@@ -274,7 +296,7 @@ public class ArmedForcesTests extends BasePage {
 	@Test(groups = {"cancelDownload"}, dependsOnGroups = {"downloadCSV"})
 	public void cancelCompleteDownload() throws Exception {
 		downloadOption(true);
-		selectChkBox(2);
+		selectChkBox(1);
 		click(cancel_button);
 		Assert.assertTrue(isElementPresent(download_complete_dataset),
 				"Cancel button did not take to the Download Complete Dataset page");
@@ -302,8 +324,7 @@ public class ArmedForcesTests extends BasePage {
 						+ "\n Expected error message : " + error_message_text);
 	}
 
-
-	public String returnSelectedOptionText() throws Exception {
+	public String returnSelectedChkBox() throws Exception {
 		String valuetoReturn = null;
 		int totalNumChkBox = getAllCheckBoxes().size();
 		int selectedChkBox = findElementsBy(selected_checkboxes_css).size();
@@ -320,44 +341,10 @@ public class ArmedForcesTests extends BasePage {
 
 	}
 
-	public ArrayList <String> getCheckBoxValues(ArrayList <WebElement> selectedCheckBoxes) {
-		ArrayList <String> chkBoxValues = new ArrayList <>();
-		for (WebElement webElement : selectedCheckBoxes) {
-			chkBoxValues.add(webElement.getAttribute("value"));
-		}
-		return chkBoxValues;
-	}
 
 
-	public void assertLastPage(ArrayList <String> selectedCheckBoxes) throws Exception {
-
-		click(generate_file);
-		int counter = 30;
-		try {
-			getWebDriverWait().until(ExpectedConditions.presenceOfElementLocated(file_download_button_options));
-		} catch (Exception ee) {
-			try {
-				while (counter < 1) {
-					Thread.sleep(2000);
-					assertLastPage(selectedCheckBoxes);
-					counter--;
-				}
-
-			} catch (InterruptedException ee1) {
-			}
-
-		}
-
-		ArrayList <String> actualButtonsForDownload = new ArrayList <>();
-		for (WebElement webElement : findElementsBy(file_download_button_options)) {
-			actualButtonsForDownload.add(webElement.getText().toUpperCase());
-		}
 
 
-		Assert.assertEquals(actualButtonsForDownload, selectedCheckBoxes,
-				"Mismatch between the file formats selected to the file formats available for download");
-
-	}
 
 	@AfterClass
 	public void closeTest() {
