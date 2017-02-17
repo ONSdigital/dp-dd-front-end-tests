@@ -20,7 +20,10 @@ import java.util.ArrayList;
 
 public class CPITests extends BasePage {
 	public String nace = getTextFromProperty("nace_filter_text");
+	public String prodcom = getTextFromProperty("prodcom_filter_text");
 	public String searchKey1 = getTextFromProperty("nace_searchkey_text");
+	public String prodcom_searchKey = getTextFromProperty("prodcom_searchkey_text");
+
 	CPI cpi = new CPI();
 	String selectedOption = null;
 	String selected_year = null, selected_month = null;
@@ -182,7 +185,17 @@ public class CPITests extends BasePage {
 		}
 	}
 
-	@Test(groups = {"getOptions"}, dependsOnGroups = {"customiseNACE"})
+	@Test(groups = {"customiseProdCom"}, dependsOnGroups = {"customiseNACE"})
+	public void customiseProdCom() {
+		try {
+			hierarchySelector.hierarchyJourney(prodcom, prodcom_searchKey);
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
+		}
+	}
+
+	@Test(groups = {"getOptions"}, dependsOnGroups = {"customiseProdCom"})
 	public void getSelectedOptions() {
 		nace_options = summarySelector.selectedOptions(nace, true);
 

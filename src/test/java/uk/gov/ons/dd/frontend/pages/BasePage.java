@@ -493,6 +493,26 @@ public class BasePage {
 		return chkBoxValues;
 	}
 
+	public void downloadOption(boolean completeDataSet, By datasetLink) {
+		if (completeDataSet) {
+			deleteCookies();
+			navigateToUrl(getConfig().getBaseURL());
+			click(datasetLink);
+			switchToLatestWindow();
+			click(download_complete_dataset);
+		} else {
+			click(choose_download_format);
+		}
+		click(help_with_file_formats);
+		Assert.assertTrue(isElementPresent(file_options_help_text), "File formats help text did not open and is still hidden");
+		click(help_with_file_formats);
+		Assert.assertFalse(isElementPresentWithOutWait(file_options_help_text),
+				"File formats help text is still open and did not close after clicking on it");
+		click(generate_file);
+		Assert.assertEquals(getElementText(error_message), error_message_text,
+				"Actual error message : " + getElementText(error_message)
+						+ "\n Expected error message : " + error_message_text);
+	}
 }
 
 
