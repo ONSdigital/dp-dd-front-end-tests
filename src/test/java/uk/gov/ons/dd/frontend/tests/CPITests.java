@@ -187,12 +187,12 @@ public class CPITests extends BasePage {
 
 	@Test(groups = {"customiseProdCom"}, dependsOnGroups = {"customiseNACE"})
 	public void customiseProdCom() {
-		try {
-			hierarchySelector.hierarchyJourney(prodcom, prodcom_searchKey);
-		} catch (Exception ee) {
-			ee.printStackTrace();
-			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
-		}
+//		try {
+//			hierarchySelector.hierarchyJourney(prodcom, prodcom_searchKey);
+//		} catch (Exception ee) {
+//			ee.printStackTrace();
+//			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
+//		}
 	}
 
 	@Test(groups = {"getOptions"}, dependsOnGroups = {"customiseProdCom"})

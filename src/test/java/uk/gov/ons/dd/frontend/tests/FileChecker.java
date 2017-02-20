@@ -63,7 +63,6 @@ public class FileChecker {
 							line = line + "," + lineVal;
 						}
 						line = line.replace("repl,", "");
-						Assert.assertTrue(numberOfLines > 1, "Number of lines in the file is " + numberOfLines);
 						if (numberOfLines > 1) {
 							Assert.assertTrue(line.contains(searchTerm), "****The filter is not present in the file.****\n" +
 									"Expected search term " + searchTerm +
@@ -72,6 +71,7 @@ public class FileChecker {
 					}
 				}
 			}
+			Assert.assertTrue(numberOfLines > 0, "Number of lines in the file is " + numberOfLines);
 		}
 		csvReader.close();
 		return numberOfLines;

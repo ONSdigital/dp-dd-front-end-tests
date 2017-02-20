@@ -64,7 +64,7 @@ public class BasePage {
 	private ArrayList <WebElement> filterNames = new ArrayList <>();
 	private ArrayList <WebElement> selectedOptions = new ArrayList <>();
 	private ArrayList <WebElement> customiseLinks = new ArrayList <>();
-
+	private String removeGroup = getTextFromProperty("remove_group_text");
 	public WebDriver getDriver() {
 		return TestContext.getDriver();
 	}
@@ -368,7 +368,14 @@ public class BasePage {
 
 
 	public void selectCheckBox(int num) throws Exception {
-		getAllCheckBoxes().get(num).click();
+		ArrayList <WebElement> allSelectedChkBox = new ArrayList <>();
+		try {
+			allSelectedChkBox = getAllSelectedChkBoxes();
+		} catch (Exception ee) {
+		}
+		if (!allSelectedChkBox.contains(getAllCheckBoxes().get(num))) {
+			getAllCheckBoxes().get(num).click();
+		}
 	}
 
 	public ArrayList <WebElement> getRemoveLinks() throws Exception {
@@ -377,7 +384,7 @@ public class BasePage {
 		while (iter.hasNext()) {
 			WebElement webTemp = iter.next();
 
-			if (webTemp.getText().contains("Remove all"))
+			if (webTemp.getText().contains(removeGroup))
 				iter.remove();
 		}
 		return removeButtons;
@@ -387,7 +394,7 @@ public class BasePage {
 		ArrayList <WebElement> removeButtons = (ArrayList <WebElement>) findElementsBy(removeButton);
 		ArrayList <WebElement> removeAllLinks = new ArrayList <>();
 		for (WebElement webTemp : removeButtons) {
-			if (webTemp.getText().contains("Remove all")) {
+			if (webTemp.getText().contains(removeGroup)) {
 				removeAllLinks.add(webTemp);
 			}
 		}

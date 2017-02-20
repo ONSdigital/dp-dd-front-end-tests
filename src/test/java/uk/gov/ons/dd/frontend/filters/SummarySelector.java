@@ -11,6 +11,8 @@ public class SummarySelector extends BasePage {
 
 	public By addMore = getElementLocator("add_more_css");
 	public By continue_selection = getElementLocator("save_selection_css");
+	public By remove_all_selected = getElementLocator("remove_all_css");
+
 
 	public void removeAll() {
 		ArrayList <WebElement> removeAllLists = getRemoveAll_Lists();
