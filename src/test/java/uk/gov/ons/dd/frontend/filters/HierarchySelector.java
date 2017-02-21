@@ -46,19 +46,8 @@ public class HierarchySelector extends BasePage {
 
 	// Use this to add the number of checkboxes within a hierarchy
 
-	public ArrayList <String> selectRandomChkBox(int num) throws Exception {
-		ArrayList <String> selectedValues = new ArrayList <>();
-		ArrayList <WebElement> selectedElements = selectChkBox(num);
-		for (WebElement webElement : selectedElements) {
-			String labelElement = selected_chkBox_label.replace("id", webElement.getAttribute("id"));
-			selectedValues.add(getElement(By.cssSelector(labelElement)).getText());
-		}
-		click(save_selection);
-		return selectedValues;
-	}
 
-
-	public void hierarchyJourney(String filterText, String searchStr) throws Exception {
+	public ArrayList <String> hierarchyJourney(String filterText, String searchStr) throws Exception {
 		String defaultSelection = getoptionsText(filterText);
 		getCustomiseLink(filterText).click();
 		addAll();
@@ -83,21 +72,12 @@ public class HierarchySelector extends BasePage {
 				getAllCheckBoxes().size() - 1));
 		click(summarySelector.addMore);
 		browseHierarchy(false);
-		ArrayList <String> browsed_selection = selectRandomChkBox(RandomStringGen.getRandomInt(
-				getAllCheckBoxes().size() - 1));
+		values_selected.addAll(selectRandomChkBox(RandomStringGen.getRandomInt(
+				getAllCheckBoxes().size() - 1)));
 		assertSelection(values_selected, getAllRangeOptions());
-		assertSelection(browsed_selection, getAllRangeOptions());
 		click(save_selection);
+		return values_selected;
 	}
 
-	public void assertSelection(ArrayList <String> selected, ArrayList <WebElement> elementArrayList) {
-		ArrayList <String> compareArrayList = new ArrayList <>();
-		for (WebElement tempElement : elementArrayList) {
-			compareArrayList.add(tempElement.getText());
-		}
-		for (String tempStr : selected) {
-			Assert.assertTrue(compareArrayList.contains(tempStr),
-					"Selected Option : " + tempStr + "is not displayed in the selection summary ");
-		}
-	}
+
 }

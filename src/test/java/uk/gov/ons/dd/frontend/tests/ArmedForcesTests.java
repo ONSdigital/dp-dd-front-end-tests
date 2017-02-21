@@ -10,6 +10,7 @@ import uk.gov.ons.dd.frontend.filters.OptionSelector;
 import uk.gov.ons.dd.frontend.filters.SummarySelector;
 import uk.gov.ons.dd.frontend.pages.ArmedForces;
 import uk.gov.ons.dd.frontend.pages.BasePage;
+import uk.gov.ons.dd.frontend.util.Helper;
 
 import java.util.ArrayList;
 
@@ -32,14 +33,16 @@ public class ArmedForcesTests extends BasePage {
 	ArrayList <String> sex = new ArrayList <>();
 	SummarySelector summarySelector = new SummarySelector();
 	OptionSelector optionSelector = new OptionSelector();
+	String fileName = null;
+
 	@BeforeTest
 	public void openPage() {
 		navigateToUrl(getConfig().getBaseURL());
 		click(armedForces.armedForces_link);
 		switchToLatestWindow();
+		Helper.pause(10);
 		click(customise_data_set);
 	}
-
 
 	@Test(groups = "sex")
 	public void customiseSexFilter() {
@@ -112,6 +115,7 @@ public class ArmedForcesTests extends BasePage {
 
 	}
 
+	// CHANGE HERE ADD SELECTED VALUES CALL OPTIONSELECTOR
 	@Test(groups = {"getOptions"}, dependsOnGroups = {"canceldownload"})
 	public void getSelectedOptions() {
 		age = summarySelector.selectedOptions(armedForces.age_filter, false);
@@ -119,25 +123,31 @@ public class ArmedForcesTests extends BasePage {
 		sex = summarySelector.selectedOptions(armedForces.sex_filter, false);
 	}
 
-	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"getOptions"})
+	@Test(groups = {"customiseCSV"}, dependsOnGroups = {"getOptions"})
+	public void downloadCustomisedDS_CSV() {
+		click(choose_download_format);
+		try {
+			selectCheckBox(1);
+		} catch (Exception ee) {
+		}
+		click(generate_file);
+		String url = waitForDownload(fileName);
+		String[] urlSplit = url.split("/");
+		fileName = urlSplit[urlSplit.length - 1];
+		checkFile(url, age, armedForces.age_filter, false);
+		checkFile(url, residence, armedForces.residence_filter, false);
+		checkFile(url, sex, armedForces.sex_filter, false);
+	}
+
+	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"customiseCSV"})
 	public void downloadCompleteDS_WithCSV() throws Exception {
 		downloadOption(true, armedForces.armedForces_link);
 		selectedChkBox = selectChkBox(1);
 		assertLastPage(getCheckBoxValues(selectedChkBox));
-		FileChecker fileChecker = new FileChecker();
-		String url = getElement(csv_file_download).getAttribute("href");
-		String[] urlSplit = url.split("/");
-		String fileName = urlSplit[urlSplit.length - 1];
-		try {
-			fileChecker.getFile(url, fileName);
-			fileChecker.checkForFilter(age, armedForces.age_filter, fileName);
-			fileChecker.checkForFilter(residence, armedForces.residence_filter, fileName);
-			fileChecker.checkForFilter(sex, armedForces.sex_filter, fileName);
-		} catch (Exception ee) {
-			ee.printStackTrace();
-			Assert.fail();
-		}
 	}
+
+
+
 
 /*
 	@Test(groups = {"alloptions"}, dependsOnGroups = {"option1"})
@@ -161,5 +171,6 @@ public class ArmedForcesTests extends BasePage {
 	@AfterClass
 	public void closeTest() {
 		TestContext.getDriver().close();
+		TestContext.getDriver().quit();
 	}
 }

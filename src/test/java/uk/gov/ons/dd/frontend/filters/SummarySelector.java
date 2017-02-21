@@ -31,7 +31,7 @@ public class SummarySelector extends BasePage {
 			}
 		} else {
 			for (WebElement webTemp : getAllSelectedChkBoxes()) {
-				selectedValues.add(webTemp.getText());
+				selectedValues.add(webTemp.getAttribute("id"));
 			}
 		}
 		click(continue_selection);

@@ -211,17 +211,14 @@ public class CPITests extends BasePage {
 			ee.printStackTrace();
 			Assert.fail();
 		}
-		FileChecker fileChecker = new FileChecker();
-		String url = getElement(csv_file_download).getAttribute("href");
-		String[] urlSplit = url.split("/");
-		String fileName = urlSplit[urlSplit.length - 1];
 		try {
-			fileChecker.getFile(url, fileName);
-			fileChecker.checkForFilter(nace_options, nace, fileName);
+			selectCheckBox(1);
 		} catch (Exception ee) {
-			ee.printStackTrace();
-			Assert.fail();
 		}
+		String url = waitForDownload(fileName);
+		String[] urlSplit = url.split("/");
+		fileName = urlSplit[urlSplit.length - 1];
+		checkFile(url, nace_options, nace, true);
 	}
 
 	//	@Test(groups = {"selectOptions"}, dependsOnGroups = {"addAllAggregates"})
@@ -239,54 +236,6 @@ public class CPITests extends BasePage {
 
 	}
 
-
-	public ArrayList <WebElement> hierarchySearch(By hierarchy, String searchString) throws Exception {
-		click(hierarchy);
-		//	click(back_link);
-//		click(hierarchy);
-		sendKeys(cpi.search_textBox, searchString);
-		click(cpi.search_button);
-		return selectBox();
-	}
-
-	public ArrayList <WebElement> hierarchyBrowse() throws Exception {
-		click(cpi.browse_aggregates);
-		int random = RandomStringGen.getRandomInt(browseHierarchies().size() - 1);
-		browseHierarchies().get(random).click();
-		return selectBox();
-	}
-
-	public ArrayList <WebElement> selectBox() throws Exception {
-		ArrayList <WebElement> checkBoxes = getAllCheckBoxes();
-		ArrayList <WebElement> toReturn = selectChkBox(RandomStringGen.getRandomInt(checkBoxes.size() - 1));
-		getNamesOfSelectedChkBox(toReturn);
-		click(save_selection);
-		return toReturn;
-	}
-
-	public ArrayList <WebElement> drillDownHierarchy(ArrayList <WebElement> allHierarchy) throws Exception {
-		try {
-			allHierarchy = browseHierarchies();
-			int random = RandomStringGen.getRandomInt(allHierarchy.size() - 1);
-			allHierarchy.get(random).click();
-			return allHierarchy;
-		} catch (Exception ee) {
-
-		} finally {
-			return selectBox();
-		}
-	}
-
-	public ArrayList <WebElement> browseHierarchies() throws Exception {
-		return (ArrayList <WebElement>) findElementsBy(cpi.customise_hierarchies);
-	}
-
-	public void getNamesOfSelectedChkBox(ArrayList <WebElement> checkBoxes) {
-		for (WebElement webElement : checkBoxes) {
-			String labelElement = selected_chkBox_label.replace("id", webElement.getAttribute("id"));
-			selectedNames.add(getElement(By.cssSelector(labelElement)).getText());
-		}
-	}
 
 	public void assertSelection(String selected, ArrayList <WebElement> elementArrayList) {
 		int numberOfItems = 0;
@@ -346,6 +295,7 @@ public class CPITests extends BasePage {
 	@AfterClass
 	public void closeTest() {
 		TestContext.getDriver().close();
+		TestContext.getDriver().quit();
 	}
 
 

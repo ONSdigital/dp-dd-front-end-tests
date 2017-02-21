@@ -2,6 +2,7 @@ package uk.gov.ons.dd.frontend.tests;
 
 
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import org.testng.Assert;
 
 import java.io.*;
@@ -44,38 +45,31 @@ public class FileChecker {
 		}
 	}
 
-	public int checkForFilter(ArrayList <String> dimFiler, String key, String fileName) throws Exception {
-		int numberOfLines = 0;
-		CSVReader csvReader = null;
+	public void checkForFilter(ArrayList <String> dimFiler, String key, String fileName, boolean hierarchy) throws Exception {
+		String file = "download/" + fileName;
+		CSVReader csvReader = new CSVReader(new FileReader(file));
+		ArrayList <String[]> allLines = (ArrayList <String[]>) csvReader.readAll();
+		ArrayList <String[]> linesToRemove = new ArrayList <>();
 		for (String filter : dimFiler) {
-			String searchTerm = key + "," + filter;
-			String file = "download/" + fileName;
-			csvReader = new CSVReader(new FileReader(file));
-			String[] nextLine;
-			while ((nextLine = csvReader.readNext()) != null) {
-				if (!nextLine[0].contains("Observation")) {
-					if (nextLine[0].contains("****")) {
-						System.out.println("******Last line of the CSV***");
-					} else {
-						numberOfLines++;
-						String line = "repl";
-						for (String lineVal : nextLine) {
-							line = line + "," + lineVal;
-						}
-						line = line.replace("repl,", "");
-						if (numberOfLines > 1) {
-							Assert.assertTrue(line.contains(searchTerm), "****The filter is not present in the file.****\n" +
-									"Expected search term " + searchTerm +
-									"\n Actual Line in the csv " + line);
-						}
-					}
+			String searchTerm = hierarchy ? "(.*)" + key + "," + "(.*)," + filter + "(.*)" : "(.*)" + key + "," + filter + "(.*)";
+			for (String[] strArr : allLines) {
+				String temp = null;
+				for (int index = 0; index < strArr.length; index++) {
+					temp += strArr[index] + ",";
 				}
-			}
-			Assert.assertTrue(numberOfLines > 0, "Number of lines in the file is " + numberOfLines);
-		}
-		csvReader.close();
-		return numberOfLines;
-	}
+				if (temp.matches(searchTerm)) {
+					linesToRemove.add(strArr);
+				}
 
+			}
+		}
+		allLines.removeAll(linesToRemove);
+		StringWriter sw = new StringWriter();
+		CSVWriter writer = new CSVWriter(sw);
+		writer.writeAll(allLines);
+		System.out.println(sw.toString());
+		Assert.assertTrue(allLines.size() == 1, "Mismatch between the filter and the downloaded CSV" + sw.toString());
+
+	}
 
 }

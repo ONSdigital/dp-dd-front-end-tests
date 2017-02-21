@@ -28,7 +28,8 @@ public class AnnualBusinessSurvey extends BaseTest {
 	OptionSelector optionSelector = new OptionSelector();
 	ArrayList <String> sicCodes = new ArrayList <>();
 	ArrayList <String> ukBizVal = new ArrayList <>();
-
+	ArrayList <String> selectedSicCodes = new ArrayList <>();
+	ArrayList <String> selectedBizValues = new ArrayList <>();
 	@BeforeTest
 	public void init() {
 		openPage(abs);
@@ -37,7 +38,7 @@ public class AnnualBusinessSurvey extends BaseTest {
 	@Test(groups = {"sic"})
 	public void customiseSIC() {
 		try {
-			hierarchySelector.hierarchyJourney(sic07ABS, searchKey1);
+			selectedSicCodes = hierarchySelector.hierarchyJourney(sic07ABS, searchKey1);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
@@ -66,13 +67,14 @@ public class AnnualBusinessSurvey extends BaseTest {
 		try {
 			selectedChkBox = basePage.selectChkBox(1);
 			basePage.assertLastPage(basePage.getCheckBoxValues(selectedChkBox));
+
 			FileChecker fileChecker = new FileChecker();
 			String url = basePage.getElement(basePage.csv_file_download).getAttribute("href");
 			String[] urlSplit = url.split("/");
 			String fileName = urlSplit[urlSplit.length - 1];
 			fileChecker.getFile(url, fileName);
-			fileChecker.checkForFilter(sicCodes, sic07ABS, fileName);
-			//		fileChecker.checkForFilter(ukBizVal, uk_Business_value, fileName);
+			basePage.checkFile(url, selectedSicCodes, sic07ABS, true);
+			basePage.checkFile(url, selectedBizValues, uk_Business_value, false);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 			Assert.fail();
@@ -83,6 +85,7 @@ public class AnnualBusinessSurvey extends BaseTest {
 	@AfterClass
 	public void closeTest() {
 		TestContext.getDriver().close();
+		TestContext.getDriver().quit();
 	}
 
 }

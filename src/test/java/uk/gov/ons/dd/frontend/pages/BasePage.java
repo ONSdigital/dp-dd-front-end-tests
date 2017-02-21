@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import uk.gov.ons.dd.frontend.core.Configuration;
 import uk.gov.ons.dd.frontend.core.TestContext;
+import uk.gov.ons.dd.frontend.tests.FileChecker;
 import uk.gov.ons.dd.frontend.util.Do;
 import uk.gov.ons.dd.frontend.util.Helper;
 import uk.gov.ons.dd.frontend.util.PropertyReader;
@@ -22,6 +23,9 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class BasePage {
 	public PropertyReader propertyReader = new PropertyReader(getConfig());
+	public FileChecker fileChecker = new FileChecker();
+	public String fileName = null;
+
 	/* ***
 	COMMON PAGE ELEMENTS
 
@@ -61,10 +65,12 @@ public class BasePage {
 	public String files_available_for_download = getTextFromProperty("file_available_for_download_text");
 	// ****** Error Message
 	public String error_message_text = getTextFromProperty("error_message_text");
+	int counter = 50;
 	private ArrayList <WebElement> filterNames = new ArrayList <>();
 	private ArrayList <WebElement> selectedOptions = new ArrayList <>();
 	private ArrayList <WebElement> customiseLinks = new ArrayList <>();
 	private String removeGroup = getTextFromProperty("remove_group_text");
+
 	public WebDriver getDriver() {
 		return TestContext.getDriver();
 	}
@@ -198,6 +204,7 @@ public class BasePage {
 
 	public void browserBack() {
 		getDriver().navigate().back();
+		Helper.pause(10);
 	}
 
 	public void clear(By by) {
@@ -366,7 +373,6 @@ public class BasePage {
 		return (ArrayList <WebElement>) findElementsBy(selected_checkboxes_css);
 	}
 
-
 	public void selectCheckBox(int num) throws Exception {
 		ArrayList <WebElement> allSelectedChkBox = new ArrayList <>();
 		try {
@@ -400,7 +406,6 @@ public class BasePage {
 		}
 		return removeAllLinks;
 	}
-
 
 	public ArrayList <WebElement> getAllRangeHeaders() {
 
@@ -441,14 +446,12 @@ public class BasePage {
 
 	}
 
-
 	public void navigateToUrl(String url) {
 		getDriver().get(url);
 		Cookie splashCookie = new Cookie("splash", "y");
 		getDriver().manage().addCookie(splashCookie);
 		refresh();
 	}
-
 
 	public ArrayList <WebElement> selectChkBox(int... checkBox) throws Exception {
 		ArrayList <WebElement> checkBoxesSelected = new ArrayList <>();
@@ -464,6 +467,7 @@ public class BasePage {
 	public void assertLastPage(ArrayList <String> selectedCheckBoxes) throws Exception {
 
 		click(generate_file);
+/*
 		int counter = 30;
 		try {
 			getWebDriverWait().until(ExpectedConditions.presenceOfElementLocated(file_download_button_options));
@@ -489,7 +493,7 @@ public class BasePage {
 		Assert.assertEquals(actualButtonsForDownload, selectedCheckBoxes,
 				"Mismatch between the file formats selected to the file formats available for download");
 		click(csv_file_download);
-
+*/
 	}
 
 	public ArrayList <String> getCheckBoxValues(ArrayList <WebElement> selectedCheckBoxes) {
@@ -519,6 +523,71 @@ public class BasePage {
 		Assert.assertEquals(getElementText(error_message), error_message_text,
 				"Actual error message : " + getElementText(error_message)
 						+ "\n Expected error message : " + error_message_text);
+	}
+
+	public ArrayList <String> selectRandomChkBox(int num) throws Exception {
+		ArrayList <String> selectedValues = new ArrayList <>();
+		ArrayList <WebElement> selectedElements = selectChkBox(num);
+		for (WebElement webElement : selectedElements) {
+			String labelElement = selected_chkBox_label.replace("id", webElement.getAttribute("id"));
+			selectedValues.add(getElement(By.cssSelector(labelElement)).getAttribute("for") + "," + getElement(By.cssSelector(labelElement)).getText());
+		}
+		click(save_selection);
+		return selectedValues;
+	}
+
+	public ArrayList <String> formatSelected(ArrayList <String> selected) {
+		ArrayList <String> returnList = new ArrayList <>();
+		for (String tempStrArr : selected) {
+			String[] tempArr = tempStrArr.split(",");
+			for (int index = 1; index < tempArr.length; index++) {
+				returnList.add(tempArr[index] + " ");
+			}
+		}
+		return returnList;
+
+	}
+
+	public void assertSelection(ArrayList <String> selected, ArrayList <WebElement> elementArrayList) {
+
+		ArrayList <String> compareArrayList = new ArrayList <>();
+		for (WebElement tempElement : elementArrayList) {
+			compareArrayList.add(tempElement.getText());
+		}
+		for (String tempStr : formatSelected(selected)) {
+			tempStr = tempStr.trim();
+			Assert.assertTrue(compareArrayList.contains(tempStr),
+					"Selected Option : " + tempStr + " is not displayed in the selection summary ");
+		}
+	}
+
+	public String waitForDownload(String fileName) {
+		String url = null;
+		while (fileName == null && counter != 0) {
+			try {
+				if (getElement(csv_file_download).isDisplayed()) {
+					url = getElement(csv_file_download).getAttribute("href");
+					String[] urlSplit = url.split("/");
+					fileName = urlSplit[urlSplit.length - 1];
+				} else {
+					Thread.sleep(200 * counter);
+					counter--;
+				}
+			} catch (Exception ee) {
+			}
+		}
+		return url;
+	}
+
+	public void checkFile(String url, ArrayList <String> selections, String filter, boolean hierarchy) {
+		try {
+			fileChecker.getFile(url, fileName);
+			fileChecker.checkForFilter(selections, filter, fileName, hierarchy);
+
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail();
+		}
 	}
 }
 
