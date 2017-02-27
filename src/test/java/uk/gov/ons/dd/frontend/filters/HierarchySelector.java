@@ -58,9 +58,6 @@ public class HierarchySelector extends BasePage {
 		getCustomiseLink(filterText).click();
 		summarySelector.removeAll();
 		browserBack();
-		if (filterText.equals("NACE")) {
-			browserBack();
-		}
 //		Assert.assertEquals(getoptionsText(filterText), "Nothing selected",
 //				"Actual selected filters : "
 //						+ getoptionsText(filterText) + "\n" +
