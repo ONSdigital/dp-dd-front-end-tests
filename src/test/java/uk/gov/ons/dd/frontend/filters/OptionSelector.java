@@ -11,6 +11,7 @@ public class OptionSelector extends BasePage {
 	public void optionJourney(String filterText) throws Exception {
 		String defaultSelection = getoptionsText(filterText);
 		getCustomiseLink(filterText).click();
+		click(enable_all);
 		click(disable_all);
 		click(save_selection);
 		Assert.assertEquals(getElementText(error_message), error_message_text,

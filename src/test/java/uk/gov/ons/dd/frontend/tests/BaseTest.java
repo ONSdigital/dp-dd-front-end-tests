@@ -15,4 +15,8 @@ public class BaseTest {
 		basePage.click(basePage.customise_data_set);
 	}
 
+	public void checkForFileExists() {
+
+	}
+
 }

@@ -1,6 +1,7 @@
 package uk.gov.ons.dd.frontend.pages;
 
 
+import com.opencsv.CSVReader;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,6 +15,7 @@ import uk.gov.ons.dd.frontend.util.Do;
 import uk.gov.ons.dd.frontend.util.Helper;
 import uk.gov.ons.dd.frontend.util.PropertyReader;
 
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +26,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 public class BasePage {
 	public PropertyReader propertyReader = new PropertyReader(getConfig());
 	public FileChecker fileChecker = new FileChecker();
-	public String fileName = null;
+	public String fileName = null, url = null;
 
 	/* ***
 	COMMON PAGE ELEMENTS
@@ -70,6 +72,11 @@ public class BasePage {
 	private ArrayList <WebElement> selectedOptions = new ArrayList <>();
 	private ArrayList <WebElement> customiseLinks = new ArrayList <>();
 	private String removeGroup = getTextFromProperty("remove_group_text");
+
+	public static void main(String[] args) {
+		BasePage basePage = new BasePage();
+		basePage.test();
+	}
 
 	public WebDriver getDriver() {
 		return TestContext.getDriver();
@@ -552,11 +559,13 @@ public class BasePage {
 
 		ArrayList <String> compareArrayList = new ArrayList <>();
 		for (WebElement tempElement : elementArrayList) {
+
 			compareArrayList.add(tempElement.getText());
 		}
 		for (String tempStr : formatSelected(selected)) {
 			tempStr = tempStr.trim();
-			Assert.assertTrue(compareArrayList.contains(tempStr),
+			String temp[] = tempStr.split("\\(found");
+			Assert.assertTrue(compareArrayList.contains(temp[0].trim()),
 					"Selected Option : " + tempStr + " is not displayed in the selection summary ");
 		}
 	}
@@ -569,6 +578,7 @@ public class BasePage {
 					url = getElement(csv_file_download).getAttribute("href");
 					String[] urlSplit = url.split("/");
 					fileName = urlSplit[urlSplit.length - 1];
+					break;
 				} else {
 					Thread.sleep(200 * counter);
 					counter--;
@@ -579,15 +589,60 @@ public class BasePage {
 		return url;
 	}
 
-	public void checkFile(String url, ArrayList <String> selections, String filter, boolean hierarchy) {
+	public void checkFile(ArrayList <String> selections, String filter, boolean hierarchy) {
 		try {
 			fileChecker.getFile(url, fileName);
-			fileChecker.checkForFilter(selections, filter, fileName, hierarchy);
+			String file = "download/" + fileName;
+			CSVReader csvReader = new CSVReader(new FileReader(file));
+			ArrayList <String[]> allLines = (ArrayList <String[]>) csvReader.readAll();
+			allLines.remove(0);
+			fileChecker.checkForFilter(selections, filter, fileName, hierarchy, allLines);
 
 		} catch (Exception ee) {
 			ee.printStackTrace();
 			Assert.fail();
 		}
+	}
+
+	public void selectDownloadCSV() {
+		click(choose_download_format);
+		try {
+			ArrayList <WebElement> selectedChkBox = selectChkBox(1);
+			assertLastPage(getCheckBoxValues(selectedChkBox));
+			url = waitForDownload(fileName);
+			String[] urlSplit = url.split("/");
+			fileName = urlSplit[urlSplit.length - 1];
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail();
+		}
+		try {
+			selectCheckBox(1);
+		} catch (Exception ee) {
+		}
+	}
+
+	public void checkDownloadedFile(ArrayList <String> values, String filter, boolean hierarchy) {
+		if (url == null) {
+			url = waitForDownload(fileName);
+			String[] urlSplit = url.split("/");
+			fileName = urlSplit[urlSplit.length - 1];
+		}
+		checkFile(values, filter, hierarchy);
+	}
+
+	public void test() {
+		ArrayList <String> age = new ArrayList <>();
+		age.add("Age 25 to 34");
+		ArrayList <String> resi = new ArrayList <>();
+		resi.add("Lives in a communal establishment");
+		ArrayList <String> sex = new ArrayList <>();
+		sex.add("Females");
+		checkDownloadedFile(age, "Age", false);
+		checkDownloadedFile(resi, "Residence", false);
+		checkDownloadedFile(sex, "Sex", false);
+
+
 	}
 }
 

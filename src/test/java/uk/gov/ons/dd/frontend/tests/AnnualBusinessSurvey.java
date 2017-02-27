@@ -63,22 +63,10 @@ public class AnnualBusinessSurvey extends BaseTest {
 
 	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"getOptions"})
 	public void downloadCompleteDS_WithCSV() {
-		basePage.downloadOption(true, abs);
-		try {
-			selectedChkBox = basePage.selectChkBox(1);
-			basePage.assertLastPage(basePage.getCheckBoxValues(selectedChkBox));
+		basePage.selectDownloadCSV();
+		basePage.checkFile(selectedSicCodes, sic07ABS, true);
+		basePage.checkFile(selectedBizValues, uk_Business_value, false);
 
-			FileChecker fileChecker = new FileChecker();
-			String url = basePage.getElement(basePage.csv_file_download).getAttribute("href");
-			String[] urlSplit = url.split("/");
-			String fileName = urlSplit[urlSplit.length - 1];
-			fileChecker.getFile(url, fileName);
-			basePage.checkFile(url, selectedSicCodes, sic07ABS, true);
-			basePage.checkFile(url, selectedBizValues, uk_Business_value, false);
-		} catch (Exception ee) {
-			ee.printStackTrace();
-			Assert.fail();
-		}
 	}
 
 

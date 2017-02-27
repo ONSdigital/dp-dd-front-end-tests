@@ -14,6 +14,8 @@ public class Configuration {
 	private String baseURL;
 	private String browser;
 	private String backend;
+	private String metadataEditor, fileuploader;
+
 
 
 	public Configuration() {
@@ -55,7 +57,12 @@ public class Configuration {
 		if (config.getProperty("backend") != null) {
 			backend = (String) config.get("backend");
 		}
-
+		if (config.containsKey("metadata_editor")) {
+			metadataEditor = (String) config.get("metadata_editor");
+		}
+		if (config.containsKey("fileUploader")) {
+			fileuploader = (String) config.get("fileUploader");
+		}
 	}
 
 	private void overrideConfigFromEnvironmentVariables() {
@@ -72,6 +79,14 @@ public class Configuration {
 		if (backend_value != null) {
 			backend = backend_value;
 		}
+	}
+
+	public String getMetadataEditor() {
+		return metadataEditor;
+	}
+
+	public String getFileuploader() {
+		return fileuploader;
 	}
 
 	@Override
