@@ -15,8 +15,11 @@ public class BaseTest {
 		basePage.click(basePage.customise_data_set);
 	}
 
-	public void checkForFileExists() {
-
+	public void checkForDS(By link) throws Exception {
+		String baseUrl = basePage.getConfig().getBaseURL();
+		basePage.navigateToUrl(baseUrl);
+		basePage.click(link);
+		basePage.switchToLatestWindow();
 	}
 
 }

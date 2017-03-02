@@ -26,23 +26,17 @@ public class CPITests extends BaseTest {
 	ArrayList <String> selected_spl_agg = null;
 	ArrayList <String> selectedProdcom = null;
 
-	public void checkForDS() throws Exception {
-		String baseUrl = basePage.getConfig().getBaseURL();
-		basePage.navigateToUrl(baseUrl);
-		basePage.click(cpi_link);
-		basePage.switchToLatestWindow();
-	}
 
-	//	@Test(groups = {"downloadComplete"})
+	@Test(groups = {"downloadComplete"})
 	public void downloadCompleteDS() throws Exception {
-		checkForDS();
+		checkForDS(cpi_link);
 		basePage.click(basePage.download_complete_dataset);
 		basePage.selectDownloadCSV(false);
 	}
 
-	@Test(groups = {"openCPI"})//, dependsOnGroups = {"downloadComplete"})
+	@Test(groups = {"openCPI"}, dependsOnGroups = {"downloadComplete"})
 	public void openCPI() throws Exception {
-		checkForDS();
+		checkForDS(cpi_link);
 		basePage.click(basePage.customise_data_set);
 	}
 

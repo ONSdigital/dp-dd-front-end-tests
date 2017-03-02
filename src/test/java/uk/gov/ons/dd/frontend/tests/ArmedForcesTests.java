@@ -38,23 +38,18 @@ public class ArmedForcesTests extends BaseTest {
 	ArrayList <String> sex = new ArrayList <>();
 	String armedForcesDS = null;
 
-	public void checkForDS() throws Exception {
-		String baseUrl = basePage.getConfig().getBaseURL();
-		basePage.navigateToUrl(baseUrl);
-		basePage.click(armedForces.armedForces_link);
-		basePage.switchToLatestWindow();
-	}
+
 
 	@Test(groups = {"downloadComplete"})
 	public void downloadCompleteDS() throws Exception {
-		checkForDS();
+		checkForDS(armedForces.armedForces_link);
 		basePage.click(basePage.download_complete_dataset);
 		basePage.selectDownloadCSV(false);
 	}
 
 	@Test(groups = {"openAF"}, dependsOnGroups = {"downloadComplete"})
 	public void openArmedForces() throws Exception {
-		checkForDS();
+		checkForDS(armedForces.armedForces_link);
 		basePage.click(basePage.customise_data_set);
 	}
 

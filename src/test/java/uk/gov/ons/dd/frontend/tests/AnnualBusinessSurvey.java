@@ -2,6 +2,7 @@ package uk.gov.ons.dd.frontend.tests;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -33,14 +34,27 @@ public class AnnualBusinessSurvey extends BaseTest {
 		openPage(abs);
 	}
 
-	@Test(groups = {"sic"})
+	@Test(groups = {"downloadComplete"})
+	public void downloadCompleteDS() throws Exception {
+		checkForDS(abs);
+		basePage.click(basePage.download_complete_dataset);
+		basePage.selectDownloadCSV(false);
+	}
+
+	@Test(groups = {"openCPI"}, dependsOnGroups = {"downloadComplete"})
+	public void openCPI() throws Exception {
+		checkForDS(abs);
+		basePage.click(basePage.customise_data_set);
+	}
+
+	@Test(groups = {"sic"}, dependsOnGroups = {"openCPI"})
 	public void customiseSIC() {
-//		try {
-//			selectedSicCodes = hierarchySelector.hierarchyJourney(sic07ABS, searchKey1);
-//		} catch (Exception ee) {
-//			ee.printStackTrace();
-//			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
-//		}
+		try {
+			selectedSicCodes = hierarchySelector.hierarchyJourney(sic07ABS, searchKey1);
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
+		}
 	}
 
 	@Test(groups = {"ukbiz"}, dependsOnGroups = {"sic"})

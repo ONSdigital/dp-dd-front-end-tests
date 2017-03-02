@@ -571,6 +571,7 @@ public class BasePage {
 		} catch (Exception ee) {
 			Thread.sleep(200 * counter);
 			counter--;
+			System.out.println(counter);
 			waitForDownloadButton();
 		}
 	}
@@ -598,9 +599,10 @@ public class BasePage {
 		try {
 			ArrayList <WebElement> selectedChkBox = selectChkBox(1);
 			assertLastPage(getCheckBoxValues(selectedChkBox));
-			counter = 50;
+			counter = 20;
 			waitForDownloadButton();
 			System.out.println(url);
+			System.out.println(counter);
 			String[] urlSplit = url.split("/");
 			fileName = urlSplit[urlSplit.length - 1];
 		} catch (Exception ee) {
