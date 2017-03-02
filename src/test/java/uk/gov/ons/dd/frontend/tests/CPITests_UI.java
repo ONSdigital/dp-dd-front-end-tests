@@ -202,9 +202,9 @@ public class CPITests_UI extends BasePage {
 	}
 
 	@Test(groups = {"verifyData"}, dependsOnGroups = {"getOptions"})
-	public void downloadAndVerifyData() {
+	public void downloadAndVerifyData() throws Exception {
 		selectDownloadCSV(true);
-		String url = waitForDownload(fileName);
+		waitForDownloadButton();
 		String[] urlSplit = url.split("/");
 		fileName = urlSplit[urlSplit.length - 1];
 		checkFile(nace_options, nace, true);

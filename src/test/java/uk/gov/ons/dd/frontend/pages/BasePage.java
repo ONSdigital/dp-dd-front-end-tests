@@ -566,24 +566,21 @@ public class BasePage {
 		}
 	}
 
-	public String waitForDownload(String fileName) {
-		String url = null;
-		while (fileName == null && counter != 0) {
-			try {
-				if (getElement(csv_file_download).isDisplayed()) {
-					url = getElement(csv_file_download).getAttribute("href");
-					String[] urlSplit = url.split("/");
-					fileName = urlSplit[urlSplit.length - 1];
-					break;
-				} else {
-					Thread.sleep(200 * counter);
-					counter--;
-				}
-			} catch (Exception ee) {
+	public void waitForDownloadButton() throws Exception {
+		try {
+			while (getElement(csv_file_download).isDisplayed()) {
+				url = getElement(csv_file_download).getAttribute("href");
+				String[] urlSplit = url.split("/");
+				fileName = urlSplit[urlSplit.length - 1];
+				break;
 			}
+		} catch (Exception ee) {
+			Thread.sleep(200 * counter);
+			counter--;
+			waitForDownloadButton();
 		}
-		return url;
 	}
+
 
 	public void checkFile(ArrayList <String> selections, String filter, boolean hierarchy) {
 		try {
@@ -608,7 +605,8 @@ public class BasePage {
 			ArrayList <WebElement> selectedChkBox = selectChkBox(1);
 			assertLastPage(getCheckBoxValues(selectedChkBox));
 			counter = 50;
-			url = waitForDownload(fileName);
+			waitForDownloadButton();
+			System.out.println(url);
 			String[] urlSplit = url.split("/");
 			fileName = urlSplit[urlSplit.length - 1];
 		} catch (Exception ee) {
@@ -625,7 +623,11 @@ public class BasePage {
 
 	public void checkDownloadedFile(ArrayList <String> values, String filter, boolean hierarchy) {
 		if (url == null) {
-			url = waitForDownload(fileName);
+			try {
+				waitForDownloadButton();
+			} catch (Exception ee) {
+				ee.printStackTrace();
+			}
 			String[] urlSplit = url.split("/");
 			fileName = urlSplit[urlSplit.length - 1];
 		}

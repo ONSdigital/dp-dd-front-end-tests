@@ -1,17 +1,13 @@
 package uk.gov.ons.dd.frontend.tests;
 
-import junit.framework.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.core.TestContext;
 import uk.gov.ons.dd.frontend.filters.OptionSelector;
 import uk.gov.ons.dd.frontend.filters.SummarySelector;
-import uk.gov.ons.dd.frontend.model.DataResource;
-import uk.gov.ons.dd.frontend.model.MetaDataEditorModel;
 import uk.gov.ons.dd.frontend.pages.ArmedForces;
 import uk.gov.ons.dd.frontend.pages.FileUploader;
 import uk.gov.ons.dd.frontend.pages.MetaDataEditor;
-import uk.gov.ons.dd.frontend.util.Helper;
 
 import java.util.ArrayList;
 
@@ -42,48 +38,24 @@ public class ArmedForcesTests extends BaseTest {
 	ArrayList <String> sex = new ArrayList <>();
 	String armedForcesDS = null;
 
-	//	@Test(groups = {"checkds"})
-	public void checkDataResource() {
-		String dataSetId = null;
-		MetaDataEditorModel metaDataEditorModel = null;
-		armedForcesDS = armedForces.armedForces_dataresource;
-		try {
-			basePage.navigateToUrl(basePage.getConfig().getBaseURL());
-			basePage.click(armedForces.armedForces_link);
-		} catch (Exception ee) {
-			DataResource dataResource = metaDataEditor.findMyDataResource("TEST_Resource_" + armedForcesDS);
-			metaDataEditorModel = metaDataEditor.verifyDataSetExists(armedForcesFile);
-			dataSetId = metaDataEditorModel.getDatasetId();
-			if (dataResource == null && dataSetId == null) {
-				fileUploader.uploadFile(armedForcesFile);
-				metaDataEditor.createDataResource(armedForcesFile);
-				Assert.assertTrue(metaDataEditor.mapMetaData(dataSetId, armedForcesFile));
-			} else if (dataResource != null && dataSetId == null) {
-				fileUploader.uploadFile(armedForcesFile);
-				Assert.assertTrue(metaDataEditor.mapMetaData(dataSetId, armedForcesFile));
-			} else if (dataResource != null && metaDataEditorModel.getDataResource().equals("")) {
-				Assert.assertTrue(metaDataEditor.mapMetaData(dataSetId, armedForcesDS));
-
-			}
-
-		}
-	}
-
 	public void checkForDS() throws Exception {
 		String baseUrl = basePage.getConfig().getBaseURL();
-		basePage.navigateToUrl(basePage.getConfig().getBaseURL());
+		basePage.navigateToUrl(baseUrl);
 		basePage.click(armedForces.armedForces_link);
 		basePage.switchToLatestWindow();
-		Helper.pause(10);
-
-
 	}
 
-	@Test(groups = {"openAF"})//, dependsOnGroups = {"checkds"})
+	@Test(groups = {"downloadComplete"})
+	public void downloadCompleteDS() throws Exception {
+		checkForDS();
+		basePage.click(basePage.download_complete_dataset);
+		basePage.selectDownloadCSV(false);
+	}
+
+	@Test(groups = {"openAF"}, dependsOnGroups = {"downloadComplete"})
 	public void openArmedForces() throws Exception {
 		checkForDS();
 		basePage.click(basePage.customise_data_set);
-
 	}
 
 	@Test(groups = "sex", dependsOnGroups = {"openAF"})
@@ -132,15 +104,7 @@ public class ArmedForcesTests extends BaseTest {
 		basePage.checkDownloadedFile(sex, armedForces.sex_filter, false);
 	}
 
-	//	@Test(groups = {"downloadComplete"}, dependsOnGroups = {"customiseCSV"})
-//	public void downloadCompleteDS() throws Exception{
-//		checkForDS();
-//		basePage.click(basePage.download_complete_dataset);
-//		basePage.selectDownloadCSV(false);
-//
-//
-//
-//	}
+
 	@AfterClass
 	public void closeTest() {
 		TestContext.getDriver().close();
