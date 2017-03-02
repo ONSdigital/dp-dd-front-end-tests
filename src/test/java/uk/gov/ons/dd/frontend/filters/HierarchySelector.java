@@ -57,16 +57,17 @@ public class HierarchySelector extends BasePage {
 						"Number of options selected by Add All : Everything selected(" + selectedOptions + ")",
 				defaultSelection.contains(String.valueOf(selectedOptions)));
 		getCustomiseLink(filterText).click();
-		summarySelector.removeAll();
+		summarySelector.removeGroups();
 		Assert.assertTrue("Does not have the add more button", isElementPresent(summarySelector.addMore));
 		click(summarySelector.addMore);
 		click(cancel_button);
-//		Assert.assertEquals(getoptionsText(filterText), "Nothing selected",
-//				"Actual selected filters : "
-//						+ getoptionsText(filterText) + "\n" +
-//						"Expected selected filters : " + "Nothing selected");
+		Assert.assertTrue("Options selected by default: " + defaultSelection + ". \n" +
+						"Number of options selected by Add All : Everything selected(" + selectedOptions + ")",
+				defaultSelection.contains(String.valueOf(selectedOptions)));
 		getCustomiseLink(filterText).click();
+		addAll();
 		click(summarySelector.remove_all_selected);
+		click(summarySelector.addMore);
 		searchHierarchy(searchStr);
 		ArrayList <String> values_selected = selectRandomChkBox(RandomStringGen.getRandomInt(
 				getAllCheckBoxes().size() - 1));

@@ -2,8 +2,7 @@ package uk.gov.ons.dd.frontend.tests;
 
 
 import org.openqa.selenium.By;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeTest;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.filters.HierarchySelector;
 import uk.gov.ons.dd.frontend.filters.SummarySelector;
@@ -13,10 +12,8 @@ import java.util.ArrayList;
 
 
 public class CPITests extends BaseTest {
-	public String nace = basePage.getTextFromProperty("nace_filter_text");
-	public String prodcom = basePage.getTextFromProperty("prodcom_filter_text");
-	public String searchKey1 = basePage.getTextFromProperty("nace_searchkey_text");
-	public String prodcom_searchKey = basePage.getTextFromProperty("prodcom_searchkey_text");
+	public String spl_aggr = basePage.getTextFromProperty("nace_filter_text");
+	public String searchKey1 = basePage.getTextFromProperty("spl_agg_searchkey_text");
 	public By cpi_link = basePage.getElementLocator("cpi_linkText");
 
 	CPI cpi = new CPI();
@@ -26,49 +23,69 @@ public class CPITests extends BaseTest {
 	String toRet = null;
 	HierarchySelector hierarchySelector = new HierarchySelector();
 	SummarySelector summarySelector = new SummarySelector();
-	ArrayList <String> selected_nace = null;
+	ArrayList <String> selected_spl_agg = null;
 	ArrayList <String> selectedProdcom = null;
 
-	@BeforeTest
-	public void init() {
-		openPage(cpi_link);
+	public void checkForDS() throws Exception {
+		String baseUrl = basePage.getConfig().getBaseURL();
+		basePage.navigateToUrl(baseUrl);
+		basePage.click(cpi_link);
+		basePage.switchToLatestWindow();
 	}
 
-	@Test(groups = {"nace"})
-	public void customiseNace() {
-//		try {
-//			selected_nace = hierarchySelector.hierarchyJourney(nace, searchKey1);
-//		} catch (Exception ee) {
-//			ee.printStackTrace();
-//			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
-//		}
+	//	@Test(groups = {"downloadComplete"})
+	public void downloadCompleteDS() throws Exception {
+		checkForDS();
+		basePage.click(basePage.download_complete_dataset);
+		basePage.selectDownloadCSV(false);
 	}
 
-	@Test(groups = {"prodcom"}, dependsOnGroups = {"nace"})
-	public void customiseProdCom() {
-//		try {
-//			selectedProdcom = hierarchySelector.hierarchyJourney(prodcom, prodcom_searchKey);
-//		} catch (Exception ee) {
-//			ee.printStackTrace();
-//			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
-//		}
+	@Test(groups = {"openCPI"})//, dependsOnGroups = {"downloadComplete"})
+	public void openCPI() throws Exception {
+		checkForDS();
+		basePage.click(basePage.customise_data_set);
 	}
 
 
-	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"prodcom"})
-	public void downloadCompleteDS_WithCSV() {
-//		basePage.selectDownloadCSV(false);
-//
-//		basePage.checkFile(selected_nace, nace, true);
-//		basePage.checkFile(selectedProdcom, prodcom, false);
-
+	@Test(groups = {"splaggregate"}, dependsOnGroups = {"openCPI"})
+	public void customiseSplAgg() {
+		try {
+			selected_spl_agg = hierarchySelector.hierarchyJourney(spl_aggr, searchKey1);
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
+		}
 	}
 
-	@AfterClass
-	public void closeTest() {
-		basePage.getDriver().close();
-		basePage.getDriver().quit();
+	//CUSTOMISE MONTH
+
+//	@Test(groups = {"prodcom"}, dependsOnGroups = {"nace"})
+//	public void customiseProdCom() {
+////		try {
+////			selectedProdcom = hierarchySelector.hierarchyJourney(prodcom, prodcom_searchKey);
+////		} catch (Exception ee) {
+////			ee.printStackTrace();
+////			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
+////		}
+//	}
+
+
+	@Test(groups = {"getOptions"}, dependsOnGroups = {"splaggregate"})
+	public void getSelectedOptions() {
+		selected_spl_agg = summarySelector.selectedOptions(spl_aggr, true);
 	}
+
+	@Test(groups = {"customiseCSV"}, dependsOnGroups = {"getOptions"})
+	public void downloadCustomisedDS_CSV() {
+		basePage.selectDownloadCSV(true);
+		basePage.checkDownloadedFile(selected_spl_agg, spl_aggr, true);
+	}
+
+//	@AfterClass
+//	public void closeTest() {
+//		basePage.getDriver().close();
+//		basePage.getDriver().quit();
+//	}
 
 
 }

@@ -13,13 +13,10 @@ public class SummarySelector extends BasePage {
 	public By continue_selection = getElementLocator("save_selection_css");
 	public By remove_all_selected = getElementLocator("remove_all_css");
 
-
-	public void removeAll() {
-		ArrayList <WebElement> removeAllLists = getRemoveAll_Lists();
-		for (WebElement removeLink : removeAllLists) {
-			removeLink.click();
+	public void removeGroups() {
+		for (WebElement removeGroup : getRemoveGroups()) {
+			removeGroup.click();
 		}
-
 	}
 
 	public ArrayList <String> selectedOptions(String filterText, boolean hierarchy) {

@@ -48,6 +48,7 @@ public class BasePage {
 	public By cancel_button = getElementLocator("cancel_button_linkText");
 	public By checkboxes = getElementLocator("checkboxes_css");
 	// ************ Save Selection -- Selection Summary
+	public By removeGroups = getElementLocator("remove_group_css");
 	public By removeButton = getElementLocator("remove_css");
 	public By selectionHeader = getElementLocator("header_summary_css");
 	public By selectionOptions = getElementLocator("selected_summary_css");
@@ -399,15 +400,8 @@ public class BasePage {
 		return removeButtons;
 	}
 
-	public ArrayList <WebElement> getRemoveAll_Lists() {
-		ArrayList <WebElement> removeButtons = (ArrayList <WebElement>) findElementsBy(removeButton);
-		ArrayList <WebElement> removeAllLinks = new ArrayList <>();
-		for (WebElement webTemp : removeButtons) {
-			if (webTemp.getText().contains(removeGroup)) {
-				removeAllLinks.add(webTemp);
-			}
-		}
-		return removeAllLinks;
+	public ArrayList <WebElement> getRemoveGroups() {
+		return (ArrayList <WebElement>) findElementsBy(removeGroups);
 	}
 
 	public ArrayList <WebElement> getAllRangeHeaders() {
