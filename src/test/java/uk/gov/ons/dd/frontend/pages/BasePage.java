@@ -34,7 +34,7 @@ public class BasePage {
 
 	*/
 // *******Customise Options
-	public By customise_data_set = getElementLocator("customise_dataset_linkText");
+	public By customise_data_set = getElementLocator("customise_dataset_css");
 	public By back_link = getElementLocator("back_button_linkText");
 	public By filter_name_css = getElementLocator("filter_name_css");
 	public By selected_options_css = getElementLocator("filter_selectedOptions_css");
@@ -53,7 +53,7 @@ public class BasePage {
 	public By selectionOptions = getElementLocator("selected_summary_css");
 	//	public By addMore = getElementLocator("add_more_linkText");
 	// ***********  Download Options  ******************
-	public By download_complete_dataset = getElementLocator("download_dataset_linkText");
+	public By download_complete_dataset = getElementLocator("download_dataset_css");
 	public By choose_download_format = getElementLocator("choose_download_format_linkText");
 	public By help_with_file_formats = getElementLocator("help_with_files_css");
 	public By generate_file = getElementLocator("generate_files_linkText");
