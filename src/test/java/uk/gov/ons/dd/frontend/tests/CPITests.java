@@ -3,10 +3,8 @@ package uk.gov.ons.dd.frontend.tests;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import uk.gov.ons.dd.frontend.core.TestContext;
 import uk.gov.ons.dd.frontend.filters.HierarchySelector;
 import uk.gov.ons.dd.frontend.filters.SummarySelector;
 import uk.gov.ons.dd.frontend.pages.CPI;
@@ -36,17 +34,17 @@ public class CPITests extends BaseTest {
 		openPage(cpi_link);
 	}
 
-//	@Test(groups = {"nace"})
-//	public void customiseNace() {
-//		try {
-//			selected_nace = hierarchySelector.hierarchyJourney(nace, searchKey1);
-//		} catch (Exception ee) {
-//			ee.printStackTrace();
-//			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
-//		}
-//	}
+	@Test(groups = {"nace"})
+	public void customiseNace() {
+		try {
+			selected_nace = hierarchySelector.hierarchyJourney(nace, searchKey1);
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
+		}
+	}
 
-	@Test(groups = {"prodcom"})//, dependsOnGroups = {"nace"})
+	@Test(groups = {"prodcom"}, dependsOnGroups = {"nace"})
 	public void customiseProdCom() {
 		try {
 			selectedProdcom = hierarchySelector.hierarchyJourney(prodcom, prodcom_searchKey);
@@ -59,19 +57,13 @@ public class CPITests extends BaseTest {
 
 	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"prodcom"})
 	public void downloadCompleteDS_WithCSV() {
-		basePage.selectDownloadCSV();
+		basePage.selectDownloadCSV(false);
 
 		basePage.checkFile(selected_nace, nace, true);
 		basePage.checkFile(selectedProdcom, prodcom, false);
 
 	}
 
-
-	@AfterClass
-	public void closeTest() {
-		TestContext.getDriver().close();
-		TestContext.getDriver().quit();
-	}
 
 
 }

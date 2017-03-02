@@ -203,7 +203,7 @@ public class CPITests_UI extends BasePage {
 
 	@Test(groups = {"verifyData"}, dependsOnGroups = {"getOptions"})
 	public void downloadAndVerifyData() {
-		selectDownloadCSV();
+		selectDownloadCSV(true);
 		String url = waitForDownload(fileName);
 		String[] urlSplit = url.split("/");
 		fileName = urlSplit[urlSplit.length - 1];

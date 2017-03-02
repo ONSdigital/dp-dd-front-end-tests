@@ -73,10 +73,6 @@ public class BasePage {
 	private ArrayList <WebElement> customiseLinks = new ArrayList <>();
 	private String removeGroup = getTextFromProperty("remove_group_text");
 
-	public static void main(String[] args) {
-		BasePage basePage = new BasePage();
-		basePage.test();
-	}
 
 	public WebDriver getDriver() {
 		return TestContext.getDriver();
@@ -604,11 +600,14 @@ public class BasePage {
 		}
 	}
 
-	public void selectDownloadCSV() {
-		click(choose_download_format);
+	public void selectDownloadCSV(boolean customise) {
+		if (customise) {
+			click(choose_download_format);
+		}
 		try {
 			ArrayList <WebElement> selectedChkBox = selectChkBox(1);
 			assertLastPage(getCheckBoxValues(selectedChkBox));
+			counter = 50;
 			url = waitForDownload(fileName);
 			String[] urlSplit = url.split("/");
 			fileName = urlSplit[urlSplit.length - 1];
@@ -617,7 +616,9 @@ public class BasePage {
 			Assert.fail();
 		}
 		try {
-			selectCheckBox(1);
+			if (customise) {
+				selectCheckBox(1);
+			}
 		} catch (Exception ee) {
 		}
 	}
@@ -631,19 +632,7 @@ public class BasePage {
 		checkFile(values, filter, hierarchy);
 	}
 
-	public void test() {
-		ArrayList <String> age = new ArrayList <>();
-		age.add("Age 25 to 34");
-		ArrayList <String> resi = new ArrayList <>();
-		resi.add("Lives in a communal establishment");
-		ArrayList <String> sex = new ArrayList <>();
-		sex.add("Females");
-		checkDownloadedFile(age, "Age", false);
-		checkDownloadedFile(resi, "Residence", false);
-		checkDownloadedFile(sex, "Sex", false);
 
-
-	}
 }
 
 

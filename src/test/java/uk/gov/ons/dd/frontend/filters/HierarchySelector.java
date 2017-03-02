@@ -1,5 +1,6 @@
 package uk.gov.ons.dd.frontend.filters;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import uk.gov.ons.dd.frontend.pages.BasePage;
@@ -52,12 +53,14 @@ public class HierarchySelector extends BasePage {
 		addAll();
 		int selectedOptions = getAllRangeOptions().size();
 		click(summarySelector.continue_selection);
-//		Assert.assertTrue(defaultSelection.contains(String.valueOf(selectedOptions)),
-//				"Options selected by default: "+defaultSelection+ ". \n" +
-//				"Number of options selected by Add All : Everything selected("+selectedOptions+")");
+		Assert.assertTrue("Options selected by default: " + defaultSelection + ". \n" +
+						"Number of options selected by Add All : Everything selected(" + selectedOptions + ")",
+				defaultSelection.contains(String.valueOf(selectedOptions)));
 		getCustomiseLink(filterText).click();
 		summarySelector.removeAll();
-		browserBack();
+		Assert.assertTrue("Does not have the add more button", isElementPresent(summarySelector.addMore));
+		click(summarySelector.addMore);
+		click(cancel_button);
 //		Assert.assertEquals(getoptionsText(filterText), "Nothing selected",
 //				"Actual selected filters : "
 //						+ getoptionsText(filterText) + "\n" +

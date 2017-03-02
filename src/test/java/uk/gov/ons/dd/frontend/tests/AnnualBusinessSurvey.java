@@ -63,7 +63,7 @@ public class AnnualBusinessSurvey extends BaseTest {
 
 	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"getOptions"})
 	public void downloadCompleteDS_WithCSV() {
-		basePage.selectDownloadCSV();
+		basePage.selectDownloadCSV(false);
 		basePage.checkFile(selectedSicCodes, sic07ABS, true);
 		basePage.checkFile(selectedBizValues, uk_Business_value, false);
 

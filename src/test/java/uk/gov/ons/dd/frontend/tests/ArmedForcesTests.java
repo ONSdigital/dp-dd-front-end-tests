@@ -1,7 +1,9 @@
 package uk.gov.ons.dd.frontend.tests;
 
 import junit.framework.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
+import uk.gov.ons.dd.frontend.core.TestContext;
 import uk.gov.ons.dd.frontend.filters.OptionSelector;
 import uk.gov.ons.dd.frontend.filters.SummarySelector;
 import uk.gov.ons.dd.frontend.model.DataResource;
@@ -40,7 +42,7 @@ public class ArmedForcesTests extends BaseTest {
 	ArrayList <String> sex = new ArrayList <>();
 	String armedForcesDS = null;
 
-	@Test(groups = {"checkds"})
+	//	@Test(groups = {"checkds"})
 	public void checkDataResource() {
 		String dataSetId = null;
 		MetaDataEditorModel metaDataEditorModel = null;
@@ -48,7 +50,6 @@ public class ArmedForcesTests extends BaseTest {
 		try {
 			basePage.navigateToUrl(basePage.getConfig().getBaseURL());
 			basePage.click(armedForces.armedForces_link);
-//			basePage.getDriver().close();
 		} catch (Exception ee) {
 			DataResource dataResource = metaDataEditor.findMyDataResource("TEST_Resource_" + armedForcesDS);
 			metaDataEditorModel = metaDataEditor.verifyDataSetExists(armedForcesFile);
@@ -69,17 +70,19 @@ public class ArmedForcesTests extends BaseTest {
 	}
 
 	public void checkForDS() throws Exception {
+		String baseUrl = basePage.getConfig().getBaseURL();
 		basePage.navigateToUrl(basePage.getConfig().getBaseURL());
 		basePage.click(armedForces.armedForces_link);
 		basePage.switchToLatestWindow();
 		Helper.pause(10);
-		basePage.click(basePage.customise_data_set);
+
 
 	}
 
-	@Test(groups = {"openAF"}, dependsOnGroups = {"checkds"})
+	@Test(groups = {"openAF"})//, dependsOnGroups = {"checkds"})
 	public void openArmedForces() throws Exception {
 		checkForDS();
+		basePage.click(basePage.customise_data_set);
 
 	}
 
@@ -123,11 +126,24 @@ public class ArmedForcesTests extends BaseTest {
 
 	@Test(groups = {"customiseCSV"}, dependsOnGroups = {"getOptions"})
 	public void downloadCustomisedDS_CSV() {
-		basePage.selectDownloadCSV();
+		basePage.selectDownloadCSV(true);
 		basePage.checkDownloadedFile(age, armedForces.age_filter, false);
 		basePage.checkDownloadedFile(residence, armedForces.residence_filter, false);
 		basePage.checkDownloadedFile(sex, armedForces.sex_filter, false);
 	}
 
-
+	//	@Test(groups = {"downloadComplete"}, dependsOnGroups = {"customiseCSV"})
+//	public void downloadCompleteDS() throws Exception{
+//		checkForDS();
+//		basePage.click(basePage.download_complete_dataset);
+//		basePage.selectDownloadCSV(false);
+//
+//
+//
+//	}
+	@AfterClass
+	public void closeTest() {
+		TestContext.getDriver().close();
+		TestContext.getDriver().quit();
+	}
 }
