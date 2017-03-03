@@ -45,12 +45,15 @@ public class ArmedForcesTests extends BaseTest {
 		checkForDS(armedForces.armedForces_link);
 		basePage.click(basePage.download_complete_dataset);
 		basePage.selectDownloadCSV(false);
+		System.out.println("downloadComplete");
+
 	}
 
 	@Test(groups = {"openAF"}, dependsOnGroups = {"downloadComplete"})
 	public void openArmedForces() throws Exception {
 		checkForDS(armedForces.armedForces_link);
 		basePage.click(basePage.customise_data_set);
+		System.out.println("openAF");
 	}
 
 	@Test(groups = "sex", dependsOnGroups = {"openAF"})
@@ -61,6 +64,7 @@ public class ArmedForcesTests extends BaseTest {
 			ee.printStackTrace();
 			org.testng.Assert.fail();
 		}
+		System.out.println("customiseSex");
 	}
 
 	@Test(groups = "residence", dependsOnGroups = {"sex"})
@@ -71,6 +75,7 @@ public class ArmedForcesTests extends BaseTest {
 			ee.printStackTrace();
 			org.testng.Assert.fail();
 		}
+		System.out.println("customiseResidence");
 	}
 
 	@Test(groups = "age", dependsOnGroups = {"residence"})
@@ -82,6 +87,7 @@ public class ArmedForcesTests extends BaseTest {
 			org.testng.Assert.fail();
 		}
 
+		System.out.println("customiseAge");
 	}
 
 	@Test(groups = {"getOptions"}, dependsOnGroups = {"age"})
@@ -89,6 +95,7 @@ public class ArmedForcesTests extends BaseTest {
 		age = summary.selectedOptions(armedForces.age_filter, false);
 		residence = summary.selectedOptions(armedForces.residence_filter, false);
 		sex = summary.selectedOptions(armedForces.sex_filter, false);
+		System.out.println("getOptions");
 	}
 
 	@Test(groups = {"customiseCSV"}, dependsOnGroups = {"getOptions"})
@@ -97,6 +104,7 @@ public class ArmedForcesTests extends BaseTest {
 		basePage.checkDownloadedFile(age, armedForces.age_filter, false);
 		basePage.checkDownloadedFile(residence, armedForces.residence_filter, false);
 		basePage.checkDownloadedFile(sex, armedForces.sex_filter, false);
+		System.out.println("customiseCSV");
 	}
 
 
