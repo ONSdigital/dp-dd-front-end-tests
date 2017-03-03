@@ -2,7 +2,7 @@ package uk.gov.ons.dd.frontend.tests;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.testng.annotations.AfterClass;
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.filters.HierarchySelector;
@@ -38,53 +38,59 @@ public class AnnualBusinessSurvey extends BaseTest {
 		checkForDS(abs);
 		basePage.click(basePage.download_complete_dataset);
 		basePage.selectDownloadCSV(false);
+		System.out.println("downloadCompleteDS");
 	}
 
 	@Test(groups = {"openABS"}, dependsOnGroups = {"downloadComplete"})
 	public void openABS() throws Exception {
 		checkForDS(abs);
 		basePage.click(basePage.customise_data_set);
+		System.out.println("openABS");
 	}
 
 	@Test(groups = {"sic"}, dependsOnGroups = {"openABS"})
 	public void customiseSIC() {
-//		try {
-//			selectedSicCodes = hierarchySelector.hierarchyJourney(sic07ABS, searchKey1, false);
-//		} catch (Exception ee) {
-//			ee.printStackTrace();
-//			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
-//		}
+		try {
+			selectedSicCodes = hierarchySelector.hierarchyJourney(sic07ABS, searchKey1, true);
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
+		}
+		System.out.println("customiseSICCodes");
 	}
 
 	@Test(groups = {"ukbiz"}, dependsOnGroups = {"sic"})
 	public void customiseUKBizValue() {
-//		try {
-//			optionSelector.optionJourney(uk_Business_value);
-//		} catch (Exception ee) {
-//			ee.printStackTrace();
-//			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
-//		}
+		try {
+			optionSelector.optionJourney(uk_Business_value);
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
+		}
+		System.out.println("customiseUKBizValue");
 	}
 
 	@Test(groups = {"getOptions"}, dependsOnGroups = {"ukbiz"})
 	public void getSelectedOptions() {
-//		sicCodes = summarySelector.selectedOptions(sic07ABS, true);
-//		ukBizVal = summarySelector.selectedOptions(uk_Business_value, false);
+		sicCodes = summarySelector.selectedOptions(sic07ABS, true);
+		ukBizVal = summarySelector.selectedOptions(uk_Business_value, false);
+		System.out.println("getSelectedOptions");
 	}
 
 	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"getOptions"})
-	public void downloadCompleteDS_WithCSV() {
-//		basePage.selectDownloadCSV(false);
-//		basePage.checkFile(selectedSicCodes, sic07ABS, true);
-//		basePage.checkFile(selectedBizValues, uk_Business_value, false);
+	public void downloadCustomisedDS_WithCSV() {
+		basePage.selectDownloadCSV(true);
+		basePage.checkFile(selectedSicCodes, sic07ABS, true);
+		basePage.checkFile(selectedBizValues, uk_Business_value, false);
+		System.out.println("downloadCustomisedDS_WithCSV");
 
 	}
 
 
-	@AfterClass
-	public void closeTest() {
-		basePage.getDriver().close();
-		basePage.getDriver().quit();
-	}
+//	@AfterClass
+//	public void closeTest() {
+//		basePage.getDriver().close();
+//		basePage.getDriver().quit();
+//	}
 
 }
