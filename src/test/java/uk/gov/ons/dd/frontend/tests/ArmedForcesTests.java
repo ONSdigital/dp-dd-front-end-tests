@@ -3,11 +3,10 @@ package uk.gov.ons.dd.frontend.tests;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.core.TestContext;
+import uk.gov.ons.dd.frontend.filters.HierarchySelector;
 import uk.gov.ons.dd.frontend.filters.OptionSelector;
 import uk.gov.ons.dd.frontend.filters.SummarySelector;
 import uk.gov.ons.dd.frontend.pages.ArmedForces;
-import uk.gov.ons.dd.frontend.pages.FileUploader;
-import uk.gov.ons.dd.frontend.pages.MetaDataEditor;
 
 import java.util.ArrayList;
 
@@ -29,8 +28,7 @@ public class ArmedForcesTests extends BaseTest {
 	// CREATE THE DATA RESOURCE
 	// LINK THE DATA RESOURCE TO THE DATASET
 	ArmedForces armedForces = new ArmedForces();
-	MetaDataEditor metaDataEditor = new MetaDataEditor();
-	FileUploader fileUploader = new FileUploader();
+	HierarchySelector hierarchySelector = new HierarchySelector();
 	SummarySelector summary = new SummarySelector();
 	OptionSelector optionSelector = new OptionSelector();
 	ArrayList <String> age = new ArrayList <>();
@@ -90,7 +88,20 @@ public class ArmedForcesTests extends BaseTest {
 		System.out.println("customiseAge");
 	}
 
-	@Test(groups = {"getOptions"}, dependsOnGroups = {"age"})
+	@Test(groups = "geography", dependsOnGroups = {"age"})
+	public void customiseGeo() throws Exception {
+		try {
+
+			hierarchySelector.simpleGeoJourney(armedForces.geo_filter, armedForces.geo_search_text, true);
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			org.testng.Assert.fail();
+		}
+
+		System.out.println("customiseGeo");
+	}
+
+	@Test(groups = {"getOptions"}, dependsOnGroups = {"geography"})
 	public void getSelectedOptions() {
 		age = summary.selectedOptions(armedForces.age_filter, false);
 		residence = summary.selectedOptions(armedForces.residence_filter, false);

@@ -3,6 +3,7 @@ package uk.gov.ons.dd.frontend.tests;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.filters.HierarchySelector;
 import uk.gov.ons.dd.frontend.filters.SummarySelector;
@@ -41,10 +42,10 @@ public class CPITests extends BaseTest {
 	}
 
 
-	@Test(groups = {"splaggregate"}, dependsOnGroups = {"openCPI"})
-	public void customiseSplAgg() {
+	@Test(groups = {"nace"}, dependsOnGroups = {"openCPI"})
+	public void customiseNace() {
 		try {
-			selected_spl_agg = hierarchySelector.hierarchyJourney(spl_aggr, searchKey1);
+			selected_spl_agg = hierarchySelector.hierarchyJourney(spl_aggr, searchKey1, true);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
@@ -64,7 +65,7 @@ public class CPITests extends BaseTest {
 //	}
 
 
-	@Test(groups = {"getOptions"}, dependsOnGroups = {"splaggregate"})
+	@Test(groups = {"getOptions"}, dependsOnGroups = {"nace"})
 	public void getSelectedOptions() {
 		selected_spl_agg = summarySelector.selectedOptions(spl_aggr, true);
 	}
@@ -75,11 +76,11 @@ public class CPITests extends BaseTest {
 		basePage.checkDownloadedFile(selected_spl_agg, spl_aggr, true);
 	}
 
-//	@AfterClass
-//	public void closeTest() {
-//		basePage.getDriver().close();
-//		basePage.getDriver().quit();
-//	}
+	@AfterClass
+	public void closeTest() {
+		basePage.getDriver().close();
+		basePage.getDriver().quit();
+	}
 
 
 }

@@ -178,7 +178,7 @@ public class CPITests_UI extends BasePage {
 	@Test(groups = {"customiseNACE"})
 	public void customiseNACE() {
 		try {
-			hierarchySelector.hierarchyJourney(nace, searchKey1);
+			hierarchySelector.hierarchyJourney(nace, searchKey1, false);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());

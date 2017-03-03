@@ -12,6 +12,10 @@ public class ArmedForces {
 	public String sex_filter = basePage.getTextFromProperty("sex_filter_text");
 	public String residence_filter = basePage.getTextFromProperty("residence_filter_text");
 	public String age_filter = basePage.getTextFromProperty("age_filter_text");
+	public String geo_filter = basePage.getTextFromProperty("geographic_hierarchy_filter_text");
+	public String geo_search_text = basePage.getTextFromProperty("geo_search_text");
+
+
 
 
 }
