@@ -31,6 +31,7 @@ public class OptionSelector extends BasePage {
 		getCustomiseLink(filterText).click();
 		click(enable_all);
 		click(cancel_button);
+		Assert.assertTrue(isElementPresent(customise_links), "**********    Not in the customise filters page   *************");
 		Assert.assertEquals(getoptionsText(filterText), selectedOption,
 				"Actual  " + filterText + "  : "
 						+ getoptionsText(filterText) + "\n" +

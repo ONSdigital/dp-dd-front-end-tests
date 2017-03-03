@@ -63,7 +63,6 @@ public class FileChecker {
 		boolean exists = false;
 		for (String filter : dimFiler) {
 			searchTerms(hierarchy, filter, key);
-//			String searchTerm = hierarchy ? "(.*)" + key + "," + "(.*)," + filter + "(.*)" : "(.*)" + key + "," + filter + "(.*)";
 		}
 		if (allLines.size() > 0) {
 			for (String[] strArr : allLines) {

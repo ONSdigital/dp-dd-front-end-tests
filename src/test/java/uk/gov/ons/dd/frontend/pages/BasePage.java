@@ -455,9 +455,15 @@ public class BasePage {
 		for (int checkOption : checkBox) {
 			selectCheckBox(checkOption);
 		}
-		for (WebElement webElement : findElementsBy(selected_checkboxes_css)) {
-			checkBoxesSelected.add(webElement);
+		try {
+			checkBoxesSelected = (ArrayList <WebElement>) findElementsBy(selected_checkboxes_css);
+		} catch (Exception ee) {
+			ee.printStackTrace();
 		}
+//
+//		for (WebElement webElement : findElementsBy(selected_checkboxes_css)) {
+//			checkBoxesSelected.add(webElement);
+//		}
 		return checkBoxesSelected;
 	}
 
@@ -571,7 +577,7 @@ public class BasePage {
 		} catch (Exception ee) {
 			Thread.sleep(200 * counter);
 			counter--;
-			System.out.println(counter);
+			System.out.println("******     Countdown to TimeOut:(Seconds)  " + (counter * 200) / 60 + "   *********");
 			waitForDownloadButton();
 		}
 	}
@@ -601,8 +607,7 @@ public class BasePage {
 			assertLastPage(getCheckBoxValues(selectedChkBox));
 			counter = 20;
 			waitForDownloadButton();
-			System.out.println(url);
-			System.out.println(counter);
+			System.out.println("****   URL of the csv file:  " + url + "  *****");
 			String[] urlSplit = url.split("/");
 			fileName = urlSplit[urlSplit.length - 1];
 		} catch (Exception ee) {

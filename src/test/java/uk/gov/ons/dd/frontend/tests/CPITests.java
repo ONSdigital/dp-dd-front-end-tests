@@ -6,6 +6,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.filters.HierarchySelector;
+import uk.gov.ons.dd.frontend.filters.OptionSelector;
 import uk.gov.ons.dd.frontend.filters.SummarySelector;
 import uk.gov.ons.dd.frontend.pages.CPI;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 
 public class CPITests extends BaseTest {
 	public String spl_aggr = basePage.getTextFromProperty("nace_filter_text");
+	public String prodcom = basePage.getTextFromProperty("prodcom_filter_text");
 	public String searchKey1 = basePage.getTextFromProperty("spl_agg_searchkey_text");
 	public By cpi_link = basePage.getElementLocator("cpi_linkText");
 
@@ -24,6 +26,7 @@ public class CPITests extends BaseTest {
 	String toRet = null;
 	HierarchySelector hierarchySelector = new HierarchySelector();
 	SummarySelector summarySelector = new SummarySelector();
+	OptionSelector optionSelector = new OptionSelector();
 	ArrayList <String> selected_spl_agg = null;
 	ArrayList <String> selectedProdcom = null;
 
@@ -45,29 +48,29 @@ public class CPITests extends BaseTest {
 	@Test(groups = {"nace"}, dependsOnGroups = {"openCPI"})
 	public void customiseNace() {
 		try {
-			selected_spl_agg = hierarchySelector.hierarchyJourney(spl_aggr, searchKey1, true);
+			hierarchySelector.hierarchyJourney(spl_aggr, searchKey1, true);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
 		}
 	}
 
-	//CUSTOMISE MONTH
 
-//	@Test(groups = {"prodcom"}, dependsOnGroups = {"nace"})
-//	public void customiseProdCom() {
-////		try {
-////			selectedProdcom = hierarchySelector.hierarchyJourney(prodcom, prodcom_searchKey);
-////		} catch (Exception ee) {
-////			ee.printStackTrace();
-////			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
-////		}
-//	}
+	@Test(groups = {"prodcom"}, dependsOnGroups = {"nace"})
+	public void customiseProdCom() {
+		try {
+			optionSelector.optionJourney(prodcom);
+		} catch (Exception ee) {
+			ee.printStackTrace();
+			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
+		}
+	}
 
 
-	@Test(groups = {"getOptions"}, dependsOnGroups = {"nace"})
+	@Test(groups = {"getOptions"}, dependsOnGroups = {"prodcom"})
 	public void getSelectedOptions() {
 		selected_spl_agg = summarySelector.selectedOptions(spl_aggr, true);
+		selectedProdcom = summarySelector.selectedOptions(prodcom, false);
 	}
 
 	@Test(groups = {"customiseCSV"}, dependsOnGroups = {"getOptions"})
