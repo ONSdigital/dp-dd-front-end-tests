@@ -607,7 +607,7 @@ public class BasePage {
 			fileName = urlSplit[urlSplit.length - 1];
 		} catch (Exception ee) {
 			ee.printStackTrace();
-			if (counter == 0) {
+			if (counter <= 0) {
 				System.out.println("**********     TIMED OUT GETTING THE CUSTOMISED CSV    *******************");
 			}
 			Assert.fail();
