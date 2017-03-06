@@ -8,7 +8,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 public class Configuration {
-	public static final int DEFAULT_TIMEOUT_VALUE = 20;
+	public static final int DEFAULT_TIMEOUT_VALUE = 5;
 	public static int DEFAULT_TIME_OUT = 5;
 	private Logger log = Logger.getLogger(Configuration.class.getCanonicalName());
 	private String baseURL;
