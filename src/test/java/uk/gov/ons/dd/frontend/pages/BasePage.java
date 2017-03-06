@@ -68,7 +68,7 @@ public class BasePage {
 	public String files_available_for_download = getTextFromProperty("file_available_for_download_text");
 	// ****** Error Message
 	public String error_message_text = getTextFromProperty("error_message_text");
-	int counter = 50;
+	int counter = 100;
 	private ArrayList <WebElement> filterNames = new ArrayList <>();
 	private ArrayList <WebElement> selectedOptions = new ArrayList <>();
 	private ArrayList <WebElement> customiseLinks = new ArrayList <>();
@@ -574,7 +574,7 @@ public class BasePage {
 
 	public void waitForDownloadButton() throws Exception {
 		try {
-			while (getElement(csv_file_download).isDisplayed()) {
+			while (getElement(csv_file_download).isDisplayed() && counter > 0) {
 				url = getElement(csv_file_download).getAttribute("href");
 				String[] urlSplit = url.split("/");
 				fileName = urlSplit[urlSplit.length - 1];
@@ -611,7 +611,6 @@ public class BasePage {
 		try {
 			ArrayList <WebElement> selectedChkBox = selectChkBox(1);
 			assertLastPage(getCheckBoxValues(selectedChkBox));
-			counter = 20;
 			waitForDownloadButton();
 			System.out.println("****   URL of the csv file:  " + url + "  *****");
 			String[] urlSplit = url.split("/");
