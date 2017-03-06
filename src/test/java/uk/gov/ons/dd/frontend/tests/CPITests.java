@@ -3,6 +3,7 @@ package uk.gov.ons.dd.frontend.tests;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.filters.HierarchySelector;
 import uk.gov.ons.dd.frontend.filters.OptionSelector;
@@ -30,14 +31,15 @@ public class CPITests extends BaseTest {
 	ArrayList <String> selectedProdcom = null;
 
 
-	@Test(groups = {"downloadComplete"})
+	@Test(groups = {"downloadCompletecpi"})
 	public void downloadCompleteDS() throws Exception {
+		System.out.println("************    CPI Tests  ***********************");
 		checkForDS(cpi_link);
 		basePage.click(basePage.download_complete_dataset);
 		basePage.selectDownloadCSV(false);
 	}
 
-	@Test(groups = {"openCPI"}, dependsOnGroups = {"downloadComplete"})
+	@Test(groups = {"openCPI"}, dependsOnGroups = {"downloadCompletecpi"})
 	public void openCPI() throws Exception {
 		checkForDS(cpi_link);
 		basePage.click(basePage.customise_data_set);
@@ -66,18 +68,23 @@ public class CPITests extends BaseTest {
 	}
 
 
-	@Test(groups = {"getOptions"}, dependsOnGroups = {"prodcom"})
+	@Test(groups = {"getOptionscpi"}, dependsOnGroups = {"prodcom"})
 	public void getSelectedOptions() {
 		selected_spl_agg = summarySelector.selectedOptions(spl_aggr, true);
 		selectedProdcom = summarySelector.selectedOptions(prodcom, false);
 	}
 
-	@Test(groups = {"customiseCSV"}, dependsOnGroups = {"getOptions"})
+	@Test(groups = {"customiseCSVcpi"}, dependsOnGroups = {"getOptionscpi"})
 	public void downloadCustomisedDS_CSV() {
 		basePage.selectDownloadCSV(true);
 		basePage.checkDownloadedFile(selected_spl_agg, spl_aggr, true);
 	}
 
+	@AfterSuite
+	public void closeBrowser() {
+		basePage.getDriver().close();
+		basePage.getDriver().quit();
+	}
 
 
 }

@@ -33,15 +33,16 @@ public class AnnualBusinessSurvey extends BaseTest {
 		openPage(abs);
 	}
 
-	@Test(groups = {"downloadComplete"})
+	@Test(groups = {"downloadCompleteabs"})
 	public void downloadCompleteDS() throws Exception {
+		System.out.println("************    Annual Business Survey  ***********************");
 		checkForDS(abs);
 		basePage.click(basePage.download_complete_dataset);
 		basePage.selectDownloadCSV(false);
 		System.out.println("downloadCompleteDS");
 	}
 
-	@Test(groups = {"openABS"}, dependsOnGroups = {"downloadComplete"})
+	@Test(groups = {"openABS"}, dependsOnGroups = {"downloadCompleteabs"})
 	public void openABS() throws Exception {
 		checkForDS(abs);
 		basePage.click(basePage.customise_data_set);
@@ -70,14 +71,14 @@ public class AnnualBusinessSurvey extends BaseTest {
 		System.out.println("customiseUKBizValue");
 	}
 
-	@Test(groups = {"getOptions"}, dependsOnGroups = {"ukbiz"})
+	@Test(groups = {"getOptionsabs"}, dependsOnGroups = {"ukbiz"})
 	public void getSelectedOptions() {
 		sicCodes = summarySelector.selectedOptions(sic07ABS, true);
 		ukBizVal = summarySelector.selectedOptions(uk_Business_value, false);
 		System.out.println("getSelectedOptions");
 	}
 
-	@Test(groups = {"downloadCSV"}, dependsOnGroups = {"getOptions"})
+	@Test(groups = {"downloadCSVabs"}, dependsOnGroups = {"getOptionsabs"})
 	public void downloadCustomisedDS_WithCSV() {
 		basePage.selectDownloadCSV(true);
 		basePage.checkFile(selectedSicCodes, sic07ABS, true);

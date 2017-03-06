@@ -35,9 +35,9 @@ public class ArmedForcesTests extends BaseTest {
 	String armedForcesDS = null;
 
 
-
-	@Test(groups = {"downloadComplete"})
+	@Test(groups = {"downloadCompleteAF"})
 	public void downloadCompleteDS() throws Exception {
+		System.out.println("************    Armed Forces  ***********************");
 		checkForDS(armedForces.armedForces_link);
 		basePage.click(basePage.download_complete_dataset);
 		basePage.selectDownloadCSV(false);
@@ -45,7 +45,7 @@ public class ArmedForcesTests extends BaseTest {
 
 	}
 
-	@Test(groups = {"openAF"}, dependsOnGroups = {"downloadComplete"})
+	@Test(groups = {"openAF"}, dependsOnGroups = {"downloadCompleteAF"})
 	public void openArmedForces() throws Exception {
 		checkForDS(armedForces.armedForces_link);
 		basePage.click(basePage.customise_data_set);
@@ -86,7 +86,7 @@ public class ArmedForcesTests extends BaseTest {
 		System.out.println("customiseAge");
 	}
 
-	@Test(groups = "geography", dependsOnGroups = {"age"})
+	@Test(groups = "geographyAF", dependsOnGroups = {"age"})
 	public void customiseGeo() throws Exception {
 		try {
 
@@ -99,7 +99,7 @@ public class ArmedForcesTests extends BaseTest {
 		System.out.println("customiseGeo");
 	}
 
-	@Test(groups = {"getOptions"}, dependsOnGroups = {"geography"})
+	@Test(groups = {"getOptionsAF"}, dependsOnGroups = {"geographyAF"})
 	public void getSelectedOptions() {
 		age = summary.selectedOptions(armedForces.age_filter, false);
 		residence = summary.selectedOptions(armedForces.residence_filter, false);
@@ -107,7 +107,7 @@ public class ArmedForcesTests extends BaseTest {
 		System.out.println("getOptions");
 	}
 
-	@Test(groups = {"customiseCSV"}, dependsOnGroups = {"getOptions"})
+	@Test(groups = {"customiseCSVAF"}, dependsOnGroups = {"getOptionsAF"})
 	public void downloadCustomisedDS_CSV() {
 		basePage.selectDownloadCSV(true);
 		basePage.checkDownloadedFile(age, armedForces.age_filter, false);
