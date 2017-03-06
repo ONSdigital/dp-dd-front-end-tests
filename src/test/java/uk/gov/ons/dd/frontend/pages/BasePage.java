@@ -383,7 +383,13 @@ public class BasePage {
 			allSelectedChkBox = getAllSelectedChkBoxes();
 		} catch (Exception ee) {
 		}
-		if (!allSelectedChkBox.contains(getAllCheckBoxes().get(num))) {
+		boolean exists = false;
+		for (WebElement webb : allSelectedChkBox) {
+			if (webb.getAttribute("name").equals(getAllCheckBoxes().get(num).getAttribute("for"))) {
+				exists = true;
+			}
+		}
+		if (!exists) {
 			getAllCheckBoxes().get(num).click();
 		}
 	}
@@ -575,9 +581,9 @@ public class BasePage {
 				break;
 			}
 		} catch (Exception ee) {
-			Thread.sleep(200 * counter);
+			Thread.sleep(1000);
 			counter--;
-			System.out.println("******     Countdown to TimeOut:(Seconds)  " + (counter * 200) / 60 + "   *********");
+			System.out.println("******     Countdown to TimeOut:(Seconds)  " + (counter * 1000) / 60 + "   *********");
 			waitForDownloadButton();
 		}
 	}
