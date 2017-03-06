@@ -3,7 +3,6 @@ package uk.gov.ons.dd.frontend.tests;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.filters.HierarchySelector;
@@ -85,13 +84,6 @@ public class AnnualBusinessSurvey extends BaseTest {
 		basePage.checkFile(selectedBizValues, uk_Business_value, false);
 		System.out.println("downloadCustomisedDS_WithCSV");
 
-	}
-
-
-	@AfterClass
-	public void closeTest() {
-		basePage.getDriver().close();
-		basePage.getDriver().quit();
 	}
 
 }

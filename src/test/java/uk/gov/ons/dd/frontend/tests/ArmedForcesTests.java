@@ -1,8 +1,6 @@
 package uk.gov.ons.dd.frontend.tests;
 
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
-import uk.gov.ons.dd.frontend.core.TestContext;
 import uk.gov.ons.dd.frontend.filters.HierarchySelector;
 import uk.gov.ons.dd.frontend.filters.OptionSelector;
 import uk.gov.ons.dd.frontend.filters.SummarySelector;
@@ -119,9 +117,4 @@ public class ArmedForcesTests extends BaseTest {
 	}
 
 
-	@AfterClass
-	public void closeTest() {
-		TestContext.getDriver().close();
-		TestContext.getDriver().quit();
-	}
 }

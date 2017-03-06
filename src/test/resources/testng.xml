@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="1" verbose="0" name="ArmedForces" parallel="false">
+    <test name="Armed Forces Test">
+        <classes>
+            <class name="uk.gov.ons.dd.frontend.tests.ArmedForcesTests"/>
+        </classes>
+    </test>
+    <test name="Annual Business Survey">
+        <classes>
+            <class name="uk.gov.ons.dd.frontend.tests.AnnualBusinessSurvey"/>
+        </classes>
+    </test>
+    <test name="CPI Tests">
+        <classes>
+            <class name="uk.gov.ons.dd.frontend.tests.CPITests"/>
+        </classes>
+    </test>
+</suite>

@@ -3,7 +3,6 @@ package uk.gov.ons.dd.frontend.tests;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.filters.HierarchySelector;
 import uk.gov.ons.dd.frontend.filters.OptionSelector;
@@ -79,11 +78,6 @@ public class CPITests extends BaseTest {
 		basePage.checkDownloadedFile(selected_spl_agg, spl_aggr, true);
 	}
 
-	@AfterClass
-	public void closeTest() {
-		basePage.getDriver().close();
-		basePage.getDriver().quit();
-	}
 
 
 }
