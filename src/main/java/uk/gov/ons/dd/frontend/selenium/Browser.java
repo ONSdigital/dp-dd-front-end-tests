@@ -10,11 +10,13 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.gov.ons.dd.frontend.core.Configuration;
 import uk.gov.ons.dd.frontend.util.Helper;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -83,6 +85,21 @@ public class Browser {
 			case "BROWSERSTACK":
 				// INIT browserstack class which will use the browser.json.
 				// more work to be done here.
+
+				DesiredCapabilities caps1 = new DesiredCapabilities();
+				caps1.setCapability("browser", "chrome");
+				caps1.setCapability("browser_version", "54.0");
+				caps1.setCapability("os", "Windows");
+				caps1.setCapability("os_version", "8");
+				caps1.setCapability("resolution", "1024x768");
+				caps1.setCapability("browserstack.debug", true);
+				caps1.setCapability("browserstack.local", true);
+				try {
+					webDriver = new RemoteWebDriver(new URL("https://iankent4:xDSMJuAtGbyf3Gzgsg5q@hub-cloud.browserstack.com/wd/hub"),
+							caps1);
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
 				break;
 			default:
 				System.setProperty("webdriver.gecko.driver", "/home/giri/Downloads/firefox/browser/firefox");
