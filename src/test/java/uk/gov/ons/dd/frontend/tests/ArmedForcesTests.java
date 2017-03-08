@@ -38,10 +38,11 @@ public class ArmedForcesTests extends BaseTest {
 	@Test(groups = {"downloadCompleteAF"})
 	public void downloadCompleteDS() throws Exception {
 		System.out.println("************    Armed Forces  ***********************");
+		System.out.println("Starting test.. DownloadComplete");
 		checkForDS(armedForces.armedForces_link);
 		basePage.click(basePage.download_complete_dataset);
 		basePage.selectDownloadCSV(false);
-		System.out.println("downloadComplete");
+		System.out.println("Finished test.. DownloadComplete");
 
 	}
 

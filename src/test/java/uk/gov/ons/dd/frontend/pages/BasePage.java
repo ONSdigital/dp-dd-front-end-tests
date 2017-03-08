@@ -584,7 +584,9 @@ public class BasePage {
 			Thread.sleep(1000);
 			counter--;
 			System.out.println("******     Countdown to TimeOut:(Seconds)  " + (counter * 1000) / 60 + "   *********");
-			waitForDownloadButton();
+			if (counter > 0) {
+				waitForDownloadButton();
+			}
 		}
 	}
 

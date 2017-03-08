@@ -32,7 +32,7 @@ public class CPITests extends BaseTest {
 
 
 	@Test(groups = {"downloadCompletecpi"})
-	public void downloadCompleteDS() throws Exception {
+	public void downloadCompDS() throws Exception {
 		System.out.println("************    CPI Tests  ***********************");
 		checkForDS(cpi_link);
 		basePage.click(basePage.download_complete_dataset);

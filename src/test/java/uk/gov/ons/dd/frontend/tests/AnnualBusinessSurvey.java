@@ -3,7 +3,6 @@ package uk.gov.ons.dd.frontend.tests;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.filters.HierarchySelector;
 import uk.gov.ons.dd.frontend.filters.OptionSelector;
@@ -28,10 +27,6 @@ public class AnnualBusinessSurvey extends BaseTest {
 	ArrayList <String> ukBizVal = new ArrayList <>();
 	ArrayList <String> selectedSicCodes = new ArrayList <>();
 	ArrayList <String> selectedBizValues = new ArrayList <>();
-	@BeforeTest
-	public void init() {
-		openPage(abs);
-	}
 
 	@Test(groups = {"downloadCompleteabs"})
 	public void downloadCompleteDS() throws Exception {
