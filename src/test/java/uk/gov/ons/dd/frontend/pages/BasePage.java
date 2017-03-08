@@ -614,6 +614,7 @@ public class BasePage {
 			ArrayList <WebElement> selectedChkBox = selectChkBox(1);
 			assertLastPage(getCheckBoxValues(selectedChkBox));
 			waitForDownloadButton();
+			Assert.assertNotNull(url, "URL is null");
 			System.out.println("****   URL of the csv file:  " + url + "  *****");
 			String[] urlSplit = url.split("/");
 			fileName = urlSplit[urlSplit.length - 1];
