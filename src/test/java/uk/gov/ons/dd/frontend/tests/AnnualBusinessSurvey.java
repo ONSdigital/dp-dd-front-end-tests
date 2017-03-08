@@ -77,7 +77,7 @@ public class AnnualBusinessSurvey extends BaseTest {
 	public void downloadCustomisedDS_WithCSV() {
 		basePage.selectDownloadCSV(true);
 //		basePage.checkFile(selectedSicCodes, sic07ABS, true);
-//		basePage.checkFile(selectedBizValues, uk_Business_value, false);
+		basePage.checkFile(selectedBizValues, uk_Business_value, false);
 		System.out.println("downloadCustomisedDS_WithCSV");
 
 	}
