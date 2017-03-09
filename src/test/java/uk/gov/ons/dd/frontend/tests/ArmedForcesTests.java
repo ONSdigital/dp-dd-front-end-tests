@@ -48,6 +48,7 @@ public class ArmedForcesTests extends BaseTest {
 
 	@Test(groups = {"openAF"}, dependsOnGroups = {"downloadCompleteAF"})
 	public void openArmedForces() throws Exception {
+		System.out.println("Starting... openArmedForces");
 		checkForDS(armedForces.armedForces_link);
 		basePage.click(basePage.customise_data_set);
 		System.out.println("openAF");
@@ -55,40 +56,43 @@ public class ArmedForcesTests extends BaseTest {
 
 	@Test(groups = "sex", dependsOnGroups = {"openAF"})
 	public void customiseSexFilter() {
+		System.out.println("Starting... customise Sex");
 		try {
 			optionSelector.optionJourney(armedForces.sex_filter);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 			org.testng.Assert.fail();
 		}
-		System.out.println("customiseSex");
+		System.out.println("customised Sex Filter");
 	}
 
 	@Test(groups = "residence", dependsOnGroups = {"sex"})
 	public void customiseResidenceType() throws Exception {
+		System.out.println("Starting... residence");
 		try {
 			optionSelector.optionJourney(armedForces.residence_filter);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 			org.testng.Assert.fail();
 		}
-		System.out.println("customiseResidence");
+		System.out.println("customised Residence Filter");
 	}
 
 	@Test(groups = "age", dependsOnGroups = {"residence"})
 	public void customiseAge() throws Exception {
+		System.out.println("Starting... age");
 		try {
 			optionSelector.optionJourney(armedForces.age_filter);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 			org.testng.Assert.fail();
 		}
-
-		System.out.println("customiseAge");
+		System.out.println("customised Age Filter");
 	}
 
 	@Test(groups = "geographyAF", dependsOnGroups = {"age"})
 	public void customiseGeo() throws Exception {
+		System.out.println("Starting... geographyAF");
 		try {
 
 			hierarchySelector.simpleGeoJourney(armedForces.geo_filter, armedForces.geo_search_text, true);
@@ -97,11 +101,12 @@ public class ArmedForcesTests extends BaseTest {
 			org.testng.Assert.fail();
 		}
 
-		System.out.println("customiseGeo");
+		System.out.println("customised Geo");
 	}
 
 	@Test(groups = {"getOptionsAF"}, dependsOnGroups = {"geographyAF"})
 	public void getSelectedOptions() {
+		System.out.println("Starting... getOptions");
 		age = summary.selectedOptions(armedForces.age_filter, false);
 		residence = summary.selectedOptions(armedForces.residence_filter, false);
 		sex = summary.selectedOptions(armedForces.sex_filter, false);
@@ -110,12 +115,13 @@ public class ArmedForcesTests extends BaseTest {
 
 	@Test(groups = {"customiseCSVAF"}, dependsOnGroups = {"getOptionsAF"})
 	public void downloadCustomisedDS_CSV() {
+		System.out.println("Starting... customiseCSVAF");
 		basePage.selectDownloadCSV(true);
 		basePage.checkDownloadedFile(age, armedForces.age_filter, false);
 		basePage.checkDownloadedFile(residence, armedForces.residence_filter, false);
 		basePage.checkDownloadedFile(sex, armedForces.sex_filter, false);
 		System.out.println("customiseCSV");
+		System.out.println("************  Completed Armed Forces Tests*************");
 	}
-
 
 }

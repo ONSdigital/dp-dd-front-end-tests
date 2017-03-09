@@ -3,7 +3,6 @@ package uk.gov.ons.dd.frontend.tests;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 import uk.gov.ons.dd.frontend.filters.HierarchySelector;
 import uk.gov.ons.dd.frontend.filters.OptionSelector;
@@ -34,56 +33,62 @@ public class CPITests extends BaseTest {
 	@Test(groups = {"downloadCompletecpi"})
 	public void downloadCompDS() throws Exception {
 		System.out.println("************    CPI Tests  ***********************");
+		System.out.println("Starting... downloadCompletecpi");
 		checkForDS(cpi_link);
 		basePage.click(basePage.download_complete_dataset);
 		basePage.selectDownloadCSV(false);
+		System.out.println("downloadCompletecpi");
 	}
 
 	@Test(groups = {"openCPI"}, dependsOnGroups = {"downloadCompletecpi"})
 	public void openCPI() throws Exception {
+		System.out.println("Starting... openCPI");
 		checkForDS(cpi_link);
 		basePage.click(basePage.customise_data_set);
+		System.out.println("openCPI");
 	}
 
 
 	@Test(groups = {"nace"}, dependsOnGroups = {"openCPI"})
 	public void customiseNace() {
+		System.out.println("Starting... nace");
 		try {
 			hierarchySelector.hierarchyJourney(spl_aggr, searchKey1, true);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
 		}
+		System.out.println("customised Nace");
 	}
 
 
 	@Test(groups = {"prodcom"}, dependsOnGroups = {"nace"})
 	public void customiseProdCom() {
+		System.out.println("Starting... prodcom");
 		try {
 			optionSelector.optionJourney(prodcom);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 			Assert.fail("Exception caught in " + getClass().getSimpleName().toUpperCase());
 		}
+		System.out.println("prodcom");
 	}
 
 
 	@Test(groups = {"getOptionscpi"}, dependsOnGroups = {"prodcom"})
 	public void getSelectedOptions() {
+		System.out.println("Starting... getOptionscpi");
 		selected_spl_agg = summarySelector.selectedOptions(spl_aggr, true);
 		selectedProdcom = summarySelector.selectedOptions(prodcom, false);
+		System.out.println("getOptionscpi");
 	}
 
 	@Test(groups = {"customiseCSVcpi"}, dependsOnGroups = {"getOptionscpi"})
 	public void downloadCustomisedDS_CSV() {
+		System.out.println("Starting...   downloadCustomisedDS_WithCSV");
 		basePage.selectDownloadCSV(true);
 		basePage.checkDownloadedFile(selected_spl_agg, spl_aggr, true);
-	}
-
-	@AfterSuite
-	public void closeBrowser() {
-		basePage.getDriver().close();
-		basePage.getDriver().quit();
+		System.out.println("downloadCustomisedDS_WithCSV");
 	}
 
 

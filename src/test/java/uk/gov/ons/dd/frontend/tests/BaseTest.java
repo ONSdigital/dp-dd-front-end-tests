@@ -16,10 +16,12 @@ public class BaseTest {
 	}
 
 	public void checkForDS(By link) throws Exception {
+		basePage.getDriver();
 		String baseUrl = basePage.getConfig().getBaseURL();
 		basePage.navigateToUrl(baseUrl);
 		basePage.click(link);
 		basePage.switchToLatestWindow();
 	}
+
 
 }
