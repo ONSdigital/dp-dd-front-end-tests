@@ -567,9 +567,22 @@ public class BasePage {
 		for (String tempStr : formatSelected(selected)) {
 			tempStr = tempStr.trim();
 			String temp[] = tempStr.split("\\(found");
-			Assert.assertTrue(compareArrayList.contains(temp[0].trim()),
-					"Selected Option : " + tempStr + " is not displayed in the selection summary ");
+			Assert.assertTrue(stringExists(compareArrayList, temp[0].trim()),
+					"Selected Option : " + temp[0].trim() + " is not displayed in the selection summary ");
+			//		Assert.assertTrue(compareArrayList.contains(temp[0].trim()),
+			//				"Selected Option : " + tempStr + " is not displayed in the selection summary ");
 		}
+	}
+
+	public boolean stringExists(ArrayList <String> values, String checkExists) {
+		boolean toRet = false;
+		for (String listStr : values) {
+			if (listStr.contains(checkExists)) {
+				toRet = true;
+				break;
+			}
+		}
+		return toRet;
 	}
 
 	public void waitForDownloadButton() throws Exception {
