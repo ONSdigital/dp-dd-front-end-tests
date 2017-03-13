@@ -466,43 +466,13 @@ public class BasePage {
 		} catch (Exception ee) {
 			ee.printStackTrace();
 		}
-//
-//		for (WebElement webElement : findElementsBy(selected_checkboxes_css)) {
-//			checkBoxesSelected.add(webElement);
-//		}
 		return checkBoxesSelected;
 	}
 
 	public void assertLastPage(ArrayList <String> selectedCheckBoxes) throws Exception {
 
 		click(generate_file);
-/*
-		int counter = 30;
-		try {
-			getWebDriverWait().until(ExpectedConditions.presenceOfElementLocated(file_download_button_options));
-		} catch (Exception ee) {
-			try {
-				while (counter < 1) {
-					Thread.sleep(2000);
-					assertLastPage(selectedCheckBoxes);
-					counter--;
-				}
 
-			} catch (InterruptedException ee1) {
-			}
-
-		}
-
-		ArrayList <String> actualButtonsForDownload = new ArrayList <>();
-		for (WebElement webElement : findElementsBy(file_download_button_options)) {
-			actualButtonsForDownload.add(webElement.getText().toUpperCase());
-		}
-
-
-		Assert.assertEquals(actualButtonsForDownload, selectedCheckBoxes,
-				"Mismatch between the file formats selected to the file formats available for download");
-		click(csv_file_download);
-*/
 	}
 
 	public ArrayList <String> getCheckBoxValues(ArrayList <WebElement> selectedCheckBoxes) {
