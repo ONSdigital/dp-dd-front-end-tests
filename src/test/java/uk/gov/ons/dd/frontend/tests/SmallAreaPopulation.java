@@ -12,9 +12,10 @@ public class SmallAreaPopulation extends BaseTest {
 	@Test(groups = {"opensape"})
 	public void openSape() throws Exception {
 		if (config.getBaseURL().contains("develop")) {
+			System.out.println("************ Starting SAPE Journey Geography Hierarchy Test **********");
 			checkForDS(sape_link);
 			basePage.click(basePage.customise_data_set);
-			System.out.println("openSAPE");
+
 		}
 	}
 
@@ -23,6 +24,7 @@ public class SmallAreaPopulation extends BaseTest {
 		if (config.getBaseURL().contains("develop")) {
 			hierarchySelector.compareGeoSorting("Geographic_Hierarchy", true);
 		}
+		System.out.println("*************** Completed SAPE Journey Geography Hierarchy Test ***************");
 	}
 
 
