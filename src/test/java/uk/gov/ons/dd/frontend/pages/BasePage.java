@@ -4,6 +4,7 @@ package uk.gov.ons.dd.frontend.pages;
 import com.opencsv.CSVReader;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -16,10 +17,7 @@ import uk.gov.ons.dd.frontend.util.Helper;
 import uk.gov.ons.dd.frontend.util.PropertyReader;
 
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
@@ -69,11 +67,11 @@ public class BasePage {
 	// ****** Error Message
 	public String error_message_text = getTextFromProperty("error_message_text");
 	int counter = 100;
+	HashMap <String, WebElement> customiseFilter = new HashMap <>();
 	private ArrayList <WebElement> filterNames = new ArrayList <>();
 	private ArrayList <WebElement> selectedOptions = new ArrayList <>();
 	private ArrayList <WebElement> customiseLinks = new ArrayList <>();
 	private String removeGroup = getTextFromProperty("remove_group_text");
-
 
 	public WebDriver getDriver() {
 		return TestContext.getDriver();
@@ -359,14 +357,23 @@ public class BasePage {
 		return indexToReturn;
 	}
 
+
 	public String getoptionsText(String filter) {
 		selectedOptions = (ArrayList <WebElement>) findElementsBy(selected_options_css);
 		return selectedOptions.get(getFilterNameIndex(filter)).getText();
 	}
 
 	public WebElement getCustomiseLink(String filter) {
+		if (filter.contains(" ")) {
+			filter = filter.replaceAll(" ", "%20");
+		}
 		customiseLinks = (ArrayList <WebElement>) findElementsBy(customise_links);
-		return customiseLinks.get(getFilterNameIndex(filter));
+		for (int index = 0; index < customiseLinks.size(); index++) {
+			String attrHref = customiseLinks.get(index).getAttribute("href");
+			String[] divDim = attrHref.split("/");
+			customiseFilter.put(divDim[divDim.length - 1], customiseLinks.get(index));
+		}
+		return customiseFilter.get(filter);
 	}
 
 	public ArrayList <WebElement> getAllCheckBoxes() throws Exception {
