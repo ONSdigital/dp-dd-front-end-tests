@@ -412,7 +412,7 @@ public class BasePage {
 		while (iter.hasNext()) {
 			WebElement webTemp = iter.next();
 
-			if (webTemp.getText().contains(removeGroup))
+			if (webTemp.getText().contains("Remove group"))
 				iter.remove();
 		}
 		return removeButtons;

@@ -3,6 +3,7 @@ package uk.gov.ons.dd.frontend.filters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import uk.gov.ons.dd.frontend.pages.BasePage;
+import uk.gov.ons.dd.frontend.util.RandomStringGen;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,14 @@ public class SummarySelector extends BasePage {
 		click(continue_selection);
 		return selectedValues;
 
+	}
+
+	public void removeRandomGroup() {
+		getRemoveGroups().get(RandomStringGen.getRandomInt(getRemoveGroups().size() - 1)).click();
+	}
+
+	public void removeRandomOption() throws Exception {
+		getRemoveLinks().get(RandomStringGen.getRandomInt(getRemoveLinks().size() - 1)).click();
 	}
 
 
