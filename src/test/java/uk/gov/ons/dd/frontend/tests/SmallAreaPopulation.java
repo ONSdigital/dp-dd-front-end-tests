@@ -20,18 +20,18 @@ public class SmallAreaPopulation extends BaseTest {
 	SummarySelector summarySelector = new SummarySelector();
 
 	@Test(groups = {"sapeTests"})
-	public void openSape() throws Exception {
+	public void sapeGeoTests() throws Exception {
 		if (config.getBaseURL().contains("develop")) {
 			System.out.println("************ Starting SAPE Journey Geography Hierarchy Test **********");
 			checkForDS(sape_link);
 			basePage.click(basePage.customise_data_set);
 			hierarchySelector.compareGeoSorting("Geographic_Hierarchy", true);
-
+			System.out.println("************ Completed SAPE Journey Geography Hierarchy Test **********");
 		}
 	}
 
-	@Test(groups = {"cpisplaggr"}, dependsOnGroups = {"orderedGeo"})
-	public void openCPISplAgg() throws Exception {
+	@Test(groups = {"cpisplaggr"}, dependsOnGroups = {"sapeTests"})
+	public void cpiTimeSelector() throws Exception {
 		if (config.getBaseURL().contains("develop")) {
 			System.out.println("************    Starting CPI TIME SELECTOR Test     **********");
 			checkForDS(cpi_spl_aggregate_link);
