@@ -30,7 +30,7 @@ public class SmallAreaPopulation extends BaseTest {
 		}
 	}
 
-	@Test(groups = {"cpisplaggr"})//, dependsOnGroups = {"sapeTests"})
+	@Test(groups = {"cpisplaggr"}, dependsOnGroups = {"sapeTests"})
 	public void cpiTimeSelector() throws Exception {
 		if (config.getBaseURL().contains("develop")) {
 			System.out.println("************    Starting CPI TIME SELECTOR Test     **********");
