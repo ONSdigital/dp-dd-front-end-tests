@@ -14,7 +14,7 @@ public class TimeSelector extends BasePage {
 	public By select_month = getElementLocator("month_css");
 	public By select_year = getElementLocator("year_css");
 	public By range = getElementLocator("range_css");
-	public By select_all = getElementLocator("select_all_id");
+	public By select_all = getElementLocator("select_all_css");
 	String selected_year = null, selected_month = null, defaultSelection = null;
 	ArrayList <String> selectedYear = new ArrayList <>();
 	ArrayList <String> selectedMonth = new ArrayList <>();
