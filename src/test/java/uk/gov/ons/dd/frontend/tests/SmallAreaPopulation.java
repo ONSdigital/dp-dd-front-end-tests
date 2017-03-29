@@ -55,7 +55,7 @@ public class SmallAreaPopulation extends BaseTest {
 			timeSelector.removeRandomGroup(time_filter);
 			ArrayList <String> timeGroups = summarySelector.selectedOptions(time_filter, true);
 			System.out.println("************  Start customising Spl Aggregates  **********");
-			hierarchySelector.hierarchyJourney(spl_aggr_filter, search_terms, true);
+			hierarchySelector.hierarchyJourney(spl_aggr_filter, search_terms, true, true);
 			ArrayList <String> selected_spl_agg = summarySelector.selectedOptions(spl_aggr_filter, true);
 			System.out.println("************  Finished customising Spl Aggregates  **********");
 			basePage.selectDownloadCSV(true);

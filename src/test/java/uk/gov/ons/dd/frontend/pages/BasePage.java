@@ -388,7 +388,9 @@ public class BasePage {
 		ArrayList <WebElement> allSelectedChkBox = new ArrayList <>();
 		if (checkSelected) {
 			try {
-				allSelectedChkBox = getAllSelectedChkBoxes();
+				if (isElementPresent(selected_checkboxes_css)) {
+					allSelectedChkBox = getAllSelectedChkBoxes();
+				}
 			} catch (Exception ee) {
 				System.out.println("No checkbox previously selected. Will select a filter option.");
 			}
@@ -474,7 +476,9 @@ public class BasePage {
 			selectCheckBox(checkOption, checkSelected);
 		}
 		try {
-			checkBoxesSelected = (ArrayList <WebElement>) findElementsBy(selected_checkboxes_css);
+			if (isElementPresent(selected_checkboxes_css)) {
+				checkBoxesSelected = (ArrayList <WebElement>) findElementsBy(selected_checkboxes_css);
+			}
 		} catch (Exception ee) {
 			System.out.println("No checkboxes previously selected. Will select a filter option.");
 		}
@@ -557,8 +561,6 @@ public class BasePage {
 			String temp[] = tempStr.split("\\(.*");
 			Assert.assertTrue(stringExists(compareArrayList, temp[0].trim()),
 					"Selected Option : " + temp[0].trim() + " is not displayed in the selection summary ");
-			//		Assert.assertTrue(compareArrayList.contains(temp[0].trim()),
-			//				"Selected Option : " + tempStr + " is not displayed in the selection summary ");
 		}
 	}
 

@@ -66,7 +66,7 @@ public class HierarchySelector extends BasePage {
 	// Use this to add the number of checkboxes within a hierarchy
 
 
-	public ArrayList <String> hierarchyJourney(String filterText, String searchStr, boolean heir) throws Exception {
+	public ArrayList <String> hierarchyJourney(String filterText, String searchStr, boolean heir, boolean removeAll) throws Exception {
 		String defaultSelection = getoptionsText(filterText);
 		getCustomiseLink(filterText).click();
 		addAll();
@@ -77,7 +77,11 @@ public class HierarchySelector extends BasePage {
 				defaultSelection.contains(String.valueOf(selectedOptions)));
 		getCustomiseLink(filterText).click();
 		Assert.assertTrue("Summary selector Page - Remove All Selections not present ", isElementPresent(summarySelector.remove_all_selected));
-		summarySelector.removeGroups();
+		if (removeAll) {
+			click(summarySelector.remove_all_selected);
+		} else {
+			summarySelector.removeGroups();
+		}
 		Assert.assertTrue("Does not have the add more button", getElement(summarySelector.save_selection).getText().contains("Add more"));
 		click(summarySelector.save_selection);
 		click(cancel_button);
