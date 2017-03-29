@@ -41,7 +41,9 @@ public class HierarchySelector extends BasePage {
 
 		WebElement toClick = null;
 		try {
-			hierarchy = (ArrayList <WebElement>) findElementsBy(customise_hierarchies);
+			if (isElementPresent(customise_hierarchies)) {
+				hierarchy = (ArrayList <WebElement>) findElementsBy(customise_hierarchies);
+			}
 			while (hierarchy.size() > 0) {
 				toClick = hierarchy.get(RandomStringGen.getRandomInt(hierarchy.size() - 1));
 				System.out.println("Browse Parent Hierarchy :    " + toClick.getText());

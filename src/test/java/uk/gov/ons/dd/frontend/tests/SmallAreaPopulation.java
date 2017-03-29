@@ -18,6 +18,8 @@ public class SmallAreaPopulation extends BaseTest {
 	HierarchySelector hierarchySelector = new HierarchySelector();
 	TimeSelector timeSelector = new TimeSelector();
 	SummarySelector summarySelector = new SummarySelector();
+	ArrayList <String> timeGroups = new ArrayList <>();
+	ArrayList <String> selected_spl_agg = new ArrayList <>();
 
 	@Test(groups = {"sapeTests"})
 	public void sapeGeoTests() throws Exception {
@@ -30,39 +32,59 @@ public class SmallAreaPopulation extends BaseTest {
 		}
 	}
 
-	@Test(groups = {"cpisplaggr"}, dependsOnGroups = {"sapeTests"})
-	public void cpiTimeSelector() throws Exception {
+	@Test(groups = {"opencpisplaggr"}, dependsOnGroups = {"sapeTests"})
+	public void openCPISplAgg() throws Exception {
 		if (config.getBaseURL().contains("develop")) {
 			System.out.println("************    Starting CPI Special aggregate Test     **********");
 			checkForDS(cpi_spl_aggregate_link);
 			basePage.click(basePage.customise_data_set);
-			System.out.println("************    Open CPI Spl Aggregate   **********");
+			System.out.println("************    Opened CPI Spl Aggregate customise page **********");
+		}
+	}
+
+	@Test(groups = {"customiseMonth"}, dependsOnGroups = {"opencpisplaggr"})
+	public void cpiMonth() throws Exception {
+		if (config.getBaseURL().contains("develop")) {
 			System.out.println("************    Start Time Selector Tests   **********");
 			timeSelector.openTimeSelector(time_filter);
-			System.out.println("************    Select Single Month   **********");
+			System.out.println("************    Select Single Month, remove selected option and add a single month again  **********");
 			timeSelector.singleMonthTimeSelector(time_filter);
 			timeSelector.removeTimeGroups(time_filter);
 			timeSelector.singleMonthTimeSelector(time_filter);
 			timeSelector.openTimeSelector(time_filter);
 			basePage.click(summarySelector.addMore);
-			System.out.println("************    Select All Time   **********");
+			System.out.println("************    Select All Time and remove a random group   **********");
 			timeSelector.selectAllTime(time_filter);
 			timeSelector.removeRandomGroup(time_filter);
 			timeSelector.openTimeSelector(time_filter);
 			basePage.click(summarySelector.addMore);
-			System.out.println("************    Select Range   **********");
+			System.out.println("************    Select Range  and remove a random group **********");
 			timeSelector.selectRange(time_filter);
 			timeSelector.removeRandomGroup(time_filter);
-			ArrayList <String> timeGroups = summarySelector.selectedOptions(time_filter, true);
+			timeGroups = summarySelector.selectedOptions(time_filter, true);
+			System.out.println("************  Completed Time Selector Tests  **********");
+
+		}
+	}
+
+	@Test(groups = {"customiseSplAggr"}, dependsOnGroups = {"customiseMonth"})
+	public void customiseSplAggr() throws Exception {
+		if (config.getBaseURL().contains("develop")) {
 			System.out.println("************  Start customising Spl Aggregates  **********");
 			hierarchySelector.hierarchyJourney(spl_aggr_filter, search_terms, true, true);
-			ArrayList <String> selected_spl_agg = summarySelector.selectedOptions(spl_aggr_filter, true);
+			selected_spl_agg = summarySelector.selectedOptions(spl_aggr_filter, true);
 			System.out.println("************  Finished customising Spl Aggregates  **********");
+		}
+	}
+
+	@Test(groups = {"validateDownload"}, dependsOnGroups = {"customiseSplAggr"})
+	public void downloadAndValidate() throws Exception {
+		if (config.getBaseURL().contains("develop")) {
+			System.out.println("************ Starting to download and validate the customised file  **********");
 			basePage.selectDownloadCSV(true);
-			System.out.println("************  Downloaded customised file  **********");
 			basePage.checkDownloadedFile(selected_spl_agg, spl_aggr_filter, true);
 			basePage.checkDownloadedFile(timeGroups, time_filter, true);
-			System.out.println("************    Finished CPI TIME SELECTOR TESTS **************");
+			System.out.println("************   Test for CPI TIME SELECTOR TESTS is now complete. **************");
 		}
 	}
 
