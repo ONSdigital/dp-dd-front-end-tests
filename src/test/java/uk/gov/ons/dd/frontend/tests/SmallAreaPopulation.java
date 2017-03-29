@@ -47,6 +47,7 @@ public class SmallAreaPopulation extends BaseTest {
 			basePage.click(summarySelector.addMore);
 			System.out.println("************    Select All Time   **********");
 			timeSelector.selectAllTime(time_filter);
+			timeSelector.removeRandomGroup(time_filter);
 			timeSelector.openTimeSelector(time_filter);
 			basePage.click(summarySelector.addMore);
 			System.out.println("************    Select Range   **********");

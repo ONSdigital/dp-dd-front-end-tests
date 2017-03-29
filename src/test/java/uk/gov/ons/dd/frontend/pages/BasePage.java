@@ -390,7 +390,7 @@ public class BasePage {
 			try {
 				allSelectedChkBox = getAllSelectedChkBoxes();
 			} catch (Exception ee) {
-				System.out.println("No checkbox selected");
+				System.out.println("No checkbox previously selected. Will select a filter option.");
 			}
 		}
 		boolean exists = false;
@@ -476,7 +476,7 @@ public class BasePage {
 		try {
 			checkBoxesSelected = (ArrayList <WebElement>) findElementsBy(selected_checkboxes_css);
 		} catch (Exception ee) {
-			System.out.println("No checkboxes to select");
+			System.out.println("No checkboxes previously selected. Will select a filter option.");
 		}
 
 		return checkBoxesSelected;

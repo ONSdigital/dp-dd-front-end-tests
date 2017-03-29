@@ -88,15 +88,15 @@ public class TimeSelector extends BasePage {
 		click(save_selection);
 	}
 
-	public void selectAllTime(String time_filter) {
+	public void selectAllTime(String time_filter) throws Exception {
 		click(select_all);
 		click(save_selection);
 		int totalOptions = getAllRangeOptions().size();
 		click(save_selection);
-		Assert.assertEquals(getoptionsText(time_filter), defaultSelection,
+		Assert.assertEquals(getoptionsText(time_filter), "Everything selected (" + totalOptions + ")",
 				"Actual Time filters : "
 						+ getoptionsText(time_filter) + "\n" +
-						"Expected Time filters : " + defaultSelection);
+						"Expected Time filters : " + "Everything selected (" + totalOptions + ")");
 
 		Assert.assertTrue(getoptionsText(time_filter).contains(String.valueOf(totalOptions)),
 				"Actual Time filters : "
@@ -105,49 +105,6 @@ public class TimeSelector extends BasePage {
 
 	}
 
-
-//	public void selectARange() {
-//		getCustomiseLink(time_filter).click();
-//		singleOrRange(range);
-//		selectFromDropDown(select_year);
-//		selectFromDropDown(select_month);
-//		click(save_selection);
-//		String selectedOptions = returnSelectedOptionText();
-//		click(save_selection);
-////    Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
-////          "Actual Time filters : "
-////                + getoptionsText(cpi.time_filter) + "\n" +
-////                "Expected Time filters : " + selectedOptions);
-//	}
-
-//	public void removeSomeRange() {
-//		getCustomiseLink(time_filter).click();
-//		click();
-//		singleOrRange(range);
-//		selectFromDropDown(cpi.select_year);
-//		selectFromDropDown(cpi.select_month);
-//		click(cpi.add_selection);
-//		String selectedOptions = returnSelectedOptionText();
-//		click(save_selection);
-//		System.out.println(selectedOptions);
-//		System.out.println(getoptionsText(cpi.time_filter));
-////    Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
-////          "Actual Time filters : "
-////                + getoptionsText(cpi.time_filter) + "\n" +
-////                "Expected Time filters : " + selectedOptions);
-//		getCustomiseLink(cpi.time_filter).click();
-//		int removeLinks = getRemoveAll_Lists().size();
-//		getRemoveAll_Lists().get(RandomStringGen.getRandomInt(removeLinks - 1)).click();
-//		selectedOptions = returnSelectedOptionText();
-//		click(save_selection);
-//		//    Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
-////          "Actual Time filters : "
-////                + getoptionsText(cpi.time_filter) + "\n" +
-////                "Expected Time filters : " + selectedOptions);
-//		System.out.println(selectedOptions);
-//		System.out.println(getoptionsText(cpi.time_filter));
-//
-//	}
 
 
 	public void singleOrRange(By selectType) {
@@ -190,47 +147,5 @@ public class TimeSelector extends BasePage {
 		}
 	}
 }
-//	public void singleTimeSelector() {
-//		getElement(single_month).click();
-//		click(cancel_button);
-//		Assert.assertEquals(getoptionsText(time_filter), defaultSelection,
-//				"Actual Time filters : "
-//						+ getoptionsText(time_filter) + "\n" +
-//						"Expected Time filters : " + defaultSelection);
-//		getCustomiseLink(time_filter).click();
-////		if(getElement(single_month);
-//		getElement(single_month).click();
-////		click(add_selection);
-////		String selectedOptions = returnSelectedOptionText();
-////		Assert.assertTrue(getAllRangeHeaders().contains(selected_year),
-////				"Selected year:  " + selected_year + " is not showing in the selection summary ");
-////		Assert.assertTrue(getAllRangeOptions().contains(selected_month),
-////				"Selected month:  " + selected_month + " is not showing in the selection summary ");
-////		click(save_selection);
-////		Assert.assertEquals(getoptionsText(cpi.time_filter), selectedOptions,
-////				"Actual Time filters : "
-////						+ getoptionsText(cpi.time_filter) + "\n" +
-////						"Expected Time filters : " + selectedOptions);
-////		getCustomiseLink(cpi.time_filter).click();
-////		selectSingleMonth(cpi.single_month);
-////		click(cpi.add_selection);
-////		removeAllSelection();
-////
-////
-////		click(save_selection);
-////
-////
-////		selectSingleMonth(cpi.range);
-////		//		click(cpi.add_selection);
-////		// validate selection
-//////		getCustomiseLink(cpi.time_filter).click();
-////		selectAValue(cpi.single_month);
-////		click(cancel_button);
-////		getCustomiseLink(cpi.time_filter).click();
-////		//validate cancel
-////		selectAValue(cpi.range);
-////		click(cancel_button);
-////		// validate cancel
-//	}
 
 
