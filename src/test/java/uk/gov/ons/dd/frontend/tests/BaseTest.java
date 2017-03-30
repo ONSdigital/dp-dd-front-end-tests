@@ -3,7 +3,6 @@ package uk.gov.ons.dd.frontend.tests;
 import org.openqa.selenium.By;
 import uk.gov.ons.dd.frontend.core.Configuration;
 import uk.gov.ons.dd.frontend.pages.BasePage;
-import uk.gov.ons.dd.frontend.util.Helper;
 
 public class BaseTest {
 	BasePage basePage = new BasePage();
@@ -22,7 +21,6 @@ public class BaseTest {
 		basePage.navigateToUrl(baseUrl);
 		basePage.click(link);
 		basePage.switchToLatestWindow();
-		Helper.pause(1000);
 	}
 
 

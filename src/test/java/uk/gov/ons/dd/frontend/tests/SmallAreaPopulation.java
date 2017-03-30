@@ -27,7 +27,9 @@ public class SmallAreaPopulation extends BaseTest {
 			System.out.println("************ Starting SAPE Journey Geography Hierarchy Test **********");
 			checkForDS(sape_link);
 			basePage.click(basePage.customise_data_set);
-			hierarchySelector.compareGeoSorting("Geographic_Hierarchy", true);
+			hierarchySelector.compareGeoSorting("Geographic_Hierarchy", true, "");
+			hierarchySelector.compareGeoSorting("Geographic_Hierarchy", true, "Unitary Authority");
+			hierarchySelector.compareGeoSorting("Geographic_Hierarchy", true, "Westminster Parliamentary Constituency");
 			System.out.println("************ Completed SAPE Journey Geography Hierarchy Test **********");
 		}
 	}

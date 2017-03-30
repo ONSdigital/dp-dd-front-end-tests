@@ -43,13 +43,13 @@ public class HierarchySelector extends BasePage {
 		try {
 			if (isElementPresent(customise_hierarchies)) {
 				hierarchy = (ArrayList <WebElement>) findElementsBy(customise_hierarchies);
-			}
-			while (hierarchy.size() > 0) {
-				toClick = hierarchy.get(RandomStringGen.getRandomInt(hierarchy.size() - 1));
-				System.out.println("Browse Parent Hierarchy :    " + toClick.getText());
+				while (hierarchy.size() > 0) {
+					toClick = hierarchy.get(RandomStringGen.getRandomInt(hierarchy.size() - 1));
+					System.out.println("Browse Parent Hierarchy :    " + toClick.getText());
 					toClick.click();
-				if (!isElementPresent(customise_hierarchies)) {
-					break;
+					if (!isElementPresent(customise_hierarchies)) {
+						break;
+					}
 				}
 			}
 		} catch (Exception ee) {
@@ -121,7 +121,8 @@ public class HierarchySelector extends BasePage {
 		return values_selected;
 	}
 
-	public void compareGeoSorting(String filterText, boolean hier) throws Exception {
+	public void compareGeoSorting(String filterText, boolean hier, String hierarchyToSelect) throws Exception {
+		hierarchyToSelect = hierarchyToSelect.length() > 2 ? hierarchyToSelect : "United Kingdom";
 		ArrayList <String> geoValues = new ArrayList <>();
 		ArrayList <String> afterAdding = new ArrayList <>();
 		getCustomiseLink(filterText).click();
@@ -131,11 +132,12 @@ public class HierarchySelector extends BasePage {
 			geoValues.add(webElement.getText());
 		}
 		for (WebElement webElement : hierarchy) {
-			if (webElement.getText().contains("United Kingdom")) {
+			if (webElement.getText().contains(hierarchyToSelect)) {
 				webElement.click();
 				break;
 			}
 		}
+		topLevelHierarchy();
 		selectRandomChkBox(RandomStringGen.getRandomInt(
 				getAllCheckBoxes().size() - 1), true);
 		click(summarySelector.addMore);
@@ -144,6 +146,11 @@ public class HierarchySelector extends BasePage {
 		for (int index = 0; index < hierarchy.size(); index++) {
 			Assert.assertTrue("The list is not ordered for geography browse page", hierarchy.get(index).getText().equalsIgnoreCase(geoValues.get(index)));
 		}
+		click(cancel_button);
+		getCustomiseLink(filterText).click();
+		summarySelector.removeGroups();
+		click(save_selection);
+		click(cancel_button);
 	}
 
 
