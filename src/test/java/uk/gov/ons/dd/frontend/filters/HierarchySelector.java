@@ -135,8 +135,8 @@ public class HierarchySelector extends BasePage {
 		for (WebElement webElement : hierarchy) {
 			if (webElement.getText().contains(hierarchyToSelect)) {
 				webElement.click();
-				if (hierarchyToSelect.equals("Unitary Authority")) {
-					Assert.assertTrue(isElementPresent(customise_hierarchies), " Unitary Authority does not have multiple hierarchies within it");
+				if (hierarchyToSelect.equals("Unitary Authority") || hierarchyToSelect.contains("Westminster")) {
+					Assert.assertTrue(isElementPresent(customise_hierarchies), hierarchyToSelect + " does not have multiple hierarchies within it");
 				}
 
 				break;
