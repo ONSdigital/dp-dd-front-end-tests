@@ -50,6 +50,8 @@ public class HierarchySelector extends BasePage {
 					toClick.click();
 					if (!isElementPresent(customise_hierarchies)) {
 						break;
+					} else {
+						hierarchy = (ArrayList <WebElement>) findElementsBy(customise_hierarchies);
 					}
 				}
 			}
