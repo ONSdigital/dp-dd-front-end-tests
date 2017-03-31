@@ -1,8 +1,9 @@
 package uk.gov.ons.dd.frontend.filters;
 
-import org.junit.Assert;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.testng.Assert;
 import uk.gov.ons.dd.frontend.pages.BasePage;
 import uk.gov.ons.dd.frontend.util.RandomStringGen;
 
@@ -74,22 +75,22 @@ public class HierarchySelector extends BasePage {
 		addAll();
 		int selectedOptions = getAllRangeOptions().size();
 		click(summarySelector.continue_selection);
-		Assert.assertTrue("Options selected by default: " + defaultSelection + ". \n" +
-						"Number of options selected by Add All : Everything selected(" + selectedOptions + ")",
-				defaultSelection.contains(String.valueOf(selectedOptions)));
+		Assert.assertTrue(
+				defaultSelection.contains(String.valueOf(selectedOptions)), "Options selected by default: " + defaultSelection + ". \n" +
+						"Number of options selected by Add All : Everything selected(" + selectedOptions + ")");
 		getCustomiseLink(filterText).click();
-		Assert.assertTrue("Summary selector Page - Remove All Selections not present ", isElementPresent(summarySelector.remove_all_selected));
+		Assert.assertTrue(isElementPresent(summarySelector.remove_all_selected), "Summary selector Page - Remove All Selections not present ");
 		if (removeAll) {
 			click(summarySelector.remove_all_selected);
 		} else {
 			summarySelector.removeGroups();
 		}
-		Assert.assertTrue("Does not have the add more button", getElement(summarySelector.save_selection).getText().contains("Add more"));
+		Assert.assertTrue(getElement(summarySelector.save_selection).getText().contains("Add more"), "Does not have the add more button");
 		click(summarySelector.save_selection);
 		click(cancel_button);
-		Assert.assertTrue("Options selected by default: " + defaultSelection + ". \n" +
-						"Number of options selected by Add All : Everything selected(" + selectedOptions + ")",
-				defaultSelection.contains(String.valueOf(selectedOptions)));
+		Assert.assertTrue(
+				defaultSelection.contains(String.valueOf(selectedOptions)), "Options selected by default: " + defaultSelection + ". \n" +
+						"Number of options selected by Add All : Everything selected(" + selectedOptions + ")");
 		getCustomiseLink(filterText).click();
 		addAll();
 		click(summarySelector.remove_all_selected);
@@ -134,6 +135,10 @@ public class HierarchySelector extends BasePage {
 		for (WebElement webElement : hierarchy) {
 			if (webElement.getText().contains(hierarchyToSelect)) {
 				webElement.click();
+				if (hierarchyToSelect.equals("Unitary Authority")) {
+					Assert.assertTrue(isElementPresent(customise_hierarchies), " Unitary Authority does not have multiple hierarchies within it");
+				}
+
 				break;
 			}
 		}
@@ -144,7 +149,7 @@ public class HierarchySelector extends BasePage {
 		click(browse_aggregates);
 		hierarchy = (ArrayList <WebElement>) findElementsBy(customise_hierarchies);
 		for (int index = 0; index < hierarchy.size(); index++) {
-			Assert.assertTrue("The list is not ordered for geography browse page", hierarchy.get(index).getText().equalsIgnoreCase(geoValues.get(index)));
+			Assert.assertTrue(hierarchy.get(index).getText().equalsIgnoreCase(geoValues.get(index)), "The list is not ordered for geography browse page");
 		}
 		click(cancel_button);
 		getCustomiseLink(filterText).click();
