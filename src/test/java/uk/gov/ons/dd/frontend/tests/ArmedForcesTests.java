@@ -93,14 +93,7 @@ public class ArmedForcesTests extends BaseTest {
 	@Test(groups = "geographyAF", dependsOnGroups = {"age"})
 	public void customiseGeo() throws Exception {
 		System.out.println("Starting... geographyAF");
-		try {
-
-			hierarchySelector.simpleGeoJourney(armedForces.geo_filter, armedForces.geo_search_text, true);
-		} catch (Exception ee) {
-			ee.printStackTrace();
-			org.testng.Assert.fail();
-		}
-
+		hierarchySelector.simpleGeoJourney(armedForces.geo_filter, armedForces.geo_search_text, true);
 		System.out.println("customised Geo");
 	}
 
@@ -121,7 +114,15 @@ public class ArmedForcesTests extends BaseTest {
 		basePage.checkDownloadedFile(residence, armedForces.residence_filter, false);
 		basePage.checkDownloadedFile(sex, armedForces.sex_filter, false);
 		System.out.println("customiseCSV");
-		System.out.println("************  Completed Armed Forces Tests*************");
+
 	}
 
+	@Test(groups = {"iterateGeo"}, dependsOnGroups = {"customiseCSVAF"})
+	public void iterateGeoGrpahyBrowse() throws Exception {
+		System.out.println("************  Browse thro all Geography Hierarchy and select one option from each *************");
+		checkForDS(armedForces.armedForces_link);
+		basePage.click(basePage.customise_data_set);
+		hierarchySelector.browseAndSelectOne(armedForces.geo_filter, true);
+		System.out.println("************  Completed Armed Forces Tests*************");
+	}
 }

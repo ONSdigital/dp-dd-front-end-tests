@@ -160,5 +160,45 @@ public class HierarchySelector extends BasePage {
 		click(cancel_button);
 	}
 
+	public void browseAndSelectOne(String filterText, boolean hier) throws Exception {
+		getCustomiseLink(filterText).click();
+		click(browse_aggregates);
+		ArrayList <WebElement> parent_hierarchy = (ArrayList <WebElement>) findElementsBy(customise_hierarchies);
+		ArrayList <String> selectedValues = new ArrayList <>();
+		ArrayList <String> parentHier_Texts = new ArrayList <>();
+		for (WebElement webElement : parent_hierarchy) {
+			parentHier_Texts.add(webElement.getText());
+		}
+		for (String textValues : parentHier_Texts) {
+			System.out.println(textValues);
+			hierarchy = (ArrayList <WebElement>) findElementsBy(customise_hierarchies);
+			for (WebElement webElement : hierarchy) {
+				if (webElement.getText().equalsIgnoreCase(textValues)) {
+					webElement.click();
+					break;
+				}
+			}
+			topLevelHierarchy();
+			ArrayList <String> selections = selectRandomChkBox(RandomStringGen.getRandomInt(
+					getAllCheckBoxes().size() - 1), true);
+			click(summarySelector.addMore);
+			click(browse_aggregates);
+			for (String select : selections) {
+				selectedValues.add(select);
+			}
+		}
+		click(cancel_button);
+		getCustomiseLink(filterText).click();
+		ArrayList <String> summarySelections = new ArrayList <>();
+		for (WebElement webElement : summarySelector.getAllRangeOptions()) {
+			summarySelections.add(webElement.getText());
+		}
+
+
+		for (String selectedVal : selectedValues) {
+			String temp = selectedVal.split(",")[1].trim();
+			Assert.assertTrue(summarySelections.contains(temp), "Selected Value " + temp + " is not in the selection summary");
+		}
+	}
 
 }
