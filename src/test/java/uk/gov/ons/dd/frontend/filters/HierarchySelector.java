@@ -197,6 +197,9 @@ public class HierarchySelector extends BasePage {
 
 		for (String selectedVal : selectedValues) {
 			String temp = selectedVal.split(",")[1].trim();
+			if (temp.equalsIgnoreCase("Herefordshire")) {
+				temp = "Herefordshire, County of";
+			}
 			Assert.assertTrue(summarySelections.contains(temp), "Selected Value " + temp + " is not in the selection summary");
 		}
 	}
