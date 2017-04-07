@@ -193,14 +193,16 @@ public class HierarchySelector extends BasePage {
 		for (WebElement webElement : summarySelector.getAllRangeOptions()) {
 			summarySelections.add(webElement.getText());
 		}
-
+		String selected = null;
 
 		for (String selectedVal : selectedValues) {
-			String temp = selectedVal.split(",")[1].trim();
-			if (temp.equalsIgnoreCase("Herefordshire")) {
-				temp = "Herefordshire, County of";
+			String[] temp = selectedVal.split(",");
+			if (temp.length == 3) {
+				selected = temp[1] + ", " + temp[2];
+			} else {
+				selected = temp[1];
 			}
-			Assert.assertTrue(summarySelections.contains(temp), "Selected Value " + temp + " is not in the selection summary");
+			Assert.assertTrue(summarySelections.contains(temp), "Selected Value " + selected + " is not in the selection summary");
 		}
 	}
 
