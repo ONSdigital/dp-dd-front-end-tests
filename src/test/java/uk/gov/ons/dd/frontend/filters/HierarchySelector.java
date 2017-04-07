@@ -198,7 +198,8 @@ public class HierarchySelector extends BasePage {
 		for (String selectedVal : selectedValues) {
 			String[] temp = selectedVal.split(",");
 			if (temp.length == 3) {
-				selected = temp[1] + ", " + temp[2];
+
+				selected = temp[1].trim() + ", " + temp[2].trim();
 			} else {
 				selected = temp[1];
 			}
