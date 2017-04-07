@@ -203,7 +203,7 @@ public class HierarchySelector extends BasePage {
 				selected = temp[1];
 			}
 			System.out.println("Selected Value " + selected);
-			Assert.assertTrue(summarySelections.contains(temp), "Selected Value " + selected + " is not in the selection summary");
+			Assert.assertTrue(summarySelections.contains(selected), "Selected Value " + selected + " is not in the selection summary");
 		}
 	}
 
